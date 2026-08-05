@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>EventHub Admin Dashboard</title>
+
+    <link rel="stylesheet" href="admin/css/dashboard.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+
+</head>
+
+<body>
+
+<div class="sidebar">
+
+    <div class="logo">
+        <h2>EventHub</h2>
+        <span>Admin Panel</span>
+    </div>
+
+    <ul>
+
+        <li class="active">
+            <a href="#">
+                <i class="fa-solid fa-house"></i>
+                Dashboard
+            </a>
+        </li>
+
+        <li>
+            <a href="admin-events.html">
+                <i class="fa-solid fa-calendar-days"></i>
+                Events
+            </a>
+        </li>
+
+        <li>
+            <a href="attendees.html">
+                <i class="fa-solid fa-users"></i>
+                Attendees
+            </a>
+        </li>
+
+        <li>
+            <a href="registration.html">
+                <i class="fa-solid fa-user-check"></i>
+                Registration
+            </a>
+        </li>
+
+        <li>
+            <a href="#">
+                <i class="fa-solid fa-chart-column"></i>
+                Reports
+            </a>
+        </li>
+
+        <li>
+            <a href="../index.html">
+                <i class="fa-solid fa-right-from-bracket"></i>
+                Logout
+            </a>
+        </li>
+
+    </ul>
+
+</div>
+
+<div class="main-content">
+
+    <header>
+
+        <div>
+
+            <h1>Dashboard</h1>
+
+            <p>
+                Welcome back, Admin.
+            </p>
+
+        </div>
+
+    </header>
+
+    <div class="cards">
+
+        <div class="card">
+
+            <i class="fa-solid fa-calendar-days"></i>
+
+            <h2>45</h2>
+
+            <p>Total Events</p>
+
+        </div>
+
+        <div class="card">
+
+            <i class="fa-solid fa-users"></i>
+
+            <h2>1,260</h2>
+
+            <p>Total Attendees</p>
+
+        </div>
+
+        <div class="card">
+
+            <i class="fa-solid fa-ticket"></i>
+
+            <h2>865</h2>
+
+            <p>Registrations</p>
+
+        </div>
+
+        <div class="card">
+
+            <i class="fa-solid fa-chart-line"></i>
+
+            <h2>18</h2>
+
+            <p>Upcoming Events</p>
+
+        </div>
+
+    </div>
+
+    <section class="recent-events">
+
+        <div class="section-header">
+
+            <h2>Recent Events</h2>
+
+            <a href="admin-events.html">View All</a>
+
+        </div>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>Event</th>
+                    <th>Date</th>
+                    <th>Location</th>
+                    <th>Attendees</th>
+                    <th>Status</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>AI Summit</td>
+                    <td>12 Aug 2026</td>
+                    <td>Kathmandu</td>
+                    <td>250</td>
+                    <td>
+                        <span class="status active">
+                            Active
+                        </span>
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Startup Meetup</td>
+                    <td>18 Aug 2026</td>
+                    <td>Pokhara</td>
+                    <td>180</td>
+                    <td>
+                        <span class="status active">
+                            Active
+                        </span>
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>Music Festival</td>
+                    <td>25 Aug 2026</td>
+                    <td>Lalitpur</td>
+                    <td>540</td>
+                    <td>
+                        <span class="status closed">
+                            Closed
+                        </span>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </section>
+
+</div>
+
+</body>
+
+</html>
