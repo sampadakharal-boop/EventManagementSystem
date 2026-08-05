@@ -417,17 +417,21 @@ nav ul{
 }
 
 .admin_btn{
-    background:#8B5CF6;
+    display:inline-block;
+    background:transparent;
     color:#fff;
     text-decoration:none;
-    padding: 40px;
-    border-radius:8px;
+    padding:11px 20px;
+    border:2px solid #fff;
+    border-radius:30px;
     font-weight:500;
     transition:.3s;
     margin-right:15px;
 }
 
 .admin_btn:hover{
-    background:#7C3AED;
+    background:#fff;
+    color:#8B5CF6;
 }
+
 
