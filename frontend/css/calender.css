@@ -1,0 +1,129 @@
+
+.calendar-section{
+
+    background:#fff;
+
+}
+
+
+
+.calendar-container{
+
+    max-width:850px;
+
+    margin:auto;
+
+    background:#fff;
+
+    padding:35px;
+
+    border-radius:25px;
+
+    box-shadow:0 15px 35px rgba(0,0,0,.08);
+
+}
+
+
+
+.calendar-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    margin-bottom:30px;
+
+}
+
+
+
+.calendar-header button{
+
+    border:none;
+
+    background:#F3E8FF;
+
+    color:#8B5CF6;
+
+    width:45px;
+
+    height:45px;
+
+    border-radius:50%;
+
+    cursor:pointer;
+
+}
+
+
+
+.calendar-header h3{
+
+    font-size:28px;
+
+}
+
+
+
+.calendar-days,
+.calendar-date{
+
+    display:grid;
+
+    grid-template-columns:repeat(7,1fr);
+
+    gap:15px;
+
+    text-align:center;
+
+}
+
+
+
+.calendar-days span{
+
+    font-weight:600;
+
+    color:#8B5CF6;
+
+}
+
+
+
+.calendar-date button{
+
+    height:45px;
+
+    border:none;
+
+    background:#F9F9F9;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    transition:.3s;
+
+}
+
+
+
+.calendar-date button:hover{
+
+    background:#EDE9FE;
+
+}
+
+
+
+.calendar-date .event-date{
+
+    background:#8B5CF6;
+
+    color:#fff;
+
+}
+
+

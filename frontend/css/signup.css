@@ -1,0 +1,248 @@
+:root {
+  --bg: #8B5CF6;
+  --card-bg: #ffffff;
+  --accent: #8B5CF6;
+  --accent-hover: #7C3AED;
+  --text: #8B5CF6;
+  --body-text: #6B7280;
+  --border: #DDD6FE;
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Inter", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  background: var(--bg);
+  font-family: var(--font-body);
+}
+
+/* Card */
+
+.card {
+  width: 100%;
+  max-width: 920px;
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: 0 20px 50px rgba(0,0,0,.12);
+}
+
+/* Form */
+
+.form-side {
+  padding: 55px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: 34px;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.subtext {
+  color: var(--body-text);
+  font-size: 14px;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.subtext a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.subtext a:hover {
+  text-decoration: underline;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--body-text);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+}
+
+/* Inputs */
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 15px;
+  color: #444;
+  outline: none;
+  transition: .25s ease;
+}
+
+input::placeholder {
+  color: #A1A1AA;
+}
+
+input:hover {
+  border-color: #C4B5FD;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(139,92,246,.12);
+}
+
+/* Checkbox */
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 6px 0 28px;
+}
+
+.checkbox-row input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.checkbox-row p {
+  color: var(--body-text);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* Button */
+
+button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: .25s ease;
+}
+
+button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+button:focus-visible {
+  outline: 3px solid rgba(139,92,246,.25);
+}
+
+/* Illustration */
+
+.illustration-side {
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
+.illustration-side svg,
+.illustration-side img {
+  width: 100%;
+  max-width: 340px;
+  height: auto;
+}
+
+/* Floating Animation */
+
+.float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+
+@media (max-width:768px) {
+
+  body {
+    padding: 20px;
+  }
+
+  .card {
+    grid-template-columns: 1fr;
+  }
+
+  .illustration-side {
+    order: -1;
+    min-height: 240px;
+    padding: 40px;
+  }
+
+  .form-side {
+    padding: 40px 30px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+}
+
+/* Accessibility */
+
+@media (prefers-reduced-motion: reduce) {
+
+  .float,
+  .float-slow {
+    animation: none;
+  }
+
+  * {
+    scroll-behavior: auto;
+  }
+}

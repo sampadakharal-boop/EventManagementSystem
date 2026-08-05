@@ -1,0 +1,233 @@
+:root {
+  --bg: #8B5CF6;
+  --card-bg: #ffffff;
+  --accent: #8B5CF6;
+  --accent-hover: #7C3AED;
+  --text: #8B5CF6;
+  --muted: #6B7280;
+  --border: #DDD6FE;
+
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 32px;
+  background: var(--bg);
+  font-family: var(--font-body);
+}
+
+.card {
+  width: 100%;
+  max-width: 920px;
+  background: var(--card-bg);
+  border-radius: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12);
+}
+
+.form-side {
+  padding: 56px 52px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  font-family: var(--font-display);
+  font-size: 32px;
+  color: var(--text);
+  margin-bottom: 8px;
+  letter-spacing: -0.5px;
+}
+
+.subtext {
+  margin-bottom: 32px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.subtext a {
+  color: var(--accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.subtext a:hover {
+  text-decoration: underline;
+}
+
+.field {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: #444;
+  outline: none;
+  transition: all .25s ease;
+}
+
+input::placeholder {
+  color: #A1A1AA;
+}
+
+input:hover {
+  border-color: #C4B5FD;
+}
+
+input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.12);
+}
+
+.checkbox-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 8px 0 28px;
+}
+
+.checkbox-row input {
+  margin-top: 3px;
+  accent-color: var(--accent);
+}
+
+.checkbox-row p {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+button {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  border-radius: 12px;
+  background: var(--accent);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .25s ease;
+}
+
+button:hover {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+button:active {
+  transform: scale(.98);
+}
+
+button:focus-visible {
+  outline: 3px solid rgba(139, 92, 246, .25);
+  outline-offset: 3px;
+}
+
+
+.illustration-side {
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+}
+
+.illustration-side svg,
+.illustration-side img {
+  width: 80%;
+  max-width: 340px;
+  height: auto;
+}
+
+
+.float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+
+@media (max-width: 720px) {
+
+  .card {
+    grid-template-columns: 1fr;
+  }
+
+  .illustration-side {
+    order: -1;
+    min-height: 240px;
+    padding: 35px;
+  }
+
+  .form-side {
+    padding: 40px 30px;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+  .float,
+  .float-slow {
+    animation: none;
+  }
+
+  * {
+    scroll-behavior: auto;
+  }
+}
