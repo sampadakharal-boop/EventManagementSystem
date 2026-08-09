@@ -1,9 +1,8 @@
 // routes/admin.js
-
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
-const { run } = require("../database/db"); // use your helper, not the raw client
+const { run } = require("../db"); // ✅ correct — goes up one level from routes/, into backend/, finds db.js
 
 router.post("/setup-admin", async (req, res) => {
   const { name, email, password } = req.body;

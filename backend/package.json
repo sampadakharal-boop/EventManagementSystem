@@ -12,12 +12,13 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
+    "@libsql/client": "^0.14.0",
     "bcryptjs": "^2.4.3",
     "better-sqlite3": "^12.4.1",
+    "cookie-parser": "^1.4.7",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
-    "nodemon": "^3.1.14",
     "jsonwebtoken": "^9.0.3",
-    "@libsql/client": "^0.14.0"
+    "nodemon": "^3.1.14"
   }
 }
