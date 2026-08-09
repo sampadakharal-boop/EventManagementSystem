@@ -5,7 +5,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { get, run } = require('./db'); // ✅ correct — db.js is right here in backend/
+const { get, run } = require('./db');
 
 const adminRoutes = require('./routes/admin');
 
@@ -45,15 +45,27 @@ app.post('/api/signup', async (req, res) => {
 
 app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log('🔍 Login attempt for email:', JSON.stringify(email));
+
   if (!email || !password) {
     return res.status(400).json({ success: false, message: 'Email and password are required.' });
   }
+
   try {
     const user = await get('SELECT * FROM users WHERE email = ?', [email]);
-    if (!user) return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+    console.log('🔍 User found in DB:', user ? JSON.stringify({ id: user.id, email: user.email, role: user.role }) : 'NO USER FOUND');
 
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+    }
+
+    console.log('🔍 Comparing password. JWT_SECRET exists:', !!process.env.JWT_SECRET);
     const passwordMatches = await bcrypt.compare(password, user.password);
-    if (!passwordMatches) return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+    console.log('🔍 Password match result:', passwordMatches);
+
+    if (!passwordMatches) {
+      return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+    }
 
     const token = jwt.sign(
       { id: user.id, email: user.email, role: user.role },
@@ -72,7 +84,7 @@ app.post('/api/login', async (req, res) => {
       role: user.role
     });
   } catch (err) {
-    console.error('Login error:', err);
+    console.error('❌ Login error:', err);
     return res.status(500).json({ success: false, message: 'Something went wrong.' });
   }
 });
