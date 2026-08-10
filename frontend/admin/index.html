@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Admin Dashboard | EventHub</title>
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+  <nav class="admin-nav">
+    <div class="logo">EventHub Admin</div>
+    <ul>
+      <li><a href="index.html" class="active">Dashboard</a></li>
+      <li><a href="#">Manage Events</a></li>
+      <li><a href="#">Manage Users</a></li>
+    </ul>
+    <button id="logoutBtn" class="logout-btn">Log out</button>
+  </nav>
+
+  <main class="admin-content">
+    <h1>Welcome, Admin</h1>
+    <p>This is your admin dashboard. Manage events and users from here.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Events</h3>
+        <p id="totalEvents">--</p>
+      </div>
+      <div class="stat-card">
+        <h3>Total Users</h3>
+        <p id="totalUsers">--</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>

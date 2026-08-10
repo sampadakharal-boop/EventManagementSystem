@@ -89,6 +89,11 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+app.post('/api/logout', (req, res) => {
+  res.clearCookie('token');
+  res.json({ success: true });
+});
+
 app.use('/api/admin', adminRoutes);
 
 app.listen(PORT, () => {

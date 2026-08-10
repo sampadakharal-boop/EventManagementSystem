@@ -2,7 +2,8 @@
 const express = require("express");
 const bcrypt = require("bcryptjs");
 const router = express.Router();
-const { run } = require("../db"); // ✅ correct — goes up one level from routes/, into backend/, finds db.js
+const { run } = require("../db");
+const verifyAdmin = require("../middleware/verifyAdmin");
 
 router.post("/setup-admin", async (req, res) => {
   const { name, email, password } = req.body;
@@ -34,6 +35,11 @@ router.post("/setup-admin", async (req, res) => {
       message: "Could not create admin account. Email may already be in use."
     });
   }
+});
+
+// New route — checks if the logged-in user is really an admin
+router.get("/verify", verifyAdmin, (req, res) => {
+  res.json({ success: true });
 });
 
 module.exports = router;
