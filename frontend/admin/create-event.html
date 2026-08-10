@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Create Event | EventHub Admin</title>
+<link rel="stylesheet" href="css/index.css" />
+<link rel="stylesheet" href="css/pages.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo"><span class="material-symbols-outlined">celebration</span> EventHub</div>
+  <nav class="sidebar-nav">
+    <p class="nav-label">Main</p>
+    <a href="index.html" class="nav-link"><span class="material-symbols-outlined">dashboard</span> Dashboard</a>
+    <a href="events.html" class="nav-link"><span class="material-symbols-outlined">event</span> Events</a>
+    <a href="calendar.html" class="nav-link"><span class="material-symbols-outlined">calendar_month</span> Calendar</a>
+    <a href="registration.html" class="nav-link"><span class="material-symbols-outlined">how_to_reg</span> Registrations</a>
+    <a href="attendees.html" class="nav-link"><span class="material-symbols-outlined">groups</span> Attendees</a>
+    <p class="nav-label">Management</p>
+    <a href="create-event.html" class="nav-link active"><span class="material-symbols-outlined">add_circle</span> Create Event</a>
+    <a href="categories.html" class="nav-link"><span class="material-symbols-outlined">category</span> Categories</a>
+    <a href="venues.html" class="nav-link"><span class="material-symbols-outlined">location_on</span> Venues</a>
+    <p class="nav-label">Analytics</p>
+    <a href="reports.html" class="nav-link"><span class="material-symbols-outlined">bar_chart</span> Reports</a>
+    <p class="nav-label">System</p>
+    <a href="notifications.html" class="nav-link"><span class="material-symbols-outlined">notifications</span> Notifications</a>
+    <a href="settings.html" class="nav-link"><span class="material-symbols-outlined">settings</span> Settings</a>
+    <button id="logoutBtn" class="nav-link logout-link"><span class="material-symbols-outlined">logout</span> Logout</button>
+  </nav>
+</aside>
+
+<div class="main-wrapper">
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle"><span class="material-symbols-outlined">menu</span></button>
+    <div class="topbar-title"><h1>Create Event</h1><p>Fill in the details to publish a new event</p></div>
+    <div class="topbar-actions">
+      <div class="admin-avatar">A</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <form id="createEventForm">
+
+      <div class="form-section">
+        <h3>Basic Information</h3>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Event Name <span class="required">*</span></label>
+            <input type="text" name="name" required />
+          </div>
+          <div class="form-group full">
+            <label>Description <span class="required">*</span></label>
+            <textarea name="description" required></textarea>
+          </div>
+          <div class="form-group">
+            <label>Category <span class="required">*</span></label>
+            <select name="category" required>
+              <option value="">Select category</option>
+              <option>Concerts</option>
+              <option>Technology</option>
+              <option>Workshops</option>
+              <option>Startups</option>
+              <option>Wellness</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Organizer</label>
+            <input type="text" name="organizer" />
+          </div>
+          <div class="form-group full">
+            <label>Event Banner Image</label>
+            <input type="file" name="banner" accept="image/*" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Date & Time</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Start Date <span class="required">*</span></label>
+            <input type="date" name="startDate" required />
+          </div>
+          <div class="form-group">
+            <label>Start Time <span class="required">*</span></label>
+            <input type="time" name="startTime" required />
+          </div>
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="date" name="endDate" />
+          </div>
+          <div class="form-group">
+            <label>End Time</label>
+            <input type="time" name="endTime" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Location</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Venue <span class="required">*</span></label>
+            <input type="text" name="venue" required />
+          </div>
+          <div class="form-group">
+            <label>City <span class="required">*</span></label>
+            <input type="text" name="city" required />
+          </div>
+          <div class="form-group full">
+            <label>Full Address</label>
+            <input type="text" name="address" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Registration</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Maximum Capacity</label>
+            <input type="number" name="capacity" min="1" />
+          </div>
+          <div class="form-group">
+            <label>Registration Deadline</label>
+            <input type="date" name="deadline" />
+          </div>
+          <div class="form-group">
+            <label>Event Type</label>
+            <select name="eventType">
+              <option value="free">Free</option>
+              <option value="paid">Paid</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Ticket Price (Rs.)</label>
+            <input type="number" name="price" min="0" placeholder="0" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3>Additional Information</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Contact Email</label>
+            <input type="email" name="contactEmail" />
+          </div>
+          <div class="form-group">
+            <label>Event Website / Social Link</label>
+            <input type="url" name="website" />
+          </div>
+          <div class="form-group full">
+            <label>Tags (comma separated)</label>
+            <input type="text" name="tags" placeholder="tech, networking, hackathon" />
+          </div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-secondary">Cancel</button>
+        <button type="button" class="btn-secondary">Save Draft</button>
+        <button type="submit" class="btn-primary">Publish Event</button>
+      </div>
+
+    </form>
+  </main>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
