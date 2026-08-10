@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ email, password })
       });
       const data = await res.json();
@@ -25,6 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.success) {
         showMessage(data.message, 'success');
         form.reset();
+
+        setTimeout(() => {
+          if (data.role === 'admin') {
+            window.location.href = 'admin/index.html';
+          } else {
+            window.location.href = 'events.html';
+          }
+        }, 800);
+
       } else {
         showMessage(data.message, 'error');
       }
