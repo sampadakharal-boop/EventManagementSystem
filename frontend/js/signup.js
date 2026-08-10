@@ -1,42 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('signupForm');
+  const form = document.getElementById('loginForm');
   const messageBox = document.getElementById('message');
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     messageBox.textContent = '';
 
-    const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-    const agree = document.getElementById('agree').checked;
 
-    if (!name || !email || !password || !confirmPassword) {
-      showMessage('Please fill in all fields.', 'error');
-      return;
-    }
-    if (password !== confirmPassword) {
-      showMessage('Passwords do not match.', 'error');
-      return;
-    }
-    if (!agree) {
-      showMessage('Please agree to the terms to continue.', 'error');
+    if (!email || !password) {
+      showMessage('Please fill in both fields.', 'error');
       return;
     }
 
     try {
-      const res = await fetch('/api/signup', {
+      const res = await fetch('/api/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
       });
       const data = await res.json();
 
       if (data.success) {
         showMessage(data.message, 'success');
         form.reset();
-        setTimeout(() => { window.location.href = 'login.html'; }, 1200);
+
+        setTimeout(() => {
+          if (data.role === 'admin') {
+            window.location.href = 'admin/index.html';
+          } else {
+            window.location.href = 'events.html';
+          }
+        }, 800);
+
       } else {
         showMessage(data.message, 'error');
       }
