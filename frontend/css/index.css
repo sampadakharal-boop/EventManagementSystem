@@ -56,8 +56,14 @@ nav ul li a{
 }
 
 nav ul li a:hover,
-.active{
+nav ul li a.active{
     color:#E9D5FF;
+}
+
+#user-area{
+    justify-self:end;
+    display:flex;
+    align-items:center;
 }
 
 .signup_btn{
@@ -69,17 +75,10 @@ nav ul li a:hover,
     font-weight:600;
     text-decoration:none;
     transition:.3s;
-    justify-self:end;
 }
 
 .signup_btn:hover{
     background:#F3E8FF;
-}
-
-#user-area{
-    justify-self:end;
-    display:flex;
-    align-items:center;
 }
 
 .profile-circle{
@@ -101,8 +100,8 @@ nav ul li a:hover,
     font-weight:600;
     line-height:1;
     cursor:pointer;
-    box-sizing:border-box;
     transition:.3s;
+    box-sizing:border-box;
 }
 
 .profile-circle:hover{
@@ -118,9 +117,17 @@ nav ul li a:hover,
     text-align:center;
     padding:80px 20px;
     background:
-    radial-gradient(circle at left top,rgba(124,58,237,.15),transparent 35%),
-    radial-gradient(circle at right bottom,rgba(139,92,246,.15),transparent 35%),
-    #fff;
+        radial-gradient(
+            circle at left top,
+            rgba(124,58,237,.15),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at right bottom,
+            rgba(139,92,246,.15),
+            transparent 35%
+        ),
+        #fff;
 }
 
 .hero-content{
@@ -171,7 +178,7 @@ nav ul li a:hover,
 }
 
 .btn:hover{
-    background:#8B5CF6;
+    background:#7C3AED;
     transform:translateY(-4px);
 }
 
@@ -316,6 +323,10 @@ nav ul li a:hover,
     color:#8B5CF6;
     font-weight:600;
     text-decoration:none;
+}
+
+.card-content a:hover{
+    color:#7C3AED;
 }
 
 .stats{
