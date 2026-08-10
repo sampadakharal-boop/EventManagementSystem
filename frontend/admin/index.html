@@ -5,34 +5,256 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Admin Dashboard | EventHub</title>
 <link rel="stylesheet" href="css/index.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
 <body>
 
-  <nav class="admin-nav">
-    <div class="logo">EventHub Admin</div>
-    <ul>
-      <li><a href="index.html" class="active">Dashboard</a></li>
-      <li><a href="#">Manage Events</a></li>
-      <li><a href="#">Manage Users</a></li>
-    </ul>
-    <button id="logoutBtn" class="logout-btn">Log out</button>
-  </nav>
+  <!-- Mobile overlay -->
+  <div class="overlay" id="overlay"></div>
 
-  <main class="admin-content">
-    <h1>Welcome, Admin</h1>
-    <p>This is your admin dashboard. Manage events and users from here.</p>
-
-    <div class="stats-grid">
-      <div class="stat-card">
-        <h3>Total Events</h3>
-        <p id="totalEvents">--</p>
-      </div>
-      <div class="stat-card">
-        <h3>Total Users</h3>
-        <p id="totalUsers">--</p>
-      </div>
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="material-symbols-outlined">celebration</span>
+      EventHub
     </div>
-  </main>
+
+    <nav class="sidebar-nav">
+      <p class="nav-label">Main</p>
+      <a href="index.html" class="nav-link active">
+        <span class="material-symbols-outlined">dashboard</span> Dashboard
+      </a>
+      <a href="events.html" class="nav-link">
+        <span class="material-symbols-outlined">event</span> Events
+      </a>
+      <a href="calendar.html" class="nav-link">
+        <span class="material-symbols-outlined">calendar_month</span> Calendar
+      </a>
+      <a href="registration.html" class="nav-link">
+        <span class="material-symbols-outlined">how_to_reg</span> Registrations
+      </a>
+      <a href="attendees.html" class="nav-link">
+        <span class="material-symbols-outlined">groups</span> Attendees
+      </a>
+
+      <p class="nav-label">Management</p>
+      <a href="create-event.html" class="nav-link">
+        <span class="material-symbols-outlined">add_circle</span> Create Event
+      </a>
+      <a href="categories.html" class="nav-link">
+        <span class="material-symbols-outlined">category</span> Categories
+      </a>
+      <a href="venues.html" class="nav-link">
+        <span class="material-symbols-outlined">location_on</span> Venues
+      </a>
+
+      <p class="nav-label">Analytics</p>
+      <a href="reports.html" class="nav-link">
+        <span class="material-symbols-outlined">bar_chart</span> Reports
+      </a>
+
+      <p class="nav-label">System</p>
+      <a href="notifications.html" class="nav-link">
+        <span class="material-symbols-outlined">notifications</span> Notifications
+      </a>
+      <a href="settings.html" class="nav-link">
+        <span class="material-symbols-outlined">settings</span> Settings
+      </a>
+      <button id="logoutBtn" class="nav-link logout-link">
+        <span class="material-symbols-outlined">logout</span> Logout
+      </button>
+    </nav>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-wrapper">
+
+    <!-- Top header -->
+    <header class="topbar">
+      <button class="menu-toggle" id="menuToggle">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+
+      <div class="topbar-title">
+        <h1>Dashboard</h1>
+        <p>Welcome back, Admin 👋</p>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="search-box">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" placeholder="Search..." />
+        </div>
+        <button class="icon-btn">
+          <span class="material-symbols-outlined">notifications</span>
+          <span class="badge-dot"></span>
+        </button>
+        <div class="admin-avatar">A</div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- Stats cards -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-icon purple">
+            <span class="material-symbols-outlined">event</span>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Total Events</p>
+            <h2 class="stat-value">128</h2>
+            <span class="stat-change positive">+12% this month</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon blue">
+            <span class="material-symbols-outlined">upcoming</span>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Upcoming Events</p>
+            <h2 class="stat-value">34</h2>
+            <span class="stat-change positive">+5 new</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon green">
+            <span class="material-symbols-outlined">how_to_reg</span>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Total Registrations</p>
+            <h2 class="stat-value">2,540</h2>
+            <span class="stat-change positive">+8.2%</span>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon amber">
+            <span class="material-symbols-outlined">groups</span>
+          </div>
+          <div class="stat-info">
+            <p class="stat-label">Total Attendees</p>
+            <h2 class="stat-value">1,982</h2>
+            <span class="stat-change negative">-2.1%</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Event overview + Recent registrations -->
+      <section class="content-grid">
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Upcoming Events</h3>
+            <a href="events.html" class="view-all">View all</a>
+          </div>
+
+          <div class="event-row">
+            <div class="event-thumb">🎤</div>
+            <div class="event-details">
+              <h4>Tech Hackathon 2026</h4>
+              <p>Aug 15, 2026 • 9:00 AM • Kathmandu</p>
+            </div>
+            <span class="status-badge upcoming">Upcoming</span>
+          </div>
+
+          <div class="event-row">
+            <div class="event-thumb">🎵</div>
+            <div class="event-details">
+              <h4>Live Music Night</h4>
+              <p>Aug 20, 2026 • 6:00 PM • Pokhara</p>
+            </div>
+            <span class="status-badge upcoming">Upcoming</span>
+          </div>
+
+          <div class="event-row">
+            <div class="event-thumb">💼</div>
+            <div class="event-details">
+              <h4>Startup Networking Meetup</h4>
+              <p>Aug 25, 2026 • 4:00 PM • Lalitpur</p>
+            </div>
+            <span class="status-badge upcoming">Upcoming</span>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-header">
+            <h3>Quick Stats</h3>
+          </div>
+          <div class="mini-stat">
+            <span>Active Events</span>
+            <strong>21</strong>
+          </div>
+          <div class="mini-stat">
+            <span>Completed Events</span>
+            <strong>73</strong>
+          </div>
+          <div class="mini-stat">
+            <span>Cancelled Events</span>
+            <strong>4</strong>
+          </div>
+          <div class="mini-stat">
+            <span>Total Revenue</span>
+            <strong>Rs. 4,52,000</strong>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Recent registrations table -->
+      <section class="panel table-panel">
+        <div class="panel-header">
+          <h3>Recent Registrations</h3>
+          <a href="registration.html" class="view-all">View all</a>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Participant</th>
+                <th>Email</th>
+                <th>Event</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sampada Kharal</td>
+                <td>sampada@example.com</td>
+                <td>Tech Hackathon 2026</td>
+                <td>Aug 9, 2026</td>
+                <td><span class="status-badge confirmed">Confirmed</span></td>
+                <td><button class="action-btn">View</button></td>
+              </tr>
+              <tr>
+                <td>Rita Shrestha</td>
+                <td>rita@example.com</td>
+                <td>Live Music Night</td>
+                <td>Aug 8, 2026</td>
+                <td><span class="status-badge pending">Pending</span></td>
+                <td><button class="action-btn">View</button></td>
+              </tr>
+              <tr>
+                <td>Bikash Thapa</td>
+                <td>bikash@example.com</td>
+                <td>Startup Meetup</td>
+                <td>Aug 7, 2026</td>
+                <td><span class="status-badge confirmed">Confirmed</span></td>
+                <td><button class="action-btn">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
 
   <script src="js/admin.js"></script>
 </body>
