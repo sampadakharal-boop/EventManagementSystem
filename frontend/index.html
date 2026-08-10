@@ -1,361 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventHub | Home</title>
+
+    <title>EventHub | Discover Amazing Events</title>
 
     <link rel="stylesheet" href="css/index.css">
 
     <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 
     <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
 </head>
 
 <body>
 
-<nav>
+    <header class="navbar">
 
-    <div class="logo">
-        EventHub
-    </div>
+        <div class="logo">
+            EventHub
+        </div>
 
-    <ul>
+        <ul>
+            <li>
+                <a href="index.html" class="active">Home</a>
+            </li>
 
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="explore.html">Explore</a></li>
-        <li><a href="aboutus.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-    </ul>
-      <div style="justify-self:end; display:flex; align-items:center;">
-        <a href="signup.html" class="signup_btn">
-            Sign Up
-        </a>
-    </div>
-</nav>
+            <li>
+                <a href="events.html">Events</a>
+            </li>
 
-<section class="hero">
+            <li>
+                <a href="categories.html">Categories</a>
+            </li>
 
-    <div class="hero-content">
-        <span class="badge">
-             Discover • Connect • Enjoy
-        </span>
-        <h1>
-            Find Amazing Events Around You
-        </h1>
+            <li>
+                <a href="explore.html">Explore</a>
+            </li>
+
+            <li>
+                <a href="aboutus.html">About</a>
+            </li>
+
+            <li>
+                <a href="contact.html">Contact</a>
+            </li>
+        </ul>
+
+        <div id="user-area"
+            style="justify-self:end; display:flex; align-items:center;">
+
+            <a href="signup.html" class="signup_btn">
+                Sign Up
+            </a>
+
+        </div>
+
+    </header>
+
+
+    <main>
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="badge">
+                    Discover • Connect • Enjoy
+                </span>
+
+                <h1>
+                    Find Amazing Events Around You
+                </h1>
+
+                <p>
+                    Discover concerts, educational events,
+                    startup programs, sports, workshops,
+                    festivals and networking opportunities
+                    happening near you.
+                </p>
+
+                <div class="hero-buttons">
+
+                    <a href="events.html" class="btn">
+                        Explore Events
+                    </a>
+
+                    <a href="signup.html" class="btn-outline">
+                        Join Now
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="categories-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Choose Your Favourite Category
+                </h2>
+
+                <p>
+                    Choose your favourite category and
+                    discover events that match your interests.
+                </p>
+
+            </div>
+
+
+            <div class="category-grid">
+
+                <div class="category-card">
+
+                    <div class="category-icon">
+                        <span class="material-symbols-outlined">
+                            sports_soccer
+                        </span>
+                    </div>
+
+                    <h3>
+                        Sports
+                    </h3>
+
+                    <p>
+                        Improve your skills and enjoy
+                        exciting sports events.
+                    </p>
+
+                    <a href="categories.html">
+                        View Details
+                    </a>
+
+                </div>
+
+
+                <div class="category-card">
+
+                    <div class="category-icon">
+                        <span class="material-symbols-outlined">
+                            school
+                        </span>
+                    </div>
+
+                    <h3>
+                        Educational
+                    </h3>
+
+                    <p>
+                        Develop practical skills through
+                        engaging sessions and expert guidance.
+                    </p>
+
+                    <a href="categories.html">
+                        View Details
+                    </a>
+
+                </div>
+
+
+                <div class="category-card">
+
+                    <div class="category-icon">
+                        <span class="material-symbols-outlined">
+                            computer
+                        </span>
+                    </div>
+
+                    <h3>
+                        Technology
+                    </h3>
+
+                    <p>
+                        Experience unforgettable meetups
+                        with tech enthusiasts.
+                    </p>
+
+                    <a href="categories.html">
+                        View Details
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="events-section">
+
+            <div class="section-heading">
+
+                <h2>
+                    Discover What's Happening
+                </h2>
+
+                <p>
+                    Connecting people through memorable events.
+                </p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <footer>
+
         <p>
-
-            Discover concerts, educational events,
-            startup programs, sports, workshops,
-            festivals and networking opportunities
-            happening near you.
+            © 2026 EventHub. All Rights Reserved.
         </p>
 
-        <div class="hero-buttons">
-            <a href="events.html" class="btn">
-                Explore Events
-            </a>
-            <a href="Signup.html" class="btn-outline">
-                Join Now
-            </a>
-        </div>
-    </div>
+    </footer>
 
-</section>
 
-<hr class="section-divider">
+    <script>
 
-<section class="categories">
+        document.addEventListener("DOMContentLoaded", async () => {
 
-<div class="container">
+            const userArea = document.getElementById("user-area");
 
-<h2>
-Browse Categories
-</h2>
+            try {
 
-<p class="section-text">
+                const response = await fetch("/api/me", {
+                    method: "GET",
+                    credentials: "include"
+                });
 
-Choose your favourite category and
-discover events that match your interests.
+                const data = await response.json();
 
-</p>
+                if (data.success && data.user) {
 
-<div class="category-grid">
+                    userArea.innerHTML = `
+                        <button
+                            class="profile-circle"
+                            onclick="window.location.href='profile.html'"
+                            title="${data.user.name}"
+                            aria-label="Open profile"
+                        >
+                            ${data.user.name.charAt(0).toUpperCase()}
+                        </button>
+                    `;
 
-<div class="category-card">
+                }
 
-<span class="material-symbols-outlined">
-music_note
-</span>
+            } catch (error) {
 
-<h3>Concerts</h3>
+                console.error(
+                    "Unable to check login status:",
+                    error
+                );
 
-<p>Live music performances and festivals.</p>
+            }
 
-</div>
+        });
 
-<div class="category-card">
+    </script>
 
-<span class="material-symbols-outlined">
-celebration
-</span>
 
-<h3>Events</h3>
+    <style>
 
-<p>Special celebrations and community events.</p>
+        .profile-circle {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 2px solid #8B5CF6;
+            background: #8B5CF6;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.2s ease;
+        }
 
-</div>
+        .profile-circle:hover {
+            transform: scale(1.06);
+        }
 
-<div class="category-card">
-
-<span class="material-symbols-outlined">
-school
-</span>
-
-<h3>Education</h3>
-
-<p>Workshops, seminars and learning sessions.</p>
-
-</div>
-
-<div class="category-card">
-
-<span class="material-symbols-outlined">
-sports_esports
-</span>
-
-<h3>Entertainment</h3>
-
-<p>Gaming competitions and fun activities.</p>
-
-</div>
-
-<div class="category-card">
-
-<span class="material-symbols-outlined">
-spa
-</span>
-
-<h3>Wellness</h3>
-
-<p>Yoga, meditation and fitness programs.</p>
-
-</div>
-
-<div class="category-card">
-
-<span class="material-symbols-outlined">
-computer
-</span>
-
-<h3>Technology</h3>
-
-<p>Hackathons, coding events and conferences.</p>
-
-</div>
-
-<div class="category-card">
-
-<span class="material-symbols-outlined">
-gavel
-</span>
-
-<h3>Law</h3>
-
-<p>Legal awareness and professional seminars.</p>
-
-</div>
-
-<div class="category-card">
-
-<span class="material-symbols-outlined">
-rocket_launch
-</span>
-
-<h3>Startups</h3>
-
-<p>Entrepreneurship and innovation programs.</p>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<section class="inspiration">
-
-<div class="container">
-
-<h2>
-Featured Events
-</h2>
-
-<p class="section-text">
-
-Join thousands of people attending exciting events every week.
-
-</p>
-
-<div class="inspiration-grid">
-
-<div class="inspiration-card">
-
-<div class="image-box">
-
-<img src="image/Pic3.jpg"
-alt="Conference">
-
-</div>
-
-<div class="card-content">
-
-<h3>Sports Match</h3>
-
-<p>
-
-Improve you skill on sports
-
-</p>
-
-<a href="events.html">
-
-View Details
-
-</a>
-
-</div>
-
-</div>
-
-<div class="inspiration-card">
-
-<div class="image-box">
-
-<img src="image/Pic2.jpg"
-alt="Workshop">
-
-</div>
-
-<div class="card-content">
-
-<h3>Creative Workshop</h3>
-
-<p>
-
-Develop practical skills
-through engaging sessions
-and expert guidance.
-
-</p>
-
-<a href="events.html">
-
-View Details
-
-</a>
-
-</div>
-
-</div>
-
-<div class="inspiration-card">
-
-<div class="image-box">
-
-<img src="image/Pic4.jpg"
-alt="Concert">
-
-</div>
-
-<div class="card-content">
-
-<h3>Meetup</h3>
-
-<p>
-
-Experience unforgettable
-meetup with Tech enthusiast
-</p>
-
-<a href="events.html">
-
-View Details
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</section>
-
-<footer>
-
-<div class="container footer-content">
-
-<div>
-
-<h3>EventHub</h3>
-
-<p>
-
-Connecting people through memorable events.
-
-</p>
-
-</div>
-
-<div>
-
-<h4>Quick Links</h4>
-
-<ul>
-
-<li><a href="index.html">Home</a></li>
-
-<li><a href="events.html">Events</a></li>
-
-<li><a href="categories.html">Categories</a></li>
-
-<li><a href="contact.html">Contact</a></li>
-
-</ul>
-
-</div>
-
-<div>
-
-<h4>Contact</h4>
-
-<p>Email: info@eventhub.com</p>
-
-<p>Phone: +977 9800000000</p>
-
-</div>
-
-</div>
-
-<div class="copyright">
-
-<p>
-
-© 2026 EventHub. All Rights Reserved.
-
-</p>
-
-</div>
-
-</footer>
+    </style>
 
 </body>
+
 </html>

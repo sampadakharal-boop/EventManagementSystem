@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (data.role === 'admin') {
             window.location.href = 'admin/index.html';
           } else {
-            window.location.href = 'events.html';
+            window.location.href = 'index.html';
           }
         }, 800);
 
