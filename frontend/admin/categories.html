@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Categories | EventHub Admin</title>
+<link rel="stylesheet" href="css/index.css" />
+<link rel="stylesheet" href="css/pages.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo"><span class="material-symbols-outlined">celebration</span> EventHub</div>
+  <nav class="sidebar-nav">
+    <p class="nav-label">Main</p>
+    <a href="index.html" class="nav-link"><span class="material-symbols-outlined">dashboard</span> Dashboard</a>
+    <a href="events.html" class="nav-link"><span class="material-symbols-outlined">event</span> Events</a>
+    <a href="calendar.html" class="nav-link"><span class="material-symbols-outlined">calendar_month</span> Calendar</a>
+    <a href="registration.html" class="nav-link"><span class="material-symbols-outlined">how_to_reg</span> Registrations</a>
+    <a href="attendees.html" class="nav-link"><span class="material-symbols-outlined">groups</span> Attendees</a>
+    <p class="nav-label">Management</p>
+    <a href="create-event.html" class="nav-link"><span class="material-symbols-outlined">add_circle</span> Create Event</a>
+    <a href="categories.html" class="nav-link active"><span class="material-symbols-outlined">category</span> Categories</a>
+    <a href="venues.html" class="nav-link"><span class="material-symbols-outlined">location_on</span> Venues</a>
+    <p class="nav-label">Analytics</p>
+    <a href="reports.html" class="nav-link"><span class="material-symbols-outlined">bar_chart</span> Reports</a>
+    <p class="nav-label">System</p>
+    <a href="notifications.html" class="nav-link"><span class="material-symbols-outlined">notifications</span> Notifications</a>
+    <a href="settings.html" class="nav-link"><span class="material-symbols-outlined">settings</span> Settings</a>
+    <button id="logoutBtn" class="nav-link logout-link"><span class="material-symbols-outlined">logout</span> Logout</button>
+  </nav>
+</aside>
+
+<div class="main-wrapper">
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle"><span class="material-symbols-outlined">menu</span></button>
+    <div class="topbar-title"><h1>Categories</h1><p>Organize your events by category</p></div>
+    <div class="topbar-actions"><div class="admin-avatar">A</div></div>
+  </header>
+
+  <main class="content">
+    <div class="page-header">
+      <h2>Event Categories</h2>
+      <button class="btn-primary"><span class="material-symbols-outlined">add</span> Add Category</button>
+    </div>
+
+    <section class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon purple"><span class="material-symbols-outlined">music_note</span></div>
+        <div class="stat-info"><p class="stat-label">Concerts</p><h2 class="stat-value">18 events</h2></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon blue"><span class="material-symbols-outlined">computer</span></div>
+        <div class="stat-info"><p class="stat-label">Technology</p><h2 class="stat-value">32 events</h2></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><span class="material-symbols-outlined">school</span></div>
+        <div class="stat-info"><p class="stat-label">Workshops</p><h2 class="stat-value">21 events</h2></div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon amber"><span class="material-symbols-outlined">rocket_launch</span></div>
+        <div class="stat-info"><p class="stat-label">Startups</p><h2 class="stat-value">14 events</h2></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
