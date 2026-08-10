@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Notifications | EventHub Admin</title>
+<link rel="stylesheet" href="css/index.css" />
+<link rel="stylesheet" href="css/notifications.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo"><span class="material-symbols-outlined">celebration</span> EventHub</div>
+  <nav class="sidebar-nav">
+    <p class="nav-label">Main</p>
+    <a href="index.html" class="nav-link"><span class="material-symbols-outlined">dashboard</span> Dashboard</a>
+    <a href="events.html" class="nav-link"><span class="material-symbols-outlined">event</span> Events</a>
+    <a href="calendar.html" class="nav-link"><span class="material-symbols-outlined">calendar_month</span> Calendar</a>
+    <a href="registration.html" class="nav-link"><span class="material-symbols-outlined">how_to_reg</span> Registrations</a>
+    <a href="attendees.html" class="nav-link"><span class="material-symbols-outlined">groups</span> Attendees</a>
+    <p class="nav-label">Management</p>
+    <a href="create-event.html" class="nav-link"><span class="material-symbols-outlined">add_circle</span> Create Event</a>
+    <a href="categories.html" class="nav-link"><span class="material-symbols-outlined">category</span> Categories</a>
+    <a href="venues.html" class="nav-link"><span class="material-symbols-outlined">location_on</span> Venues</a>
+    <p class="nav-label">Analytics</p>
+    <a href="reports.html" class="nav-link"><span class="material-symbols-outlined">bar_chart</span> Reports</a>
+    <p class="nav-label">System</p>
+    <a href="notifications.html" class="nav-link active"><span class="material-symbols-outlined">notifications</span> Notifications</a>
+    <a href="settings.html" class="nav-link"><span class="material-symbols-outlined">settings</span> Settings</a>
+    <button id="logoutBtn" class="nav-link logout-link"><span class="material-symbols-outlined">logout</span> Logout</button>
+  </nav>
+</aside>
+
+<div class="main-wrapper">
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle"><span class="material-symbols-outlined">menu</span></button>
+    <div class="topbar-title"><h1>Notifications</h1><p>Stay updated on activity</p></div>
+    <div class="topbar-actions"><div class="admin-avatar">A</div></div>
+  </header>
+
+  <main class="content">
+    <section class="panel">
+      <div class="panel-header">
+        <h3>Recent Notifications</h3>
+        <a href="#" class="view-all">Mark all as read</a>
+      </div>
+
+      <div class="notif-item unread">
+        <div class="notif-icon"><span class="material-symbols-outlined">how_to_reg</span></div>
+        <div class="notif-text">
+          <h4>New registration</h4>
+          <p>Rita Shrestha registered for Live Music Night</p>
+        </div>
+        <span class="notif-time">5 min ago</span>
+      </div>
+
+      <div class="notif-item unread">
+        <div class="notif-icon"><span class="material-symbols-outlined">warning</span></div>
+        <div class="notif-text">
+          <h4>Event reaching capacity</h4>
+          <p>Tech Hackathon 2026 is 90% full</p>
+        </div>
+        <span class="notif-time">2 hours ago</span>
+      </div>
+
+      <div class="notif-item">
+        <div class="notif-icon"><span class="material-symbols-outlined">event</span></div>
+        <div class="notif-text">
+          <h4>Registration deadline approaching</h4>
+          <p>Startup Networking Meetup closes in 2 days</p>
+        </div>
+        <span class="notif-time">1 day ago</span>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

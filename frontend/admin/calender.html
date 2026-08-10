@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calendar | EventHub Admin</title>
+<link rel="stylesheet" href="css/index.css" />
+<link rel="stylesheet" href="css/calendar.css" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo"><span class="material-symbols-outlined">celebration</span> EventHub</div>
+  <nav class="sidebar-nav">
+    <p class="nav-label">Main</p>
+    <a href="index.html" class="nav-link"><span class="material-symbols-outlined">dashboard</span> Dashboard</a>
+    <a href="events.html" class="nav-link"><span class="material-symbols-outlined">event</span> Events</a>
+    <a href="calendar.html" class="nav-link active"><span class="material-symbols-outlined">calendar_month</span> Calendar</a>
+    <a href="registration.html" class="nav-link"><span class="material-symbols-outlined">how_to_reg</span> Registrations</a>
+    <a href="attendees.html" class="nav-link"><span class="material-symbols-outlined">groups</span> Attendees</a>
+    <p class="nav-label">Management</p>
+    <a href="create-event.html" class="nav-link"><span class="material-symbols-outlined">add_circle</span> Create Event</a>
+    <a href="categories.html" class="nav-link"><span class="material-symbols-outlined">category</span> Categories</a>
+    <a href="venues.html" class="nav-link"><span class="material-symbols-outlined">location_on</span> Venues</a>
+    <p class="nav-label">Analytics</p>
+    <a href="reports.html" class="nav-link"><span class="material-symbols-outlined">bar_chart</span> Reports</a>
+    <p class="nav-label">System</p>
+    <a href="notifications.html" class="nav-link"><span class="material-symbols-outlined">notifications</span> Notifications</a>
+    <a href="settings.html" class="nav-link"><span class="material-symbols-outlined">settings</span> Settings</a>
+    <button id="logoutBtn" class="nav-link logout-link"><span class="material-symbols-outlined">logout</span> Logout</button>
+  </nav>
+</aside>
+
+<div class="main-wrapper">
+  <header class="topbar">
+    <button class="menu-toggle" id="menuToggle"><span class="material-symbols-outlined">menu</span></button>
+    <div class="topbar-title"><h1>Calendar</h1><p>All events at a glance</p></div>
+    <div class="topbar-actions">
+      <div class="admin-avatar">A</div>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="panel">
+      <div class="calendar-header">
+        <h3>August 2026</h3>
+        <div class="calendar-nav">
+          <button><span class="material-symbols-outlined">chevron_left</span></button>
+          <button><span class="material-symbols-outlined">chevron_right</span></button>
+        </div>
+      </div>
+
+      <div class="calendar-grid">
+        <div class="calendar-day-label">Sun</div>
+        <div class="calendar-day-label">Mon</div>
+        <div class="calendar-day-label">Tue</div>
+        <div class="calendar-day-label">Wed</div>
+        <div class="calendar-day-label">Thu</div>
+        <div class="calendar-day-label">Fri</div>
+        <div class="calendar-day-label">Sat</div>
+
+        <div class="calendar-cell empty"></div>
+        <div class="calendar-cell empty"></div>
+        <div class="calendar-cell empty"></div>
+        <div class="calendar-cell empty"></div>
+        <div class="calendar-cell empty"></div>
+        <div class="calendar-cell empty"></div>
+        <div class="calendar-cell">1</div>
+
+        <div class="calendar-cell">2</div>
+        <div class="calendar-cell">3</div>
+        <div class="calendar-cell">4</div>
+        <div class="calendar-cell">5</div>
+        <div class="calendar-cell">6</div>
+        <div class="calendar-cell">7</div>
+        <div class="calendar-cell">8</div>
+
+        <div class="calendar-cell">9</div>
+        <div class="calendar-cell today">10<span class="calendar-dot"></span></div>
+        <div class="calendar-cell">11</div>
+        <div class="calendar-cell">12</div>
+        <div class="calendar-cell">13</div>
+        <div class="calendar-cell">14</div>
+        <div class="calendar-cell">15<span class="calendar-dot"></span></div>
+
+        <div class="calendar-cell">16</div>
+        <div class="calendar-cell">17</div>
+        <div class="calendar-cell">18</div>
+        <div class="calendar-cell">19</div>
+        <div class="calendar-cell">20<span class="calendar-dot"></span></div>
+        <div class="calendar-cell">21</div>
+        <div class="calendar-cell">22</div>
+
+        <div class="calendar-cell">23</div>
+        <div class="calendar-cell">24</div>
+        <div class="calendar-cell">25<span class="calendar-dot"></span></div>
+        <div class="calendar-cell">26</div>
+        <div class="calendar-cell">27</div>
+        <div class="calendar-cell">28</div>
+        <div class="calendar-cell">29</div>
+
+        <div class="calendar-cell">30</div>
+        <div class="calendar-cell">31</div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

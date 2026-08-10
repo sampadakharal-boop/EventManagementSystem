@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Attendees | EventHub Admin</title>
+<title>Manage Events | EventHub Admin</title>
 <link rel="stylesheet" href="css/index.css" />
-<link rel="stylesheet" href="css/pages.css" />
+<link rel="stylesheet" href="css/Events.css" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 </head>
@@ -18,10 +18,10 @@
   <nav class="sidebar-nav">
     <p class="nav-label">Main</p>
     <a href="index.html" class="nav-link"><span class="material-symbols-outlined">dashboard</span> Dashboard</a>
-    <a href="events.html" class="nav-link"><span class="material-symbols-outlined">event</span> Events</a>
+    <a href="events.html" class="nav-link active"><span class="material-symbols-outlined">event</span> Events</a>
     <a href="calendar.html" class="nav-link"><span class="material-symbols-outlined">calendar_month</span> Calendar</a>
     <a href="registration.html" class="nav-link"><span class="material-symbols-outlined">how_to_reg</span> Registrations</a>
-    <a href="attendees.html" class="nav-link active"><span class="material-symbols-outlined">groups</span> Attendees</a>
+    <a href="attendees.html" class="nav-link"><span class="material-symbols-outlined">groups</span> Attendees</a>
     <p class="nav-label">Management</p>
     <a href="create-event.html" class="nav-link"><span class="material-symbols-outlined">add_circle</span> Create Event</a>
     <a href="categories.html" class="nav-link"><span class="material-symbols-outlined">category</span> Categories</a>
@@ -38,37 +38,25 @@
 <div class="main-wrapper">
   <header class="topbar">
     <button class="menu-toggle" id="menuToggle"><span class="material-symbols-outlined">menu</span></button>
-    <div class="topbar-title"><h1>Attendees</h1><p>Track check-ins across all events</p></div>
+    <div class="topbar-title"><h1>Events</h1><p>Manage all your events</p></div>
     <div class="topbar-actions">
+      <div class="search-box"><span class="material-symbols-outlined">search</span><input type="text" placeholder="Search..." /></div>
+      <button class="icon-btn"><span class="material-symbols-outlined">notifications</span><span class="badge-dot"></span></button>
       <div class="admin-avatar">A</div>
     </div>
   </header>
 
   <main class="content">
-
-    <section class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon purple"><span class="material-symbols-outlined">groups</span></div>
-        <div class="stat-info"><p class="stat-label">Total Attendees</p><h2 class="stat-value">1,982</h2></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon green"><span class="material-symbols-outlined">check_circle</span></div>
-        <div class="stat-info"><p class="stat-label">Checked In</p><h2 class="stat-value">1,340</h2></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon amber"><span class="material-symbols-outlined">schedule</span></div>
-        <div class="stat-info"><p class="stat-label">Not Checked In</p><h2 class="stat-value">602</h2></div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon blue"><span class="material-symbols-outlined">cancel</span></div>
-        <div class="stat-info"><p class="stat-label">Cancelled</p><h2 class="stat-value">40</h2></div>
-      </div>
-    </section>
+    <div class="page-header">
+      <h2>All Events</h2>
+      <a href="create-event.html" class="btn-primary"><span class="material-symbols-outlined">add</span> Create Event</a>
+    </div>
 
     <div class="filters-bar">
-      <input type="text" placeholder="Search attendees..." />
-      <select><option>All Events</option><option>Tech Hackathon 2026</option></select>
-      <select><option>All Status</option><option>Checked In</option><option>Not Checked In</option></select>
+      <input type="text" placeholder="Search events..." />
+      <select><option>All Categories</option><option>Concerts</option><option>Tech</option><option>Workshops</option></select>
+      <select><option>All Status</option><option>Upcoming</option><option>Active</option><option>Completed</option><option>Cancelled</option></select>
+      <input type="date" />
     </div>
 
     <section class="panel table-panel">
@@ -76,27 +64,36 @@
         <table>
           <thead>
             <tr>
-              <th>Name</th><th>Email</th><th>Phone</th><th>Event</th><th>Reg. ID</th><th>Check-in</th><th>Actions</th>
+              <th>Event</th><th>Category</th><th>Date</th><th>Location</th><th>Registrations</th><th>Status</th><th>Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Sampada Kharal</td>
-              <td>sampada@example.com</td>
-              <td>98XXXXXXXX</td>
-              <td>Tech Hackathon 2026</td>
-              <td>#R001</td>
-              <td><span class="status-badge confirmed">Checked In</span></td>
-              <td><button class="action-btn">View</button></td>
+              <td><strong>Tech Hackathon 2026</strong></td>
+              <td>Technology</td>
+              <td>Aug 15, 2026</td>
+              <td>Kathmandu</td>
+              <td>240</td>
+              <td><span class="status-badge upcoming">Upcoming</span></td>
+              <td><button class="action-btn">Manage</button></td>
             </tr>
             <tr>
-              <td>Rita Shrestha</td>
-              <td>rita@example.com</td>
-              <td>98XXXXXXXX</td>
-              <td>Live Music Night</td>
-              <td>#R002</td>
-              <td><span class="status-badge pending">Not Checked In</span></td>
-              <td><button class="action-btn">Check In</button></td>
+              <td><strong>Live Music Night</strong></td>
+              <td>Concerts</td>
+              <td>Aug 20, 2026</td>
+              <td>Pokhara</td>
+              <td>512</td>
+              <td><span class="status-badge upcoming">Upcoming</span></td>
+              <td><button class="action-btn">Manage</button></td>
+            </tr>
+            <tr>
+              <td><strong>Startup Networking Meetup</strong></td>
+              <td>Startups</td>
+              <td>Aug 25, 2026</td>
+              <td>Lalitpur</td>
+              <td>98</td>
+              <td><span class="status-badge confirmed">Active</span></td>
+              <td><button class="action-btn">Manage</button></td>
             </tr>
           </tbody>
         </table>
