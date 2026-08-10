@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile | EventHub</title>
+    <link rel="stylesheet" href="profile.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="navbar">
+        <div class="logo">
+            <span>Event</span>Hub
+        </div>
+
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="events.html">Explore Events</a>
+            <a href="my-events.html">My Events</a>
+            <a href="profile.html" class="active">Profile</a>
+        </nav>
+
+        <div class="nav-actions">
+            <button class="notification-btn">
+                <i class="fa-regular fa-bell"></i>
+            </button>
+
+            <div class="mini-profile">
+                <img src="https://i.pravatar.cc/100?img=47" alt="Profile">
+            </div>
+        </div>
+    </header>
+
+    <main class="profile-container">
+
+        <section class="profile-header">
+
+            <div class="profile-image-container">
+                <img
+                    src="https://i.pravatar.cc/200?img=47"
+                    alt="Profile"
+                    class="profile-image"
+                >
+
+                <button class="edit-profile-image">
+                    <i class="fa-solid fa-camera"></i>
+                </button>
+            </div>
+
+            <div class="profile-info">
+
+                <div class="profile-name-row">
+                    <div>
+                        <h1>Sampada Kharal</h1>
+                        <p class="username">@sampada</p>
+                    </div>
+
+                    <button class="edit-profile-btn">
+                        <i class="fa-solid fa-pen"></i>
+                        Edit Profile
+                    </button>
+                </div>
+
+                <p class="bio">
+                    Exploring events, meeting people and sharing
+                    unforgettable experiences.
+                </p>
+
+                <div class="profile-stats">
+
+                    <div class="stat">
+                        <strong>18</strong>
+                        <span>Posts</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong>24</strong>
+                        <span>Events Attended</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong>326</strong>
+                        <span>Followers</span>
+                    </div>
+
+                    <div class="stat">
+                        <strong>184</strong>
+                        <span>Following</span>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="profile-tabs">
+            <button class="tab active">
+                <i class="fa-solid fa-table-cells"></i>
+                Posts
+            </button>
+
+            <button class="tab">
+                <i class="fa-solid fa-calendar-check"></i>
+                Events Attended
+            </button>
+
+            <button class="tab">
+                <i class="fa-regular fa-bookmark"></i>
+                Saved
+            </button>
+        </div>
+
+        <section class="create-post-section">
+
+            <div class="create-post-header">
+
+                <div>
+                    <h2>Share Your Event Experience</h2>
+                    <p>
+                        Share photos and experiences from events
+                        you attended on EventHub.
+                    </p>
+                </div>
+
+                <button
+                    class="create-post-btn"
+                    onclick="openPostModal()"
+                >
+                    <i class="fa-solid fa-plus"></i>
+                    Create Post
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="posts-section">
+
+            <div class="section-heading">
+                <h2>Your Experiences</h2>
+            </div>
+
+            <div class="posts-grid">
+
+                <article class="experience-post">
+
+                    <div class="post-image-container">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80"
+                            alt="Music Festival"
+                        >
+
+                        <span class="verified-badge">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Verified Event
+                        </span>
+
+                    </div>
+
+                    <div class="post-content">
+
+                        <div class="event-tag">
+                            <i class="fa-solid fa-ticket"></i>
+                            <span>EVENT-2026-0042</span>
+                        </div>
+
+                        <h3>
+                            What an incredible night! 🎶
+                        </h3>
+
+                        <p>
+                            Had an amazing experience at the Kathmandu
+                            Music Festival. The performances were
+                            absolutely incredible!
+                        </p>
+
+                        <div class="post-actions">
+
+                            <button>
+                                <i class="fa-regular fa-heart"></i>
+                                128
+                            </button>
+
+                            <button>
+                                <i class="fa-regular fa-comment"></i>
+                                24
+                            </button>
+
+                            <button>
+                                <i class="fa-solid fa-share"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="experience-post">
+
+                    <div class="post-image-container">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=80"
+                            alt="Technology Event"
+                        >
+
+                        <span class="verified-badge">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Verified Event
+                        </span>
+
+                    </div>
+
+                    <div class="post-content">
+
+                        <div class="event-tag">
+                            <i class="fa-solid fa-ticket"></i>
+                            <span>EVENT-2026-0018</span>
+                        </div>
+
+                        <h3>
+                            Learned so much today! 💻
+                        </h3>
+
+                        <p>
+                            Great experience attending this technology
+                            conference. Met some amazing developers
+                            and learned about modern web technologies.
+                        </p>
+
+                        <div class="post-actions">
+
+                            <button>
+                                <i class="fa-regular fa-heart"></i>
+                                86
+                            </button>
+
+                            <button>
+                                <i class="fa-regular fa-comment"></i>
+                                12
+                            </button>
+
+                            <button>
+                                <i class="fa-solid fa-share"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+                <article class="experience-post">
+
+                    <div class="post-image-container">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1515169067868-5387ec356754?auto=format&fit=crop&w=900&q=80"
+                            alt="Startup Event"
+                        >
+
+                        <span class="verified-badge">
+                            <i class="fa-solid fa-circle-check"></i>
+                            Verified Event
+                        </span>
+
+                    </div>
+
+                    <div class="post-content">
+
+                        <div class="event-tag">
+                            <i class="fa-solid fa-ticket"></i>
+                            <span>EVENT-2026-0071</span>
+                        </div>
+
+                        <h3>
+                            Startup community is amazing 🚀
+                        </h3>
+
+                        <p>
+                            Loved meeting entrepreneurs and listening
+                            to their stories. Definitely attending
+                            the next one!
+                        </p>
+
+                        <div class="post-actions">
+
+                            <button>
+                                <i class="fa-regular fa-heart"></i>
+                                54
+                            </button>
+
+                            <button>
+                                <i class="fa-regular fa-comment"></i>
+                                8
+                            </button>
+
+                            <button>
+                                <i class="fa-solid fa-share"></i>
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </article>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <div class="modal-overlay" id="postModal">
+
+        <div class="post-modal">
+
+            <div class="modal-header">
+
+                <div>
+                    <h2>Create Experience</h2>
+                    <p>Share an event you attended.</p>
+                </div>
+
+                <button
+                    class="close-modal"
+                    onclick="closePostModal()"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Event ID</label>
+
+                <div class="event-id-input">
+
+                    <input
+                        type="text"
+                        id="eventId"
+                        placeholder="Example: EVENT-2026-0042"
+                    >
+
+                    <button onclick="verifyEvent()">
+                        Verify
+                    </button>
+
+                </div>
+
+                <small>
+                    Your post must be connected to a valid EventHub event.
+                </small>
+
+            </div>
+
+            <div
+                class="verification-message"
+                id="verificationMessage"
+            ></div>
+
+            <div class="form-group">
+
+                <label>Add Photo</label>
+
+                <label class="upload-box">
+
+                    <i class="fa-regular fa-image"></i>
+
+                    <span>
+                        Click to upload a photo
+                    </span>
+
+                    <input type="file" accept="image/*">
+
+                </label>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Your Experience</label>
+
+                <textarea
+                    placeholder="Tell people about your experience..."
+                    maxlength="500"
+                ></textarea>
+
+            </div>
+
+            <button
+                class="publish-btn"
+                id="publishBtn"
+                disabled
+            >
+                <i class="fa-solid fa-paper-plane"></i>
+                Publish Experience
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+
+        const modal = document.getElementById("postModal");
+        const verificationMessage = document.getElementById("verificationMessage");
+        const publishBtn = document.getElementById("publishBtn");
+
+        function openPostModal() {
+            modal.classList.add("show");
+        }
+
+        function closePostModal() {
+            modal.classList.remove("show");
+        }
+
+        function verifyEvent() {
+
+            const eventId = document.getElementById("eventId").value.trim();
+
+            if (!eventId) {
+
+                verificationMessage.className =
+                    "verification-message error";
+
+                verificationMessage.innerHTML =
+                    "Please enter an Event ID.";
+
+                publishBtn.disabled = true;
+
+                return;
+            }
+
+            const validEvents = [
+                "EVENT-2026-0042",
+                "EVENT-2026-0018",
+                "EVENT-2026-0071"
+            ];
+
+            if (validEvents.includes(eventId)) {
+
+                verificationMessage.className =
+                    "verification-message success";
+
+                verificationMessage.innerHTML = `
+                    <i class="fa-solid fa-circle-check"></i>
+                    Event verified successfully.
+                `;
+
+                publishBtn.disabled = false;
+
+            } else {
+
+                verificationMessage.className =
+                    "verification-message error";
+
+                verificationMessage.innerHTML = `
+                    <i class="fa-solid fa-circle-xmark"></i>
+                    Event not found on EventHub.
+                `;
+
+                publishBtn.disabled = true;
+            }
+        }
+
+        window.onclick = function(event) {
+
+            if (event.target === modal) {
+                closePostModal();
+            }
+
+        };
+
+    </script>
+
+</body>
+</html>
