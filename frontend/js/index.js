@@ -1,72 +1,150 @@
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
 
-    const profileName = document.getElementById("profileName");
-    const profileEmail = document.getElementById("profileEmail");
-    const nameInfo = document.getElementById("nameInfo");
-    const emailInfo = document.getElementById("emailInfo");
-    const roleInfo = document.getElementById("roleInfo");
-    const profileAvatar = document.getElementById("profileAvatar");
-    const logoutBtn = document.getElementById("logoutBtn");
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
 
-    try {
+if (menuBtn && navLinks) {
+    menuBtn.addEventListener("click", () => {
+        navLinks.classList.toggle("show");
 
-        const response = await fetch("/api/me", {
-            method: "GET",
-            credentials: "include"
-        });
-
-        const data = await response.json();
-
-        if (!data.success || !data.user) {
-            window.location.href = "login.html";
-            return;
+        if (navLinks.classList.contains("show")) {
+            menuBtn.textContent = "✕";
+        } else {
+            menuBtn.textContent = "☰";
         }
+    });
 
-        const user = data.user;
+    navLinks.querySelectorAll("a").forEach(link => {
+        link.addEventListener("click", () => {
+            navLinks.classList.remove("show");
+            menuBtn.textContent = "☰";
+        });
+    });
+}
 
-        profileName.textContent = user.name;
-        profileEmail.textContent = user.email;
+const heartButtons = document.querySelectorAll(".heart-btn, .card-heart");
 
-        nameInfo.textContent = user.name;
-        emailInfo.textContent = user.email;
+heartButtons.forEach(button => {
+    button.addEventListener("click", () => {
+        button.classList.toggle("liked");
 
-        roleInfo.textContent =
-            user.role === "admin" ? "Administrator" : "User";
+        if (button.classList.contains("liked")) {
+            button.textContent = "♥";
+        } else {
+            button.textContent = "♡";
+        }
+    });
+});
 
-        profileAvatar.textContent =
-            user.name.charAt(0).toUpperCase();
+const searchInput = document.getElementById("eventSearch");
+const searchBtn = document.getElementById("searchBtn");
+const searchMessage = document.getElementById("searchMessage");
 
-    } catch (error) {
+function searchEvents() {
+    const query = searchInput.value.trim();
 
-        console.error("Unable to load profile:", error);
-        window.location.href = "login.html";
-
+    if (!query) {
+        searchMessage.textContent = "Try searching for technology, concerts, workshops or startups.";
+        searchInput.focus();
+        return;
     }
 
-    logoutBtn.addEventListener("click", async () => {
+    window.location.href = `events.html?search=${encodeURIComponent(query)}`;
+}
 
-        try {
+if (searchBtn) {
+    searchBtn.addEventListener("click", searchEvents);
+}
 
-            const response = await fetch("/api/logout", {
-                method: "POST",
-                credentials: "include"
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                window.location.href = "login.html";
-            } else {
-                alert(data.message || "Logout failed.");
-            }
-
-        } catch (error) {
-
-            console.error("Logout error:", error);
-            alert("Could not log out. Please try again.");
-
+if (searchInput) {
+    searchInput.addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+            searchEvents();
         }
-
     });
+
+    searchInput.addEventListener("input", () => {
+        if (searchInput.value.trim()) {
+            searchMessage.textContent = "";
+        }
+    });
+}
+
+const profileCircle = document.getElementById("profileCircle");
+
+const storedUser = localStorage.getItem("user");
+
+if (storedUser && profileCircle) {
+    try {
+        const user = JSON.parse(storedUser);
+
+        const name =
+            user.full_name ||
+            user.fullName ||
+            user.name ||
+            "";
+
+        if (name) {
+            profileCircle.textContent = name.charAt(0).toUpperCase();
+            profileCircle.title = name;
+        }
+    } catch (error) {
+        console.log("Unable to load user profile.");
+    }
+}
+
+const observer = new IntersectionObserver(
+    entries => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+            }
+        });
+    },
+    {
+        threshold: 0.12
+    }
+);
+
+document
+    .querySelectorAll(".category-card, .event-card, .step")
+    .forEach(element => {
+        element.style.opacity = "0";
+        element.style.transform = "translateY(20px)";
+        element.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+        observer.observe(element);
+    });
+
+document.querySelectorAll(".category-card, .event-card, .step").forEach(element => {
+    element.addEventListener("transitionend", () => {
+        if (element.classList.contains("visible")) {
+            element.style.opacity = "1";
+            element.style.transform = "translateY(0)";
+        }
+    });
+});
+
+const animatedElements = document.querySelectorAll(
+    ".category-card, .event-card, .step"
+);
+
+animatedElements.forEach(element => {
+    const observerElement = new IntersectionObserver(
+        entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                    observerElement.unobserve(entry.target);
+                }
+            });
+        },
+        {
+            threshold: 0.1
+        }
+    );
+
+    observerElement.observe(element);
+});
 
 });

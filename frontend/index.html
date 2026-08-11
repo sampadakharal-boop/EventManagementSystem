@@ -1,79 +1,615 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>EventHub | My Profile</title>
+<title>EventHub | Discover. Connect. Experience.</title>
 
-    <link rel="stylesheet" href="css/index.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <link rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+<link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+<link rel="stylesheet" href="css/index.css">
+
 </head>
 
 <body>
 
-    <header class="navbar">
+<header class="navbar">
 
-        <div class="logo">
-            EventHub
+    <a href="index.html" class="logo">
+        Event<span>Hub</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+        <a href="index.html" class="active">Home</a>
+        <a href="events.html">Events</a>
+        <a href="categories.html">Categories</a>
+        <a href="explore.html">Explore</a>
+    </nav>
+
+    <div class="nav-actions">
+
+        <a href="login.html" class="login-btn">Log In</a>
+
+        <a href="signup.html" class="signup-btn">Get Started</a>
+
+        <a href="profile.html" class="profile-circle" id="profileCircle">
+            U
+        </a>
+
+    </div>
+
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        ☰
+    </button>
+
+</header>
+
+<main>
+
+    <section class="hero">
+
+        <div class="hero-decoration hero-decoration-one"></div>
+        <div class="hero-decoration hero-decoration-two"></div>
+
+        <div class="hero-content">
+
+            <div class="welcome-badge">
+                <span class="pulse-dot"></span>
+                Your next experience starts here
+            </div>
+
+            <h1>
+                Discover Events.
+                <span>Create Memories.</span>
+            </h1>
+
+            <p>
+                Find exciting events, connect with amazing people,
+                and make every moment worth remembering — all in one place.
+            </p>
+
+            <div class="hero-buttons">
+
+                <a href="events.html" class="primary-btn">
+                    Explore Events
+                    <span>→</span>
+                </a>
+
+                <a href="signup.html" class="secondary-btn">
+                    Create Account
+                </a>
+
+            </div>
+
+            <div class="hero-trust">
+
+                <div class="avatar-stack">
+                    <div class="mini-avatar">S</div>
+                    <div class="mini-avatar">A</div>
+                    <div class="mini-avatar">R</div>
+                    <div class="mini-avatar">+</div>
+                </div>
+
+                <div>
+                    <strong>Join the community</strong>
+                    <small>Discover experiences together</small>
+                </div>
+
+            </div>
+
         </div>
 
-        <nav>
-            <a href="index.html">Home</a>
+        <div class="hero-visual">
+
+            <div class="event-preview-card">
+
+                <div class="preview-top">
+                    <span class="featured-tag">FEATURED</span>
+
+                    <button class="heart-btn" id="heartBtn">
+                        ♡
+                    </button>
+                </div>
+
+                <div class="event-image">
+                    <div class="image-overlay"></div>
+
+                    <div class="event-date">
+                        <strong>24</strong>
+                        <span>AUG</span>
+                    </div>
+                </div>
+
+                <div class="preview-content">
+
+                    <span class="event-category">
+                        Technology
+                    </span>
+
+                    <h3>
+                        Future of Technology 2026
+                    </h3>
+
+                    <p>
+                        Discover ideas, innovation and the future.
+                    </p>
+
+                    <div class="preview-details">
+                        <span>📍 Kathmandu</span>
+                        <span>👥 250+</span>
+                    </div>
+
+                    <a href="events.html" class="preview-btn">
+                        View Event
+                    </a>
+
+                </div>
+
+            </div>
+
+            <div class="floating-card floating-card-one">
+                <span class="floating-icon">🎟️</span>
+
+                <div>
+                    <strong>Easy Registration</strong>
+                    <small>Book your spot</small>
+                </div>
+            </div>
+
+            <div class="floating-card floating-card-two">
+                <span class="floating-icon">✨</span>
+
+                <div>
+                    <strong>Great Experiences</strong>
+                    <small>Waiting for you</small>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="search-section">
+
+        <div class="search-box">
+
+            <span class="search-icon">⌕</span>
+
+            <input
+                type="text"
+                id="eventSearch"
+                placeholder="Search for events, workshops, concerts..."
+            >
+
+            <button id="searchBtn">
+                Search
+            </button>
+
+        </div>
+
+        <p id="searchMessage"></p>
+
+    </section>
+
+    <section class="categories-section">
+
+        <div class="section-heading">
+
+            <span class="section-label">
+                EXPLORE
+            </span>
+
+            <h2>
+                Find Something You'll Love
+            </h2>
+
+            <p>
+                Explore events based on what interests you.
+            </p>
+
+        </div>
+
+        <div class="category-grid">
+
+            <a href="events.html?category=technology" class="category-card">
+                <div class="category-icon">💻</div>
+                <h3>Technology</h3>
+                <p>Tech talks, workshops & innovation</p>
+                <span>Explore →</span>
+            </a>
+
+            <a href="events.html?category=concerts" class="category-card">
+                <div class="category-icon">🎵</div>
+                <h3>Concerts</h3>
+                <p>Music, performances & live shows</p>
+                <span>Explore →</span>
+            </a>
+
+            <a href="events.html?category=education" class="category-card">
+                <div class="category-icon">🎓</div>
+                <h3>Education</h3>
+                <p>Learn, grow & build your future</p>
+                <span>Explore →</span>
+            </a>
+
+            <a href="events.html?category=startup" class="category-card">
+                <div class="category-icon">🚀</div>
+                <h3>Startups</h3>
+                <p>Ideas, founders & entrepreneurship</p>
+                <span>Explore →</span>
+            </a>
+
+            <a href="events.html?category=wellness" class="category-card">
+                <div class="category-icon">🧘</div>
+                <h3>Wellness</h3>
+                <p>Health, fitness & mindfulness</p>
+                <span>Explore →</span>
+            </a>
+
+            <a href="events.html?category=fun" class="category-card">
+                <div class="category-icon">🎉</div>
+                <h3>Fun & Social</h3>
+                <p>Meet people & enjoy unforgettable moments</p>
+                <span>Explore →</span>
+            </a>
+
+        </div>
+
+    </section>
+
+    <section class="featured-section">
+
+        <div class="section-heading section-heading-row">
+
+            <div>
+
+                <span class="section-label">
+                    DON'T MISS OUT
+                </span>
+
+                <h2>
+                    Upcoming Events
+                </h2>
+
+                <p>
+                    Experiences worth adding to your calendar.
+                </p>
+
+            </div>
+
+            <a href="events.html" class="view-all-btn">
+                View All Events →
+            </a>
+
+        </div>
+
+        <div class="events-grid">
+
+            <article class="event-card">
+
+                <div class="event-card-image event-image-one">
+
+                    <span class="event-badge">
+                        Featured
+                    </span>
+
+                    <button class="card-heart">
+                        ♡
+                    </button>
+
+                    <div class="card-date">
+                        <strong>24</strong>
+                        <span>AUG</span>
+                    </div>
+
+                </div>
+
+                <div class="event-card-content">
+
+                    <span class="card-category">
+                        Technology
+                    </span>
+
+                    <h3>
+                        Future of Technology 2026
+                    </h3>
+
+                    <div class="event-meta">
+                        <span>📅 August 24, 2026</span>
+                        <span>📍 Kathmandu</span>
+                    </div>
+
+                    <div class="card-footer">
+                        <strong>Free Entry</strong>
+
+                        <a href="events.html">
+                            Details →
+                        </a>
+                    </div>
+
+                </div>
+
+            </article>
+
+            <article class="event-card">
+
+                <div class="event-card-image event-image-two">
+
+                    <span class="event-badge paid">
+                        Paid
+                    </span>
+
+                    <button class="card-heart">
+                        ♡
+                    </button>
+
+                    <div class="card-date">
+                        <strong>28</strong>
+                        <span>AUG</span>
+                    </div>
+
+                </div>
+
+                <div class="event-card-content">
+
+                    <span class="card-category">
+                        Music
+                    </span>
+
+                    <h3>
+                        Kathmandu Music Night
+                    </h3>
+
+                    <div class="event-meta">
+                        <span>📅 August 28, 2026</span>
+                        <span>📍 Lalitpur</span>
+                    </div>
+
+                    <div class="card-footer">
+                        <strong>Rs. 1,000</strong>
+
+                        <a href="events.html">
+                            Details →
+                        </a>
+                    </div>
+
+                </div>
+
+            </article>
+
+            <article class="event-card">
+
+                <div class="event-card-image event-image-three">
+
+                    <span class="event-badge">
+                        Popular
+                    </span>
+
+                    <button class="card-heart">
+                        ♡
+                    </button>
+
+                    <div class="card-date">
+                        <strong>05</strong>
+                        <span>SEP</span>
+                    </div>
+
+                </div>
+
+                <div class="event-card-content">
+
+                    <span class="card-category">
+                        Startup
+                    </span>
+
+                    <h3>
+                        Startup & Innovation Summit
+                    </h3>
+
+                    <div class="event-meta">
+                        <span>📅 September 5, 2026</span>
+                        <span>📍 Kathmandu</span>
+                    </div>
+
+                    <div class="card-footer">
+                        <strong>Free Entry</strong>
+
+                        <a href="events.html">
+                            Details →
+                        </a>
+                    </div>
+
+                </div>
+
+            </article>
+
+        </div>
+
+    </section>
+
+    <section class="how-section">
+
+        <div class="section-heading">
+
+            <span class="section-label">
+                SIMPLE & EASY
+            </span>
+
+            <h2>
+                Your Next Event Is Just 3 Steps Away
+            </h2>
+
+            <p>
+                We've made discovering and joining events effortless.
+            </p>
+
+        </div>
+
+        <div class="steps">
+
+            <div class="step">
+
+                <div class="step-number">
+                    01
+                </div>
+
+                <div class="step-icon">
+                    🔎
+                </div>
+
+                <h3>
+                    Discover
+                </h3>
+
+                <p>
+                    Browse through exciting events and find something
+                    that matches your interests.
+                </p>
+
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step">
+
+                <div class="step-number">
+                    02
+                </div>
+
+                <div class="step-icon">
+                    🎟️
+                </div>
+
+                <h3>
+                    Register
+                </h3>
+
+                <p>
+                    Choose your event, reserve your spot and complete
+                    your registration in seconds.
+                </p>
+
+            </div>
+
+            <div class="step-line"></div>
+
+            <div class="step">
+
+                <div class="step-number">
+                    03
+                </div>
+
+                <div class="step-icon">
+                    ✨
+                </div>
+
+                <h3>
+                    Experience
+                </h3>
+
+                <p>
+                    Show up, connect with people and create memories
+                    that last beyond the event.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="cta-section">
+
+        <div class="cta-content">
+
+            <span class="section-label light">
+                YOUR NEXT EXPERIENCE AWAITS
+            </span>
+
+            <h2>
+                Don't Just Hear About It.
+                <span>Be There.</span>
+            </h2>
+
+            <p>
+                Discover events happening around you and start
+                creating experiences worth remembering.
+            </p>
+
+            <a href="events.html" class="cta-btn">
+                Explore Events →
+            </a>
+
+        </div>
+
+    </section>
+
+</main>
+
+<footer>
+
+    <div class="footer-content">
+
+        <div class="footer-brand">
+
+            <a href="index.html" class="logo">
+                Event<span>Hub</span>
+            </a>
+
+            <p>
+                Your place to discover exciting events,
+                connect with people and create unforgettable experiences.
+            </p>
+
+        </div>
+
+        <div class="footer-column">
+
+            <h4>Explore</h4>
+
             <a href="events.html">Events</a>
             <a href="categories.html">Categories</a>
             <a href="explore.html">Explore</a>
-        </nav>
 
-    </header>
+        </div>
 
-    <main class="profile-container">
+        <div class="footer-column">
 
-        <section class="profile-card">
+            <h4>Account</h4>
 
-            <div class="profile-avatar" id="profileAvatar">
-                U
-            </div>
+            <a href="login.html">Log In</a>
+            <a href="signup.html">Create Account</a>
+            <a href="profile.html">My Profile</a>
 
-            <h1 id="profileName">
-                Loading...
-            </h1>
+        </div>
 
-            <p id="profileEmail">
-                Loading...
-            </p>
+        <div class="footer-column">
 
-            <div class="profile-info">
+            <h4>EventHub</h4>
 
-                <div class="info-item">
-                    <span>Name</span>
-                    <strong id="nameInfo">Loading...</strong>
-                </div>
+            <a href="aboutus.html">About Us</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy</a>
 
-                <div class="info-item">
-                    <span>Email</span>
-                    <strong id="emailInfo">Loading...</strong>
-                </div>
+        </div>
 
-                <div class="info-item">
-                    <span>Account Type</span>
-                    <strong id="roleInfo">Loading...</strong>
-                </div>
+    </div>
 
-            </div>
+    <div class="copyright">
+        © 2026 EventHub. All rights reserved.
+    </div>
 
-            <button id="logoutBtn" class="logout-btn">
-                Log Out
-            </button>
+</footer>
 
-        </section>
-
-    </main>
-
-    <script src="js/index.js"></script>
+<script src="js/index.js"></script>
 
 </body>
 
