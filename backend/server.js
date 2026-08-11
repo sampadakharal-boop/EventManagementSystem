@@ -1,3 +1,4 @@
+
 const path = require('path');
 
 require('dotenv').config({
@@ -27,9 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.get('/', (req, res) => {
-    res.sendFile(
-        path.join(__dirname, '../frontend/index.html')
-    );
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 app.post('/api/signup', async (req, res) => {
@@ -43,9 +42,11 @@ app.post('/api/signup', async (req, res) => {
             });
         }
 
+        const normalizedEmail = email.trim().toLowerCase();
+
         const existingUser = await get(
             'SELECT id FROM users WHERE email = ?',
-            [email]
+            [normalizedEmail]
         );
 
         if (existingUser) {
@@ -66,8 +67,8 @@ app.post('/api/signup', async (req, res) => {
             )
             VALUES (?, ?, ?, ?)`,
             [
-                name,
-                email,
+                name.trim(),
+                normalizedEmail,
                 hashedPassword,
                 'user'
             ]
@@ -92,12 +93,25 @@ app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
+        console.log('LOGIN REQUEST RECEIVED');
+        console.log('Email:', email);
+
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
                 message: 'Email and password are required.'
             });
         }
+
+        if (!JWT_SECRET) {
+            console.error('LOGIN ERROR: JWT_SECRET is missing.');
+            return res.status(500).json({
+                success: false,
+                message: 'Server authentication configuration is missing.'
+            });
+        }
+
+        const normalizedEmail = email.trim().toLowerCase();
 
         const user = await get(
             `SELECT
@@ -108,8 +122,10 @@ app.post('/api/login', async (req, res) => {
                 role
              FROM users
              WHERE email = ?`,
-            [email]
+            [normalizedEmail]
         );
+
+        console.log('USER FOUND:', !!user);
 
         if (!user) {
             return res.status(401).json({
@@ -118,10 +134,20 @@ app.post('/api/login', async (req, res) => {
             });
         }
 
+        if (!user.password) {
+            console.error('LOGIN ERROR: User has no password hash.');
+            return res.status(500).json({
+                success: false,
+                message: 'Account password data is invalid.'
+            });
+        }
+
         const passwordMatch = await bcrypt.compare(
             password,
             user.password
         );
+
+        console.log('PASSWORD MATCH:', passwordMatch);
 
         if (!passwordMatch) {
             return res.status(401).json({
@@ -146,8 +172,11 @@ app.post('/api/login', async (req, res) => {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: 'lax',
-            maxAge: 24 * 60 * 60 * 1000
+            maxAge: 24 * 60 * 60 * 1000,
+            path: '/'
         });
+
+        console.log('LOGIN SUCCESS:', user.email);
 
         return res.json({
             success: true,
@@ -163,6 +192,8 @@ app.post('/api/login', async (req, res) => {
 
     } catch (error) {
         console.error('LOGIN ERROR:', error);
+        console.error('LOGIN ERROR MESSAGE:', error.message);
+        console.error('LOGIN ERROR STACK:', error.stack);
 
         return res.status(500).json({
             success: false,
@@ -182,10 +213,14 @@ app.get('/api/me', async (req, res) => {
             });
         }
 
-        const decoded = jwt.verify(
-            token,
-            JWT_SECRET
-        );
+        if (!JWT_SECRET) {
+            return res.status(500).json({
+                success: false,
+                message: 'Server authentication configuration is missing.'
+            });
+        }
+
+        const decoded = jwt.verify(token, JWT_SECRET);
 
         const user = await get(
             `SELECT
@@ -229,7 +264,8 @@ app.post('/api/logout', (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax'
+        sameSite: 'lax',
+        path: '/'
     });
 
     return res.json({
