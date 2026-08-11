@@ -15,30 +15,28 @@ body{
     line-height:1.6;
 }
 
-header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    background:#fff;
-    box-shadow:0 2px 20px rgba(0,0,0,.08);
-}
-
 nav{
     background:#8B5CF6;
-    display:grid;
-    grid-template-columns:1fr auto 1fr;
+    display:flex;
     align-items:center;
-    padding:35px 8%;
+    padding:25px 8%;
     position:sticky;
     top:0;
     z-index:1000;
     box-shadow:0 5px 20px rgba(0,0,0,.08);
+    min-height:120px;
+}
+
+nav > div:not(.logo){
+    display:none;
 }
 
 .logo{
     color:#fff;
     font-size:30px;
     font-weight:700;
+    white-space:nowrap;
+    margin-right:auto;
 }
 
 nav ul{
@@ -57,7 +55,7 @@ nav ul li a{
 }
 
 nav ul li a:hover,
-.active{
+nav ul li a.active{
     color:#E9D5FF;
 }
 
@@ -65,17 +63,19 @@ nav ul li a:hover,
     display:inline-block;
     background:#fff;
     color:#8B5CF6;
-    padding:11px 24px;
+    padding:11px 30px;
     border-radius:30px;
     font-weight:600;
     text-decoration:none;
     transition:.3s;
-    justify-self:end;
+    margin-left:auto;
+    white-space:nowrap;
 }
 
 .signup_btn:hover{
     background:#F3E8FF;
 }
+
 .events-hero{
     height:520px;
     background:linear-gradient(135deg,#8B5CF6,#A78BFA);
@@ -98,6 +98,7 @@ nav ul li a:hover,
     z-index:2;
     color:#fff;
     max-width:700px;
+    padding:20px;
 }
 
 .hero-content h1{
@@ -164,6 +165,8 @@ nav ul li a:hover,
     border-radius:50px;
     cursor:pointer;
     transition:.3s;
+    font-size:15px;
+    font-weight:500;
 }
 
 .search-box button:hover{
@@ -194,10 +197,11 @@ nav ul li a:hover,
     border-radius:40px;
     cursor:pointer;
     transition:.3s;
+    font-family:'Poppins',sans-serif;
 }
 
 .filter-buttons button:hover,
-.filter-buttons .active{
+.filter-buttons button.active{
     background:#8B5CF6;
     color:#fff;
 }
@@ -214,6 +218,11 @@ nav ul li a:hover,
 .section-title h2{
     color:#8B5CF6;
     font-size:36px;
+}
+
+.section-title p{
+    color:#666;
+    margin-top:8px;
 }
 
 .events-grid{
@@ -238,6 +247,7 @@ nav ul li a:hover,
 .event-image{
     position:relative;
     height:230px;
+    overflow:hidden;
 }
 
 .event-image img{
@@ -282,6 +292,7 @@ nav ul li a:hover,
     display:flex;
     justify-content:space-between;
     flex-wrap:wrap;
+    gap:8px;
     color:#777;
     font-size:14px;
     margin-bottom:18px;
@@ -289,6 +300,7 @@ nav ul li a:hover,
 
 .event-info i{
     color:#8B5CF6;
+    margin-right:5px;
 }
 
 .event-content p{
@@ -327,41 +339,86 @@ nav ul li a:hover,
 
 @media(max-width:992px){
 
-.navbar{
-    flex-direction:column;
-    height:auto;
-    padding:20px;
-    gap:20px;
-}
+    nav{
+        padding:20px 5%;
+        min-height:auto;
+        flex-wrap:wrap;
+        gap:20px;
+    }
 
-.hero-content h1{
-    font-size:42px;
-}
+    .logo{
+        margin-right:0;
+    }
 
-.search-box{
-    flex-direction:column;
-}
+    nav ul{
+        order:3;
+        width:100%;
+        gap:20px;
+        flex-wrap:wrap;
+    }
 
+    .signup_btn{
+        margin-left:auto;
+    }
+
+    .hero-content h1{
+        font-size:42px;
+    }
+
+    .search-box{
+        flex-direction:column;
+    }
+
+    .input-group{
+        width:100%;
+    }
+
+    .search-box button{
+        width:100%;
+    }
 }
 
 @media(max-width:768px){
 
-.nav-links{
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:15px;
-}
+    nav{
+        justify-content:center;
+    }
 
-.hero-content h1{
-    font-size:34px;
-}
+    .logo{
+        width:100%;
+        text-align:center;
+    }
 
-.hero-content p{
-    font-size:16px;
-}
+    .signup_btn{
+        margin-left:0;
+    }
 
-.section-title h2{
-    font-size:30px;
-}
+    nav ul{
+        justify-content:center;
+        gap:15px;
+    }
 
+    nav ul li a{
+        font-size:14px;
+    }
+
+    .hero-content h1{
+        font-size:34px;
+    }
+
+    .hero-content p{
+        font-size:16px;
+    }
+
+    .section-title h2{
+        font-size:30px;
+    }
+
+    .events-section{
+        padding:60px 6%;
+    }
+
+    .filter-section{
+        padding:60px 6%;
+    }
 }
