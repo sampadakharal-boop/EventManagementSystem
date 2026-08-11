@@ -1,5 +1,7 @@
 const path = require('path');
-require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config({
+    path: path.join(__dirname, '.env')
+});
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -8,139 +10,219 @@ const jwt = require('jsonwebtoken');
 
 const { get, run } = require('./db');
 const adminRoutes = require('./routes/admin');
-const verifyAdmin = require('./middleware/verifyAdmin');
 
 const app = express();
+
 const PORT = process.env.PORT || 3000;
-const frontendPath = path.join(__dirname, '../frontend');
-const adminFrontendPath = path.join(frontendPath, 'admin');
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+    console.error('ERROR: JWT_SECRET is missing from .env');
+    process.exit(1);
+}
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// Protect the admin HTML and its assets before public static files are served.
-app.use('/admin', verifyAdmin, express.static(adminFrontendPath));
-app.use(express.static(frontendPath));
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.get('/', (req, res) => {
-  res.redirect('/index.html');
+    res.sendFile(path.join(__dirname, '../frontend/index.html'));
 });
 
 app.post('/api/signup', async (req, res) => {
-  const { name, email, password } = req.body;
+    try {
+        const { name, email, password } = req.body;
 
-  if (!name || !email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: 'All fields are required.'
-    });
-  }
+        if (!name || !email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Name, email and password are required.'
+            });
+        }
 
-  try {
-    const existing = await get('SELECT id FROM users WHERE email = ?', [email]);
-    if (existing) {
-      return res.status(409).json({
-        success: false,
-        message: 'That email is already registered.'
-      });
+        const existingUser = await get(
+            'SELECT id FROM users WHERE email = ?',
+            [email]
+        );
+
+        if (existingUser) {
+            return res.status(409).json({
+                success: false,
+                message: 'An account with this email already exists.'
+            });
+        }
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await run(
+            `INSERT INTO users (name, email, password, role)
+             VALUES (?, ?, ?, ?)`,
+            [name, email, hashedPassword, 'user']
+        );
+
+        return res.status(201).json({
+            success: true,
+            message: 'Account created successfully.'
+        });
+
+    } catch (error) {
+        console.error('SIGNUP ERROR:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: 'Server error while creating account.'
+        });
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await run(
-      'INSERT INTO users (full_name, email, password, role) VALUES (?, ?, ?, ?)',
-      [name, email, hashedPassword, 'user']
-    );
-
-    return res.json({ success: true, message: 'Account created!' });
-  } catch (err) {
-    console.error('Signup error:', err);
-    return res.status(500).json({ success: false, message: 'Something went wrong.' });
-  }
 });
 
 app.post('/api/login', async (req, res) => {
-  const { email, password } = req.body;
+    try {
+        const { email, password } = req.body;
 
-  if (!email || !password) {
-    return res.status(400).json({
-      success: false,
-      message: 'Email and password are required.'
-    });
-  }
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email and password are required.'
+            });
+        }
 
-  try {
-    const user = await get(
-      'SELECT id, full_name AS name, email, password, role FROM users WHERE email = ?',
-      [email]
-    );
+        const user = await get(
+            `SELECT id, name, email, password, role
+             FROM users
+             WHERE email = ?`,
+            [email]
+        );
 
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({
-        success: false,
-        message: 'Invalid email or password.'
-      });
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password.'
+            });
+        }
+
+        const passwordMatch = await bcrypt.compare(
+            password,
+            user.password
+        );
+
+        if (!passwordMatch) {
+            return res.status(401).json({
+                success: false,
+                message: 'Invalid email or password.'
+            });
+        }
+
+        const token = jwt.sign(
+            {
+                id: user.id,
+                email: user.email,
+                role: user.role
+            },
+            JWT_SECRET,
+            {
+                expiresIn: '1d'
+            }
+        );
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
+        return res.json({
+            success: true,
+            message: 'Login successful.',
+            user: {
+                id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role
+            }
+        });
+
+    } catch (error) {
+        console.error('LOGIN ERROR:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: 'Server error during login.'
+        });
     }
-
-    const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role },
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' }
-    );
-
-    res.cookie('token', token, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 1000,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/'
-    });
-
-    return res.json({
-      success: true,
-      message: `Welcome back, ${user.name}!`,
-      role: user.role
-    });
-  } catch (err) {
-    console.error('Login error:', err);
-    return res.status(500).json({ success: false, message: 'Something went wrong.' });
-  }
 });
 
 app.get('/api/me', async (req, res) => {
-  try {
-    const token = req.cookies.token;
-    if (!token) {
-      return res.status(401).json({ success: false, message: 'Not logged in.' });
+    try {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.status(401).json({
+                success: false,
+                message: 'Not logged in.'
+            });
+        }
+
+        const decoded = jwt.verify(token, JWT_SECRET);
+
+        const user = await get(
+            `SELECT id, name, email, role
+             FROM users
+             WHERE id = ?`,
+            [decoded.id]
+        );
+
+        if (!user) {
+            return res.status(401).json({
+                success: false,
+                message: 'User no longer exists.'
+            });
+        }
+
+        return res.json({
+            success: true,
+            user
+        });
+
+    } catch (error) {
+        console.error('AUTH CHECK ERROR:', error);
+
+        return res.status(401).json({
+            success: false,
+            message: 'Invalid or expired login.'
+        });
     }
-
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await get(
-      'SELECT id, full_name AS name, email, role FROM users WHERE id = ?',
-      [decoded.id]
-    );
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: 'User not found.' });
-    }
-
-    return res.json({ success: true, user });
-  } catch (err) {
-    console.error('Get current user error:', err);
-    return res.status(401).json({ success: false, message: 'Invalid or expired session.' });
-  }
 });
 
 app.post('/api/logout', (req, res) => {
-  res.clearCookie('token', { path: '/' });
-  return res.json({ success: true, message: 'Logged out successfully.' });
+    res.clearCookie('token');
+
+    return res.json({
+        success: true,
+        message: 'Logged out successfully.'
+    });
 });
 
 app.use('/api/admin', adminRoutes);
 
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
-  });
-}
+app.use((req, res) => {
+    res.status(404).json({
+        success: false,
+        message: 'Route not found.'
+    });
+});
 
-module.exports = app;
+app.use((err, req, res, next) => {
+    console.error('SERVER ERROR:', err);
+
+    res.status(500).json({
+        success: false,
+        message: 'Internal server error.'
+    });
+});
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
