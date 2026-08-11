@@ -1,3 +1,22 @@
+:root {
+    --purple: #8b5cf6;
+    --purple-dark: #7545df;
+    --purple-light: #f2edff;
+    --purple-lighter: #f1edff;
+    --purple-badge: #6d43d8;
+    --text-dark: #1f1f29;
+    --text-body: #4e4959;
+    --text-muted: #777280;
+    --text-faint: #8a8591;
+    --border: #e9e7ef;
+    --border-light: #ddd8e5;
+    --border-lighter: #ded9ea;
+    --success-bg: #edf9f2;
+    --success-text: #237746;
+    --error-bg: #fff0f0;
+    --error-text: #c53d3d;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -7,13 +26,13 @@
 body {
     font-family: Inter, Arial, sans-serif;
     background: #f8f7fb;
-    color: #1f1f29;
+    color: var(--text-dark);
 }
 
 .navbar {
     height: 72px;
     background: #ffffff;
-    border-bottom: 1px solid #e9e7ef;
+    border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -26,11 +45,11 @@ body {
 .logo {
     font-size: 25px;
     font-weight: 800;
-    color: #1f1f29;
+    color: var(--text-dark);
 }
 
 .logo span {
-    color: #8b5cf6;
+    color: var(--purple);
 }
 
 .navbar nav {
@@ -48,7 +67,7 @@ body {
 
 .navbar nav a:hover,
 .navbar nav a.active {
-    color: #8b5cf6;
+    color: var(--purple);
 }
 
 .nav-actions {
@@ -79,7 +98,7 @@ body {
 
 .profile-header {
     background: #ffffff;
-    border: 1px solid #e9e7ef;
+    border: 1px solid var(--border);
     border-radius: 18px;
     padding: 35px;
     display: flex;
@@ -89,6 +108,7 @@ body {
 
 .profile-image-container {
     position: relative;
+    flex-shrink: 0;
 }
 
 .profile-image {
@@ -96,7 +116,7 @@ body {
     height: 150px;
     border-radius: 50%;
     object-fit: cover;
-    border: 5px solid #f1edff;
+    border: 5px solid var(--purple-lighter);
 }
 
 .edit-profile-image {
@@ -107,19 +127,25 @@ body {
     height: 38px;
     border-radius: 50%;
     border: 3px solid #ffffff;
-    background: #8b5cf6;
+    background: var(--purple);
     color: #ffffff;
     cursor: pointer;
 }
 
+.edit-profile-image:hover {
+    background: var(--purple-dark);
+}
+
 .profile-info {
     flex: 1;
+    min-width: 0;
 }
 
 .profile-name-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 15px;
 }
 
 .profile-name-row h1 {
@@ -128,7 +154,7 @@ body {
 
 .username {
     margin-top: 4px;
-    color: #8b5cf6;
+    color: var(--purple);
     font-size: 14px;
 }
 
@@ -140,22 +166,24 @@ body {
 }
 
 .edit-profile-btn {
-    border: 1px solid #ded9ea;
+    border: 1px solid var(--border-lighter);
     background: #ffffff;
     padding: 10px 16px;
     border-radius: 9px;
     cursor: pointer;
     font-weight: 600;
-    color: #4e4959;
+    color: var(--text-body);
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
+    transition: 0.2s;
 }
 
 .edit-profile-btn:hover {
     background: #f7f4ff;
-    border-color: #8b5cf6;
-    color: #8b5cf6;
+    border-color: var(--purple);
+    color: var(--purple);
 }
 
 .profile-stats {
@@ -176,7 +204,7 @@ body {
 
 .stat span {
     font-size: 13px;
-    color: #777280;
+    color: var(--text-muted);
 }
 
 .profile-tabs {
@@ -190,15 +218,20 @@ body {
     border: none;
     background: transparent;
     padding: 17px 30px;
-    color: #777280;
+    color: var(--text-muted);
     cursor: pointer;
     font-size: 14px;
     border-bottom: 2px solid transparent;
+    transition: 0.2s;
+}
+
+.tab:hover {
+    color: var(--purple);
 }
 
 .tab.active {
-    color: #8b5cf6;
-    border-bottom-color: #8b5cf6;
+    color: var(--purple);
+    border-bottom-color: var(--purple);
 }
 
 .tab i {
@@ -208,7 +241,7 @@ body {
 .create-post-section {
     margin-top: 30px;
     background: #ffffff;
-    border: 1px solid #e9e7ef;
+    border: 1px solid var(--border);
     border-radius: 15px;
     padding: 22px 25px;
 }
@@ -217,6 +250,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 15px;
 }
 
 .create-post-header h2 {
@@ -225,13 +259,13 @@ body {
 
 .create-post-header p {
     margin-top: 5px;
-    color: #777280;
+    color: var(--text-muted);
     font-size: 13px;
 }
 
 .create-post-btn {
     border: none;
-    background: #8b5cf6;
+    background: var(--purple);
     color: #ffffff;
     padding: 12px 18px;
     border-radius: 9px;
@@ -240,10 +274,12 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
+    flex-shrink: 0;
+    transition: 0.2s;
 }
 
 .create-post-btn:hover {
-    background: #7545df;
+    background: var(--purple-dark);
 }
 
 .posts-section {
@@ -255,15 +291,17 @@ body {
     margin-bottom: 20px;
 }
 
+/* Was a rigid repeat(3, 1fr) that jumped straight to 2 columns at 900px.
+   auto-fit + minmax lets it flex naturally at any width. */
 .posts-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 22px;
 }
 
 .experience-post {
     background: #ffffff;
-    border: 1px solid #e9e7ef;
+    border: 1px solid var(--border);
     border-radius: 15px;
     overflow: hidden;
     transition: 0.2s;
@@ -296,7 +334,7 @@ body {
     top: 12px;
     left: 12px;
     background: rgba(255, 255, 255, 0.95);
-    color: #6d43d8;
+    color: var(--purple-badge);
     padding: 7px 10px;
     border-radius: 20px;
     font-size: 11px;
@@ -311,7 +349,7 @@ body {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: #f2edff;
+    background: var(--purple-light);
     color: #7046db;
     padding: 6px 9px;
     border-radius: 6px;
@@ -349,10 +387,11 @@ body {
     align-items: center;
     gap: 6px;
     font-size: 13px;
+    transition: 0.2s;
 }
 
 .post-actions button:hover {
-    color: #8b5cf6;
+    color: var(--purple);
 }
 
 .modal-overlay {
@@ -385,6 +424,7 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 25px;
+    gap: 15px;
 }
 
 .modal-header h2 {
@@ -394,7 +434,7 @@ body {
 .modal-header p {
     margin-top: 5px;
     font-size: 13px;
-    color: #777280;
+    color: var(--text-muted);
 }
 
 .close-modal {
@@ -405,6 +445,12 @@ body {
     border-radius: 50%;
     cursor: pointer;
     color: #55515e;
+    flex-shrink: 0;
+    transition: 0.2s;
+}
+
+.close-modal:hover {
+    background: #e9e5f0;
 }
 
 .form-group {
@@ -422,7 +468,7 @@ body {
 .form-group small {
     display: block;
     margin-top: 7px;
-    color: #8a8591;
+    color: var(--text-faint);
     font-size: 11px;
 }
 
@@ -433,7 +479,7 @@ body {
 
 .event-id-input input {
     flex: 1;
-    border: 1px solid #ddd8e5;
+    border: 1px solid var(--border-light);
     padding: 12px;
     border-radius: 8px;
     outline: none;
@@ -441,17 +487,22 @@ body {
 }
 
 .event-id-input input:focus {
-    border-color: #8b5cf6;
+    border-color: var(--purple);
 }
 
 .event-id-input button {
     border: none;
-    background: #8b5cf6;
+    background: var(--purple);
     color: #ffffff;
     padding: 0 17px;
     border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
+    transition: 0.2s;
+}
+
+.event-id-input button:hover {
+    background: var(--purple-dark);
 }
 
 .verification-message {
@@ -464,32 +515,43 @@ body {
 
 .verification-message.success {
     display: block;
-    background: #edf9f2;
-    color: #237746;
+    background: var(--success-bg);
+    color: var(--success-text);
 }
 
 .verification-message.error {
     display: block;
-    background: #fff0f0;
-    color: #c53d3d;
+    background: var(--error-bg);
+    color: var(--error-text);
 }
 
+/* Was `display: flex !important; color: ... !important;` fighting some
+   other rule. A dashed-border upload zone has no reason to need !important
+   at this specificity — if it still gets overridden after removing these,
+   the real fix is raising this selector's specificity or fixing whatever
+   JS/CSS was setting display:none on it, not slapping !important back on. */
 .upload-box {
     height: 130px;
     border: 2px dashed #d9d3e4;
     border-radius: 10px;
-    display: flex !important;
+    display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    color: #777280 !important;
+    color: var(--text-muted);
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.upload-box:hover {
+    border-color: var(--purple);
+    background: #faf9ff;
 }
 
 .upload-box i {
     font-size: 26px;
-    color: #8b5cf6;
+    color: var(--purple);
 }
 
 .upload-box input {
@@ -500,7 +562,7 @@ textarea {
     width: 100%;
     height: 120px;
     resize: vertical;
-    border: 1px solid #ddd8e5;
+    border: 1px solid var(--border-light);
     border-radius: 9px;
     padding: 12px;
     font-family: inherit;
@@ -509,23 +571,41 @@ textarea {
 }
 
 textarea:focus {
-    border-color: #8b5cf6;
+    border-color: var(--purple);
 }
 
 .publish-btn {
     width: 100%;
     border: none;
-    background: #8b5cf6;
+    background: var(--purple);
     color: #ffffff;
     padding: 13px;
     border-radius: 9px;
     font-weight: 700;
     cursor: pointer;
+    transition: 0.2s;
+}
+
+.publish-btn:hover:not(:disabled) {
+    background: var(--purple-dark);
 }
 
 .publish-btn:disabled {
     background: #c9c3d4;
     cursor: not-allowed;
+}
+
+/* Keyboard-accessible focus states for interactive elements */
+.tab:focus-visible,
+.edit-profile-btn:focus-visible,
+.create-post-btn:focus-visible,
+.close-modal:focus-visible,
+.publish-btn:focus-visible,
+.event-id-input button:focus-visible,
+.navbar nav a:focus-visible,
+.post-actions button:focus-visible {
+    outline: 2px solid var(--purple);
+    outline-offset: 2px;
 }
 
 @media (max-width: 900px) {
@@ -540,10 +620,6 @@ textarea:focus {
 
     .profile-header {
         align-items: flex-start;
-    }
-
-    .posts-grid {
-        grid-template-columns: repeat(2, 1fr);
     }
 }
 
