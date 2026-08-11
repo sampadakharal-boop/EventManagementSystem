@@ -1,10 +1,131 @@
 const express = require('express');
 const verifyAdmin = require('../middleware/verifyAdmin');
+const { get, run } = require('../db');
 
 const router = express.Router();
 
 router.get('/verify', verifyAdmin, (req, res) => {
-  res.json({ success: true });
+    res.json({
+        success: true
+    });
+});
+
+router.post('/events', verifyAdmin, async (req, res) => {
+    try {
+        const {
+            name,
+            description,
+            category,
+            organizer,
+            startDate,
+            startTime,
+            endDate,
+            endTime,
+            venue,
+            city,
+            address,
+            capacity,
+            deadline,
+            eventType,
+            price,
+            contactEmail,
+            website,
+            tags
+        } = req.body;
+
+        if (
+            !name ||
+            !description ||
+            !category ||
+            !startDate ||
+            !startTime ||
+            !venue ||
+            !city
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please fill in all required fields.'
+            });
+        }
+
+        let categoryRecord = await get(
+            'SELECT id FROM categories WHERE name = ?',
+            [category]
+        );
+
+        if (!categoryRecord) {
+            const categoryResult = await run(
+                'INSERT INTO categories (name) VALUES (?)',
+                [category]
+            );
+
+            categoryRecord = {
+                id: categoryResult.lastInsertRowid
+            };
+        }
+
+        const eventResult = await run(
+            `INSERT INTO events (
+                title,
+                description,
+                category_id,
+                organizer,
+                venue,
+                city,
+                address,
+                event_date,
+                event_time,
+                end_date,
+                end_time,
+                image,
+                capacity,
+                price,
+                event_type,
+                registration_deadline,
+                contact_email,
+                website,
+                tags,
+                status
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            [
+                name,
+                description,
+                categoryRecord.id,
+                organizer || '',
+                venue,
+                city,
+                address || '',
+                startDate,
+                startTime,
+                endDate || null,
+                endTime || null,
+                null,
+                Number(capacity) || 0,
+                eventType === 'paid' ? Number(price) || 0 : 0,
+                eventType || 'free',
+                deadline || null,
+                contactEmail || '',
+                website || '',
+                tags || '',
+                'active'
+            ]
+        );
+
+        return res.status(201).json({
+            success: true,
+            message: 'Event published successfully.',
+            eventId: eventResult.lastInsertRowid
+        });
+
+    } catch (error) {
+        console.error('CREATE EVENT ERROR:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: 'Server error while creating event.'
+        });
+    }
 });
 
 module.exports = router;

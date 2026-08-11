@@ -28,7 +28,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../frontend')));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.sendFile(
+        path.join(__dirname, '../frontend/index.html')
+    );
 });
 
 app.post('/api/signup', async (req, res) => {
@@ -57,9 +59,19 @@ app.post('/api/signup', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await run(
-            `INSERT INTO users (name, email, password, role)
-             VALUES (?, ?, ?, ?)`,
-            [name, email, hashedPassword, 'user']
+            `INSERT INTO users (
+                full_name,
+                email,
+                password,
+                role
+            )
+            VALUES (?, ?, ?, ?)`,
+            [
+                name,
+                email,
+                hashedPassword,
+                'user'
+            ]
         );
 
         return res.status(201).json({
@@ -89,7 +101,12 @@ app.post('/api/login', async (req, res) => {
         }
 
         const user = await get(
-            `SELECT id, name, email, password, role
+            `SELECT
+                id,
+                full_name,
+                email,
+                password,
+                role
              FROM users
              WHERE email = ?`,
             [email]
@@ -138,10 +155,11 @@ app.post('/api/login', async (req, res) => {
             message: 'Login successful.',
             user: {
                 id: user.id,
-                name: user.name,
+                name: user.full_name,
                 email: user.email,
                 role: user.role
-            }
+            },
+            role: user.role
         });
 
     } catch (error) {
@@ -165,10 +183,17 @@ app.get('/api/me', async (req, res) => {
             });
         }
 
-        const decoded = jwt.verify(token, JWT_SECRET);
+        const decoded = jwt.verify(
+            token,
+            JWT_SECRET
+        );
 
         const user = await get(
-            `SELECT id, name, email, role
+            `SELECT
+                id,
+                full_name,
+                email,
+                role
              FROM users
              WHERE id = ?`,
             [decoded.id]
@@ -183,7 +208,12 @@ app.get('/api/me', async (req, res) => {
 
         return res.json({
             success: true,
-            user
+            user: {
+                id: user.id,
+                name: user.full_name,
+                email: user.email,
+                role: user.role
+            }
         });
 
     } catch (error) {
@@ -197,7 +227,11 @@ app.get('/api/me', async (req, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
-    res.clearCookie('token');
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax'
+    });
 
     return res.json({
         success: true,

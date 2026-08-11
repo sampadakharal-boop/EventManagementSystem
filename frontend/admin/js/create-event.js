@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const priceInput = document.querySelector('input[name="price"]');
 
     function togglePriceField() {
-        if (!eventTypeSelect || !priceInput) return;
+        if (!eventTypeSelect || !priceInput) {
+            return;
+        }
 
         if (eventTypeSelect.value === 'free') {
             priceInput.value = 0;
@@ -19,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
         togglePriceField();
     }
 
-    if (!form) return;
+    if (!form) {
+        return;
+    }
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -68,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('/api/events', {
+            const response = await fetch('/api/admin/events', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -80,7 +84,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (!response.ok || !data.success) {
-                throw new Error(data.message || 'Failed to create event.');
+                throw new Error(
+                    data.message || 'Failed to create event.'
+                );
             }
 
             alert('Event published successfully!');
@@ -95,7 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         } catch (error) {
             console.error('Create event error:', error);
-            alert(error.message || 'Could not publish the event.');
+
+            alert(
+                error.message ||
+                'Could not publish the event.'
+            );
+
         } finally {
             if (publishButton) {
                 publishButton.disabled = false;
