@@ -1,4 +1,7 @@
-require('dotenv').config();
+const fs = require('fs');
+const path = require('path');
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+
 const { createClient } = require('@libsql/client');
 
 const db = createClient({
@@ -6,19 +9,38 @@ const db = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
+const schemaPath = path.join(__dirname, 'database', 'schema.sql');
+let databaseInitializationError = null;
+const databaseReady = db.executeMultiple(fs.readFileSync(schemaPath, 'utf8'))
+  .then(() => {
+    console.log('Database schema is ready');
+  })
+  .catch((error) => {
+    databaseInitializationError = error;
+    console.error('Database schema initialization failed:', error);
+  });
+
+async function ensureDatabaseReady() {
+  await databaseReady;
+  if (databaseInitializationError) {
+    throw databaseInitializationError;
+  }
+}
+
 async function get(sql, args = []) {
+  await ensureDatabaseReady();
   const result = await db.execute({ sql, args });
   return result.rows[0];
 }
 
 async function all(sql, args = []) {
+  await ensureDatabaseReady();
   const result = await db.execute({ sql, args });
   return result.rows;
 }
 
-console.log("✅ Database connected successfully");
-
 async function run(sql, args = []) {
+  await ensureDatabaseReady();
   const result = await db.execute({ sql, args });
   return {
     lastInsertRowid:
@@ -29,4 +51,4 @@ async function run(sql, args = []) {
   };
 }
 
-module.exports = { db, get, all, run };
+module.exports = { db, databaseReady, get, all, run };
