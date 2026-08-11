@@ -1,4 +1,3 @@
-```js
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('loginForm');
     const messageBox = document.getElementById('message');
@@ -58,4 +57,3 @@ document.addEventListener('DOMContentLoaded', () => {
             type === 'error' ? '#D6304A' : '#1C8A4B';
     }
 });
-```
