@@ -1,50 +1,61 @@
+```js
 document.addEventListener('DOMContentLoaded', () => {
-  const form = document.getElementById('loginForm');
-  const messageBox = document.getElementById('message');
+    const form = document.getElementById('loginForm');
+    const messageBox = document.getElementById('message');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    messageBox.textContent = '';
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        messageBox.textContent = '';
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
 
-    if (!email || !password) {
-      showMessage('Please fill in both fields.', 'error');
-      return;
+        if (!email || !password) {
+            showMessage('Please fill in both fields.', 'error');
+            return;
+        }
+
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const data = await res.json();
+
+            if (data.success) {
+                showMessage(data.message, 'success');
+                form.reset();
+
+                setTimeout(() => {
+                    if (data.user.role === 'admin') {
+                        window.location.href = '/admin/index.html';
+                    } else {
+                        window.location.href = '/index.html';
+                    }
+                }, 800);
+
+            } else {
+                showMessage(data.message, 'error');
+            }
+
+        } catch (err) {
+            console.error(err);
+            showMessage('Could not reach the server. Is it running?', 'error');
+        }
+    });
+
+    function showMessage(text, type) {
+        messageBox.textContent = text;
+        messageBox.style.color =
+            type === 'error' ? '#D6304A' : '#1C8A4B';
     }
-
-    try {
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-
-      if (data.success) {
-        showMessage(data.message, 'success');
-        form.reset();
-
-        setTimeout(() => {
-          if (data.role === 'admin') {
-            window.location.href = 'admin/index.html';
-          } else {
-            window.location.href = 'index.html';
-          }
-        }, 800);
-
-      } else {
-        showMessage(data.message, 'error');
-      }
-    } catch (err) {
-      showMessage('Could not reach the server. Is it running?', 'error');
-    }
-  });
-
-  function showMessage(text, type) {
-    messageBox.textContent = text;
-    messageBox.style.color = type === 'error' ? '#D6304A' : '#1C8A4B';
-  }
 });
+```
