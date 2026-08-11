@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -10,873 +9,565 @@
 
     <link rel="stylesheet" href="css/explore.css">
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
-
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
-
 
 <body>
 
-<nav>
+    <nav>
 
-    <div class="logo">
-        EventHub
-    </div>
+        <div class="logo">
+            EventHub
+        </div>
 
-    <ul>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="categories.html">Categories</a></li>
+            <li><a href="explore.html" class="active">Explore</a></li>
+            <li><a href="aboutus.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
 
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="explore.html">Explore</a></li>
-        <li><a href="aboutus.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-    </ul>
-
-    
-            <a href="signup.html" class="signup_btn">
-                Sign Up
+        <div id="user-area">
+            <a href="login.html" class="signup_btn">
+                Sign In
             </a>
-
-</nav>
-
-
-
-
-<section class="explore-hero">
-
-
-    <div class="hero-content">
-
-
-        <h1>
-            Discover Amazing Events Around You
-        </h1>
-
-
-        <p>
-            Find concerts, workshops, conferences, educational programs,
-            and experiences that match your interests.
-        </p>
-
-
-
-        <div class="search-box">
-
-
-            <input 
-            type="text"
-            placeholder="Search events by name, location, or organizer">
-
-
-            <button>
-
-                <i class="fa-solid fa-magnifying-glass"></i>
-
-                Search
-
-            </button>
-
-
         </div>
 
+    </nav>
 
-    </div>
+    <section class="explore-hero">
 
+        <div class="hero-overlay"></div>
 
-</section>
+        <div class="hero-content">
 
-
-
-
-
-<section class="categories-filter">
-
-
-    <button class="category-active">
-        All Events
-    </button>
-
-
-    <button>
-        Concerts
-    </button>
-
-
-    <button>
-        Educational Events
-    </button>
-
-
-    <button>
-        Technology Events
-    </button>
-
-
-    <button>
-        Startup Events
-    </button>
-
-
-    <button>
-        Wellness Events
-    </button>
-
-
-    <button>
-        Fun Events
-    </button>
-
-
-    <button>
-        Law Programs
-    </button>
-
-
-</section>
-
-<section class="filter-section">
-
-    <div class="filter-container">
-
-        <div class="filter-box">
-
-            <label>
-                Sort By
-            </label>
-
-            <select>
-
-                <option>
-                    Upcoming Events
-                </option>
-
-                <option>
-                    Most Popular
-                </option>
-
-                <option>
-                    Free Events
-                </option>
-
-                <option>
-                    Paid Events
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="filter-box">
-
-            <label>
-                Date Range
-            </label>
-
-            <select>
-
-                <option>
-                    Any Date
-                </option>
-
-                <option>
-                    This Week
-                </option>
-
-                <option>
-                    This Month
-                </option>
-
-                <option>
-                    Next Month
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="filter-box">
-
-            <label>
-                Location
-            </label>
-
-            <select>
-
-                <option>
-                    All Locations
-                </option>
-
-                <option>
-                    Kathmandu
-                </option>
-
-                <option>
-                    Pokhara
-                </option>
-
-                <option>
-                    Lalitpur
-                </option>
-
-            </select>
-
-        </div>
-
-
-        <div class="filter-box">
-
-            <label>
-                Price
-            </label>
-
-            <select>
-
-                <option>
-                    All
-                </option>
-
-                <option>
-                    Free
-                </option>
-
-                <option>
-                    Paid
-                </option>
-
-            </select>
-
-        </div>
-
-
-    </div>
-
-
-</section>
-
-
-    <div class="event-grid">
-
-
-
-        <div class="event-card">
-
-
-            <div class="event-image">
-
-                <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80" alt="Concert">
-
-                <span>
-                    Concert
-                </span>
-
-
-                <button class="favorite">
-
-                    <i class="fa-regular fa-heart"></i>
-
-                </button>
-
-
-            </div>
-
-
-
-
-            <div class="event-info">
-
-
-                <h3>
-                    Summer Music Festival
-                </h3>
-
-
-                <p>
-                    Enjoy live performances from amazing artists.
-                </p>
-
-
-
-                <div class="event-detail">
-
-                    <i class="fa-solid fa-calendar"></i>
-
-                    <span>
-                        August 15, 2026 | 6:00 PM
-                    </span>
-
-                </div>
-
-
-
-                <div class="event-detail">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    <span>
-                        Kathmandu
-                    </span>
-
-                </div>
-
-
-
-                <div class="event-footer">
-
-
-                    <strong>
-                        Free
-                    </strong>
-
-
-                    <button>
-                        View Details
-                    </button>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="event-card">
-
-
-            <div class="event-image">
-
-                <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80" alt="Technology Event">
-
-
-                <span>
-                    Technology
-                </span>
-
-
-                <button class="favorite">
-
-                    <i class="fa-regular fa-heart"></i>
-
-                </button>
-
-
-            </div>
-
-
-
-            <div class="event-info">
-
-
-                <h3>
-                    AI & Cyber Security Conference
-                </h3>
-
-
-                <p>
-                    Learn from industry professionals and experts.
-                </p>
-
-
-                <div class="event-detail">
-
-                    <i class="fa-solid fa-calendar"></i>
-
-                    <span>
-                        September 10, 2026 | 10:00 AM
-                    </span>
-
-                </div>
-
-
-
-                <div class="event-detail">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    <span>
-                        Pokhara
-                    </span>
-
-                </div>
-
-
-
-                <div class="event-footer">
-
-
-                    <strong>
-                        $25
-                    </strong>
-
-
-                    <button>
-                        View Details
-                    </button>
-
-
-                </div>
-
-
-            </div>
-
-
-        </div>
-
-
-
-
-
-        <div class="event-card">
-
-
-            <div class="event-image">
-
-
-                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80" alt="Workshop">
-
-
-                <span>
-                    Education
-                </span>
-
-
-                <button class="favorite">
-
-                    <i class="fa-regular fa-heart"></i>
-
-                </button>
-
-
-            </div>
-
-
-
-
-            <div class="event-info">
-
-
-                <h3>
-                    Web Development Workshop
-                </h3>
-
-
-                <p>
-                    Improve your coding skills with practical sessions.
-                </p>
-
-
-
-                <div class="event-detail">
-
-                    <i class="fa-solid fa-calendar"></i>
-
-                    <span>
-                        October 5, 2026 | 11:00 AM
-                    </span>
-
-                </div>
-
-
-
-
-                <div class="event-detail">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    <span>
-                        Lalitpur
-                    </span>
-
-                </div>
-
-
-
-                <div class="event-footer">
-
-
-                    <strong>
-                        Free
-                    </strong>
-
-
-                    <button>
-                        View Details
-                    </button>
-
-
-                </div>
-
-
-
-            </div>
-
-
-        </div>
-
-
-
-    </div>
-
-
-
-</section>
-
-
-
-
-<div class="event-modal">
-
-
-    <div class="modal-content">
-
-
-        <button class="close-modal">
-
-            <i class="fa-solid fa-xmark"></i>
-
-        </button>
-
-
-
-        <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=1200&q=80" alt="Event">
-
-
-
-        <div class="modal-info">
-
-
-            <span>
-                Technology Event
-            </span>
-
-
-            <h2>
-                AI & Cyber Security Conference
-            </h2>
-
-
+            <h1>
+                Discover Amazing Events Around You
+            </h1>
 
             <p>
-                Join cybersecurity experts and technology professionals
-                to explore artificial intelligence, security trends,
-                ethical hacking, and future technologies.
+                Find concerts, workshops, conferences, educational programs,
+                and experiences that match your interests.
             </p>
 
+            <div class="search-box">
 
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search events by name, location, or organizer">
 
-
-            <div class="modal-details">
-
-
-                <p>
-                    <i class="fa-solid fa-calendar"></i>
-                    September 10, 2026
-                </p>
-
-
-                <p>
-                    <i class="fa-solid fa-clock"></i>
-                    10:00 AM - 5:00 PM
-                </p>
-
-
-                <p>
-                    <i class="fa-solid fa-location-dot"></i>
-                    Pokhara Convention Center
-                </p>
-
-
-                <p>
-                    <i class="fa-solid fa-users"></i>
-                    350 Seats Available
-                </p>
-
-
+                <button id="searchBtn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    Search
+                </button>
 
             </div>
 
-
-
-
-            <h3>
-                Event Agenda
-            </h3>
-
-
-
-            <ul class="agenda">
-
-
-                <li>
-                    Opening Ceremony
-                </li>
-
-
-                <li>
-                    Security Workshop
-                </li>
-
-
-                <li>
-                    AI Demonstration
-                </li>
-
-
-                <li>
-                    Networking Session
-                </li>
-
-
-            </ul>
-
-
-
-
-            <div class="modal-buttons">
-
-
-                <button>
-                    Register Now
-                </button>
-
-
-                <button>
-                    Add Calendar
-                </button>
-
-
-                <button>
-                    Favorite
-                </button>
-
-
-                <button>
-                    Set Reminder
-                </button>
-
-
-            </div>
-
-
-
         </div>
 
+    </section>
 
-    </div>
+    <section class="categories-filter">
 
-
-</div>
-
-
-
-
-
-
-
-
-<section class="registration-section">
-
-
-    <div class="section-title">
-
-
-        <span>
-            REGISTRATION
-        </span>
-
-
-        <h2>
-            Register For Event
-        </h2>
-
-
-    </div>
-
-
-
-
-    <form class="registration-form">
-
-
-        <div class="input-group">
-
-            <label>
-                Full Name
-            </label>
-
-            <input type="text" placeholder="Enter your name">
-
-        </div>
-
-
-
-        <div class="input-group">
-
-            <label>
-                Email Address
-            </label>
-
-            <input type="email" placeholder="Enter your email">
-
-        </div>
-
-
-
-        <div class="input-group">
-
-            <label>
-                Phone Number
-            </label>
-
-            <input type="text" placeholder="Enter phone number">
-
-        </div>
-
-
-
-        <div class="input-group">
-
-            <label>
-                Gender
-            </label>
-
-
-            <select>
-
-                <option>
-                    Select Gender
-                </option>
-
-
-                <option>
-                    Male
-                </option>
-
-
-                <option>
-                    Female
-                </option>
-
-
-                <option>
-                    Other
-                </option>
-
-
-            </select>
-
-
-        </div>
-
-
-
-
-        <div class="input-group">
-
-
-            <label>
-                Number Of Attendees
-            </label>
-
-
-            <input type="number" value="1">
-
-
-        </div>
-
-
-
-
-        <div class="input-group">
-
-
-            <label>
-                Special Requirements
-            </label>
-
-
-            <textarea placeholder="Any special requirements"></textarea>
-
-
-        </div>
-
-
-
-
-        <div class="input-group">
-
-
-            <label>
-                Payment Option
-            </label>
-
-
-            <select>
-
-
-                <option>
-                    Free Registration
-                </option>
-
-
-                <option>
-                    Credit Card
-                </option>
-
-
-                <option>
-                    Online Payment
-                </option>
-
-
-            </select>
-
-
-        </div>
-
-
-
-
-        <button class="register-btn">
-
-            Complete Registration
-
+        <button class="category-active" data-category="all">
+            All Events
         </button>
 
+        <button data-category="concert">
+            Concerts
+        </button>
 
+        <button data-category="education">
+            Educational Events
+        </button>
 
-    </form>
+        <button data-category="technology">
+            Technology Events
+        </button>
 
+        <button data-category="startup">
+            Startup Events
+        </button>
 
-</section>
+        <button data-category="wellness">
+            Wellness Events
+        </button>
 
+        <button data-category="fun">
+            Fun Events
+        </button>
 
-<footer>
+        <button data-category="law">
+            Law Programs
+        </button>
 
+    </section>
 
-    <h2>
-        EventHub
-    </h2>
+    <section class="filter-section">
 
+        <div class="filter-container">
 
-    <p>
-        Discover, register, and experience amazing events.
-    </p>
+            <div class="filter-box">
 
+                <label for="sortFilter">
+                    Sort By
+                </label>
 
-</footer>
+                <select id="sortFilter">
 
+                    <option value="upcoming">
+                        Upcoming Events
+                    </option>
 
+                    <option value="popular">
+                        Most Popular
+                    </option>
+
+                    <option value="free">
+                        Free Events
+                    </option>
+
+                    <option value="paid">
+                        Paid Events
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="filter-box">
+
+                <label for="dateFilter">
+                    Date Range
+                </label>
+
+                <select id="dateFilter">
+
+                    <option value="any">
+                        Any Date
+                    </option>
+
+                    <option value="week">
+                        This Week
+                    </option>
+
+                    <option value="month">
+                        This Month
+                    </option>
+
+                    <option value="next-month">
+                        Next Month
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="filter-box">
+
+                <label for="locationFilter">
+                    Location
+                </label>
+
+                <select id="locationFilter">
+
+                    <option value="all">
+                        All Locations
+                    </option>
+
+                    <option value="kathmandu">
+                        Kathmandu
+                    </option>
+
+                    <option value="pokhara">
+                        Pokhara
+                    </option>
+
+                    <option value="lalitpur">
+                        Lalitpur
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="filter-box">
+
+                <label for="priceFilter">
+                    Price
+                </label>
+
+                <select id="priceFilter">
+
+                    <option value="all">
+                        All
+                    </option>
+
+                    <option value="free">
+                        Free
+                    </option>
+
+                    <option value="paid">
+                        Paid
+                    </option>
+
+                </select>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="events-section">
+
+        <div class="section-title">
+
+            <h2>
+                Explore Events
+            </h2>
+
+            <p>
+                Find an event that matches your interests.
+            </p>
+
+        </div>
+
+        <div class="event-grid" id="eventGrid">
+
+            <div
+                class="event-card"
+                data-category="concert"
+                data-location="kathmandu"
+                data-price="free">
+
+                <div class="event-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=900&q=80"
+                        alt="Concert">
+
+                    <span>
+                        Concert
+                    </span>
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="event-info">
+
+                    <h3>
+                        Summer Music Festival
+                    </h3>
+
+                    <p>
+                        Enjoy live performances from amazing artists.
+                    </p>
+
+                    <div class="event-detail">
+
+                        <i class="fa-solid fa-calendar"></i>
+
+                        <span>
+                            August 15, 2026 | 6:00 PM
+                        </span>
+
+                    </div>
+
+                    <div class="event-detail">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <span>
+                            Kathmandu
+                        </span>
+
+                    </div>
+
+                    <div class="event-footer">
+
+                        <strong>
+                            Free
+                        </strong>
+
+                        <button class="view-details">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div
+                class="event-card"
+                data-category="technology"
+                data-location="pokhara"
+                data-price="paid">
+
+                <div class="event-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1511578314322-379afb476865?auto=format&fit=crop&w=900&q=80"
+                        alt="Technology Event">
+
+                    <span>
+                        Technology
+                    </span>
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="event-info">
+
+                    <h3>
+                        AI & Cyber Security Conference
+                    </h3>
+
+                    <p>
+                        Learn from industry professionals and experts.
+                    </p>
+
+                    <div class="event-detail">
+
+                        <i class="fa-solid fa-calendar"></i>
+
+                        <span>
+                            September 10, 2026 | 10:00 AM
+                        </span>
+
+                    </div>
+
+                    <div class="event-detail">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <span>
+                            Pokhara
+                        </span>
+
+                    </div>
+
+                    <div class="event-footer">
+
+                        <strong>
+                            $25
+                        </strong>
+
+                        <button class="view-details">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div
+                class="event-card"
+                data-category="education"
+                data-location="lalitpur"
+                data-price="free">
+
+                <div class="event-image">
+
+                    <img
+                        src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=900&q=80"
+                        alt="Workshop">
+
+                    <span>
+                        Education
+                    </span>
+
+                    <button class="favorite">
+                        <i class="fa-regular fa-heart"></i>
+                    </button>
+
+                </div>
+
+                <div class="event-info">
+
+                    <h3>
+                        Web Development Workshop
+                    </h3>
+
+                    <p>
+                        Improve your coding skills with practical sessions.
+                    </p>
+
+                    <div class="event-detail">
+
+                        <i class="fa-solid fa-calendar"></i>
+
+                        <span>
+                            October 5, 2026 | 11:00 AM
+                        </span>
+
+                    </div>
+
+                    <div class="event-detail">
+
+                        <i class="fa-solid fa-location-dot"></i>
+
+                        <span>
+                            Lalitpur
+                        </span>
+
+                    </div>
+
+                    <div class="event-footer">
+
+                        <strong>
+                            Free
+                        </strong>
+
+                        <button class="view-details">
+                            View Details
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <div class="event-modal" id="eventModal">
+
+        <div class="modal-content">
+
+            <button class="close-modal" id="closeModal">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <img
+                id="modalImage"
+                src=""
+                alt="Event">
+
+            <div class="modal-info">
+
+                <span id="modalCategory">
+                    Technology Event
+                </span>
+
+                <h2 id="modalTitle">
+                    AI & Cyber Security Conference
+                </h2>
+
+                <p id="modalDescription">
+                    Join cybersecurity experts and technology professionals
+                    to explore artificial intelligence, security trends,
+                    ethical hacking, and future technologies.
+                </p>
+
+                <div class="modal-details">
+
+                    <p>
+                        <i class="fa-solid fa-calendar"></i>
+                        <span id="modalDate">September 10, 2026</span>
+                    </p>
+
+                    <p>
+                        <i class="fa-solid fa-clock"></i>
+                        <span id="modalTime">10:00 AM - 5:00 PM</span>
+                    </p>
+
+                    <p>
+                        <i class="fa-solid fa-location-dot"></i>
+                        <span id="modalLocation">Pokhara Convention Center</span>
+                    </p>
+
+                    <p>
+                        <i class="fa-solid fa-users"></i>
+                        <span id="modalSeats">350 Seats Available</span>
+                    </p>
+
+                </div>
+
+                <h3>
+                    Event Agenda
+                </h3>
+
+                <ul class="agenda">
+
+                    <li>
+                        Opening Ceremony
+                    </li>
+
+                    <li>
+                        Security Workshop
+                    </li>
+
+                    <li>
+                        AI Demonstration
+                    </li>
+
+                    <li>
+                        Networking Session
+                    </li>
+
+                </ul>
+
+                <div class="modal-buttons">
+
+                    <button>
+                        Register Now
+                    </button>
+
+                    <button>
+                        Add Calendar
+                    </button>
+
+                    <button>
+                        Favorite
+                    </button>
+
+                    <button>
+                        Set Reminder
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+
+        <h2>
+            EventHub
+        </h2>
+
+        <p>
+            Discover, register, and experience amazing events.
+        </p>
+
+    </footer>
+
+    <script src="js/explore.js"></script>
 
 </body>
 
