@@ -1,4 +1,5 @@
 const path = require('path');
+
 require('dotenv').config({
     path: path.join(__dirname, '.env')
 });
@@ -13,12 +14,10 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
-const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-    console.error('ERROR: JWT_SECRET is missing from .env');
-    process.exit(1);
+    console.error('ERROR: JWT_SECRET is missing.');
 }
 
 app.use(express.json());
@@ -257,6 +256,12 @@ app.use((err, req, res, next) => {
     });
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+module.exports = app;
+
+if (require.main === module) {
+    const PORT = process.env.PORT || 3000;
+
+    app.listen(PORT, () => {
+        console.log(`Server running on http://localhost:${PORT}`);
+    });
+}
