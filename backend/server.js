@@ -24,10 +24,34 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-app.use(express.static(path.join(__dirname, '../frontend')));
+const FRONTEND_PATH = path.join(__dirname, '../frontend');
+
+app.use(express.static(FRONTEND_PATH));
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/index.html'));
+    res.sendFile(path.join(FRONTEND_PATH, 'index.html'));
+});
+
+app.get('/admin/dashboard.html', (req, res) => {
+    res.sendFile(
+        path.join(FRONTEND_PATH, 'admin', 'dashboard.html'),
+        (error) => {
+            if (error) {
+                console.error('ADMIN DASHBOARD ERROR:', error);
+
+                if (!res.headersSent) {
+                    return res.status(404).json({
+                        success: false,
+                        message: 'Admin dashboard file not found.'
+                    });
+                }
+            }
+        }
+    );
+});
+
+app.get('/admin', (req, res) => {
+    res.redirect('/admin/dashboard.html');
 });
 
 app.post('/api/signup', async (req, res) => {
