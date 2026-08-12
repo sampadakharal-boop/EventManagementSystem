@@ -5,8 +5,40 @@ const isProduction = process.env.NODE_ENV === 'production';
 let dbMode = 'sqlite';
 let sqliteDb = null;
 let tursoClient = null;
+let initializationPromise = null;
+
+async function initializeDatabase() {
+    if (initializationPromise) {
+        return initializationPromise;
+    }
+
+    initializationPromise = (async () => {
+        if (
+            isProduction &&
+            process.env.TURSO_DATABASE_URL &&
+            process.env.TURSO_AUTH_TOKEN
+        ) {
+            dbMode = 'turso';
+            await initializeTurso();
+        } else {
+            dbMode = 'sqlite';
+            initializeSQLite();
+        }
+    })();
+
+    try {
+        await initializationPromise;
+    } catch (error) {
+        initializationPromise = null;
+        throw error;
+    }
+}
 
 function initializeSQLite() {
+    if (sqliteDb) {
+        return;
+    }
+
     const Database = require('better-sqlite3');
 
     const dbPath = path.join(__dirname, 'database.db');
@@ -20,7 +52,7 @@ function initializeSQLite() {
 
     createSQLiteTables();
 
-    return sqliteDb;
+    console.log('SQLITE TABLES READY');
 }
 
 function createSQLiteTables() {
@@ -77,8 +109,6 @@ function createSQLiteTables() {
         CREATE INDEX IF NOT EXISTS idx_events_date
         ON events(event_date);
     `);
-
-    console.log('SQLITE TABLES READY');
 }
 
 async function initializeTurso() {
@@ -105,109 +135,74 @@ async function initializeTurso() {
 
     await createTursoTables();
 
-    return tursoClient;
-}
-
-async function createTursoTables() {
-    await tursoClient.batch(
-        [
-            {
-                sql: `
-                    CREATE TABLE IF NOT EXISTS users (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        name TEXT NOT NULL,
-                        email TEXT NOT NULL UNIQUE,
-                        password TEXT NOT NULL,
-                        role TEXT NOT NULL DEFAULT 'user',
-                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-                    )
-                `
-            },
-            {
-                sql: `
-                    CREATE TABLE IF NOT EXISTS categories (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        name TEXT NOT NULL UNIQUE,
-                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-                    )
-                `
-            },
-            {
-                sql: `
-                    CREATE TABLE IF NOT EXISTS events (
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        title TEXT NOT NULL,
-                        description TEXT NOT NULL,
-                        category_id INTEGER,
-                        organizer TEXT,
-                        venue TEXT NOT NULL,
-                        city TEXT NOT NULL,
-                        address TEXT,
-                        event_date TEXT NOT NULL,
-                        event_time TEXT NOT NULL,
-                        end_date TEXT,
-                        end_time TEXT,
-                        image TEXT,
-                        capacity INTEGER DEFAULT 0,
-                        price REAL DEFAULT 0,
-                        event_type TEXT DEFAULT 'free',
-                        registration_deadline TEXT,
-                        contact_email TEXT,
-                        website TEXT,
-                        tags TEXT,
-                        status TEXT DEFAULT 'active',
-                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-                    )
-                `
-            },
-            {
-                sql: `
-                    CREATE INDEX IF NOT EXISTS idx_users_email
-                    ON users(email)
-                `
-            },
-            {
-                sql: `
-                    CREATE INDEX IF NOT EXISTS idx_events_status
-                    ON events(status)
-                `
-            },
-            {
-                sql: `
-                    CREATE INDEX IF NOT EXISTS idx_events_date
-                    ON events(event_date)
-                `
-            }
-        ],
-        'write'
-    );
-
     console.log('TURSO TABLES READY');
 }
 
-let initializationPromise;
+async function createTursoTables() {
+    const statements = [
+        `
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
+            role TEXT NOT NULL DEFAULT 'user',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+        `,
+        `
+        CREATE TABLE IF NOT EXISTS categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+        `,
+        `
+        CREATE TABLE IF NOT EXISTS events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            category_id INTEGER,
+            organizer TEXT,
+            venue TEXT NOT NULL,
+            city TEXT NOT NULL,
+            address TEXT,
+            event_date TEXT NOT NULL,
+            event_time TEXT NOT NULL,
+            end_date TEXT,
+            end_time TEXT,
+            image TEXT,
+            capacity INTEGER DEFAULT 0,
+            price REAL DEFAULT 0,
+            event_type TEXT DEFAULT 'free',
+            registration_deadline TEXT,
+            contact_email TEXT,
+            website TEXT,
+            tags TEXT,
+            status TEXT DEFAULT 'active',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        )
+        `,
+        `
+        CREATE INDEX IF NOT EXISTS idx_users_email
+        ON users(email)
+        `,
+        `
+        CREATE INDEX IF NOT EXISTS idx_events_status
+        ON events(status)
+        `,
+        `
+        CREATE INDEX IF NOT EXISTS idx_events_date
+        ON events(event_date)
+        `
+    ];
 
-async function initializeDatabase() {
-    if (initializationPromise) {
-        return initializationPromise;
+    for (const sql of statements) {
+        await tursoClient.execute({
+            sql,
+            args: []
+        });
     }
-
-    initializationPromise = (async () => {
-        if (
-            isProduction &&
-            process.env.TURSO_DATABASE_URL &&
-            process.env.TURSO_AUTH_TOKEN
-        ) {
-            dbMode = 'turso';
-            await initializeTurso();
-            return;
-        }
-
-        dbMode = 'sqlite';
-        initializeSQLite();
-    })();
-
-    return initializationPromise;
 }
 
 async function get(sql, params = []) {
@@ -259,9 +254,11 @@ async function run(sql, params = []) {
 
         return {
             changes: Number(result.rowsAffected || 0),
-            lastInsertRowid: result.lastInsertRowid
-                ? Number(result.lastInsertRowid)
-                : null
+            lastInsertRowid:
+                result.lastInsertRowid !== undefined &&
+                result.lastInsertRowid !== null
+                    ? Number(result.lastInsertRowid)
+                    : null
         };
     }
 
@@ -292,14 +289,20 @@ async function healthCheck() {
     try {
         await initializeDatabase();
 
-        await get('SELECT 1 AS ok');
+        const result = await get(
+            'SELECT 1 AS ok'
+        );
 
         return {
             success: true,
-            mode: dbMode
+            mode: dbMode,
+            database: result
         };
     } catch (error) {
-        console.error('DATABASE HEALTH CHECK ERROR:', error);
+        console.error(
+            'DATABASE HEALTH CHECK ERROR:',
+            error
+        );
 
         return {
             success: false,
