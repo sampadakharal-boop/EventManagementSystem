@@ -1,275 +1,257 @@
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EventHub</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="stylesheet" href="css/events.css">
+<title>Events | EventHub</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="css/events.css">
+
 </head>
 
 <body>
 
-    <nav>
+<nav>
 
-    <div class="logo">
-        EventHub
-    </div>
-<div>
-    
-    
-</div>
-<div>
-    
-</div>
-    <ul>
+<div class="logo">EventHub</div>
 
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="aboutus.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-    </ul>
+<ul>
+    <li><a href="index.html">Home</a></li>
+    <li><a href="events.html" class="active">Events</a></li>
+    <li><a href="categories.html">Categories</a></li>
+    <li><a href="aboutus.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+</ul>
 
-    
-            <a href="signup.html" class="signup_btn">
-                Sign Up
-            </a>
+<a href="signup.html" class="signup_btn">Sign Up</a>
 
 </nav>
 
-    <section class="events-hero">
+<section class="events-hero">
 
-        <div class="hero-overlay"></div>
+<div class="hero-overlay"></div>
 
-        <div class="hero-content">
-            <h1>Discover Amazing Events</h1>
+<div class="hero-content">
+    <h1>Discover Amazing Events</h1>
+
+    <p>
+        Find concerts, conferences, workshops,
+        festivals, hackathons, seminars and more
+        happening near you.
+    </p>
+</div>
+
+</section>
+
+<section class="search-section">
+
+<div class="search-container">
+
+    <h2>Find Your Next Event</h2>
+
+    <div class="search-box">
+
+        <div class="input-group">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" placeholder="Search event...">
+        </div>
+
+        <div class="input-group">
+            <i class="fa-solid fa-location-dot"></i>
+            <input type="text" placeholder="Location">
+        </div>
+
+        <button>Search</button>
+
+    </div>
+
+</div>
+
+</section>
+
+<section class="filter-section">
+
+<h2>Browse by Category</h2>
+
+<div class="filter-buttons">
+    <button class="active">All</button>
+    <button>Music</button>
+    <button>Technology</button>
+    <button>Sports</button>
+    <button>Business</button>
+    <button>Education</button>
+    <button>Startup</button>
+    <button>Workshop</button>
+    <button>Festival</button>
+</div>
+
+</section>
+
+<section class="events-section">
+
+<div class="section-title">
+    <h2>Featured Events</h2>
+    <p>Explore trending events happening this month.</p>
+</div>
+
+<div class="events-grid">
+
+    <div class="event-card">
+
+        <div class="event-image">
+            <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=900" alt="Concert">
+            <span class="badge featured">Featured</span>
+        </div>
+
+        <div class="event-content">
+
+            <h3>Summer Music Festival</h3>
+
+            <div class="event-info">
+                <span>
+                    <i class="fa-solid fa-calendar"></i>
+                    July 30, 2026
+                </span>
+
+                <span>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Kathmandu
+                </span>
+            </div>
 
             <p>
-                Find concerts, conferences, workshops,
-                festivals, hackathons, seminars and more
-                happening near you.
+                Experience unforgettable live
+                performances from top artists.
             </p>
+
+            <div class="event-footer">
+                <span class="price">FREE</span>
+                <a href="event-registration.html" class="register-btn">Register Now</a>
+            </div>
+
         </div>
 
-    </section>
+    </div>
 
-    <section class="search-section">
+    <div class="event-card">
 
-        <div class="search-container">
+        <div class="event-image">
+            <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=900" alt="Technology Event">
+            <span class="badge paid">Paid</span>
+        </div>
 
-            <h2>Find Your Next Event</h2>
+        <div class="event-content">
 
-            <div class="search-box">
+            <h3>AI &amp; Cyber Security Summit</h3>
 
-                <div class="input-group">
-                    <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" placeholder="Search event...">
-                </div>
+            <div class="event-info">
+                <span>
+                    <i class="fa-solid fa-calendar"></i>
+                    August 12, 2026
+                </span>
 
-                <div class="input-group">
+                <span>
                     <i class="fa-solid fa-location-dot"></i>
-                    <input type="text" placeholder="Location">
-                </div>
+                    Pokhara
+                </span>
+            </div>
 
-                <button>Search</button>
+            <p>
+                Learn from industry experts on AI,
+                security and ethical hacking.
+            </p>
 
+            <div class="event-footer">
+                <span class="price paid-price">Rs.1500</span>
+                <a href="event-registration.html" class="register-btn">Register Now</a>
             </div>
 
         </div>
 
-    </section>
+    </div>
 
-    <section class="filter-section">
+    <div class="event-card">
 
-        <h2>Browse by Category</h2>
-
-        <div class="filter-buttons">
-            <button class="active">All</button>
-            <button>Music</button>
-            <button>Technology</button>
-            <button>Sports</button>
-            <button>Business</button>
-            <button>Education</button>
-            <button>Startup</button>
-            <button>Workshop</button>
-            <button>Festival</button>
+        <div class="event-image">
+            <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=900" alt="Business Event">
+            <span class="badge featured">Featured</span>
         </div>
 
-    </section>
+        <div class="event-content">
 
-    <section class="events-section">
+            <h3>Startup Networking Meetup</h3>
 
-        <div class="section-title">
-            <h2>Featured Events</h2>
-            <p>Explore trending events happening this month.</p>
-        </div>
+            <div class="event-info">
+                <span>
+                    <i class="fa-solid fa-calendar"></i>
+                    August 18, 2026
+                </span>
 
-        <div class="events-grid">
-
-            <div class="event-card">
-
-                <div class="event-image">
-                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=900" alt="Concert">
-                    <span class="badge featured">Featured</span>
-                </div>
-
-                <div class="event-content">
-
-                    <h3>Summer Music Festival</h3>
-
-                    <div class="event-info">
-
-                        <span>
-                            <i class="fa-solid fa-calendar"></i>
-                            July 30, 2026
-                        </span>
-
-                        <span>
-                            <i class="fa-solid fa-location-dot"></i>
-                            Kathmandu
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Experience unforgettable live
-                        performances from top artists.
-                    </p>
-
-                    <div class="event-footer">
-                        <span class="price">FREE</span>
-                        <a href="#">Details</a>
-                    </div>
-
-                </div>
-
+                <span>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Lalitpur
+                </span>
             </div>
 
-            <div class="event-card">
+            <p>
+                Meet founders, investors and
+                entrepreneurs.
+            </p>
 
-                <div class="event-image">
-                    <img src="https://images.unsplash.com/photo-1511578314322-379afb476865?w=900" alt="Tech">
-                    <span class="badge paid">Paid</span>
-                </div>
-
-                <div class="event-content">
-
-                    <h3>AI &amp; Cyber Security Summit</h3>
-
-                    <div class="event-info">
-
-                        <span>
-                            <i class="fa-solid fa-calendar"></i>
-                            August 12
-                        </span>
-
-                        <span>
-                            <i class="fa-solid fa-location-dot"></i>
-                            Pokhara
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Learn from industry experts on AI,
-                        security and ethical hacking.
-                    </p>
-
-                    <div class="event-footer">
-                        <span class="price paid-price">Rs.1500</span>
-                        <a href="#">Details</a>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="event-card">
-
-                <div class="event-image">
-                    <img src="https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=900" alt="Business">
-                    <span class="badge featured">Featured</span>
-                </div>
-
-                <div class="event-content">
-
-                    <h3>Startup Networking Meetup</h3>
-
-                    <div class="event-info">
-
-                        <span>
-                            <i class="fa-solid fa-calendar"></i>
-                            August 18
-                        </span>
-
-                        <span>
-                            <i class="fa-solid fa-location-dot"></i>
-                            Lalitpur
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Meet founders, investors and
-                        entrepreneurs.
-                    </p>
-
-                    <div class="event-footer">
-                        <span class="price">FREE</span>
-                        <a href="#">Details</a>
-                    </div>
-
-                </div>
-
-            </div>
-
-            <div class="event-card">
-
-                <div class="event-image">
-                    <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?w=900" alt="Workshop">
-                    <span class="badge paid">Paid</span>
-                </div>
-
-                <div class="event-content">
-
-                    <h3>UI/UX Design Workshop</h3>
-
-                    <div class="event-info">
-
-                        <span>
-                            <i class="fa-solid fa-calendar"></i>
-                            September 1
-                        </span>
-
-                        <span>
-                            <i class="fa-solid fa-location-dot"></i>
-                            Kathmandu
-                        </span>
-
-                    </div>
-
-                    <p>
-                        Master Figma, prototyping,
-                        design systems and UX research.
-                    </p>
-
-                    <div class="event-footer">
-                        <span class="price paid-price">Rs.900</span>
-                        <a href="#">Details</a>
-                    </div>
-
-                </div>
-
+            <div class="event-footer">
+                <span class="price">FREE</span>
+                <a href="event-registration.html" class="register-btn">Register Now</a>
             </div>
 
         </div>
 
-    </section>
+    </div>
+
+    <div class="event-card">
+
+        <div class="event-image">
+            <img src="https://images.unsplash.com/photo-1515169067868-5387ec356754?w=900" alt="Workshop">
+            <span class="badge paid">Paid</span>
+        </div>
+
+        <div class="event-content">
+
+            <h3>UI/UX Design Workshop</h3>
+
+            <div class="event-info">
+                <span>
+                    <i class="fa-solid fa-calendar"></i>
+                    September 1, 2026
+                </span>
+
+                <span>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Kathmandu
+                </span>
+            </div>
+
+            <p>
+                Master Figma, prototyping,
+                design systems and UX research.
+            </p>
+
+            <div class="event-footer">
+                <span class="price paid-price">Rs.900</span>
+                <a href="event-registration.html" class="register-btn">Register Now</a>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+</section>
 
 </body>
-
 </html>
