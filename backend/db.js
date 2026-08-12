@@ -15,9 +15,6 @@ const adminRoutes = require('./routes/admin');
 
 const app = express();
 
-/* =========================================================
-   CONFIGURATION
-========================================================= */
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -25,19 +22,6 @@ if (!JWT_SECRET) {
     console.error('ERROR: JWT_SECRET is missing from .env');
 }
 
-/*
-    server.js is inside:
-
-    EventManagementSystem/backend/server.js
-
-    Therefore:
-
-    ../frontend
-
-    points to:
-
-    EventManagementSystem/frontend
-*/
 const FRONTEND_PATH = path.resolve(__dirname, '../frontend');
 
 const ADMIN_INDEX_PATH = path.join(

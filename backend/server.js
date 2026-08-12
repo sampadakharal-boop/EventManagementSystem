@@ -1,30 +1,30 @@
 const path = require('path');
-
-require('dotenv').config({
-    path: path.join(__dirname, '.env')
-});
-
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { get, run } = require('./db');
+require('dotenv').config({
+    path: path.join(__dirname, '.env')
+});
+
+const { get, all, run } = require('./db');
 const adminRoutes = require('./routes/admin');
 
 const app = express();
 
+const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-    console.error('ERROR: JWT_SECRET is missing.');
+    console.error('ERROR: JWT_SECRET is missing from .env');
 }
+
+const FRONTEND_PATH = path.join(__dirname, '../frontend');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-const FRONTEND_PATH = path.join(__dirname, '../frontend');
 
 app.use(express.static(FRONTEND_PATH));
 
@@ -33,25 +33,15 @@ app.get('/', (req, res) => {
 });
 
 app.get('/admin', (req, res) => {
-    res.redirect('/admin/index.html');
+    res.sendFile(path.join(FRONTEND_PATH, 'admin', 'index.html'));
+});
+
+app.get('/admin/', (req, res) => {
+    res.sendFile(path.join(FRONTEND_PATH, 'admin', 'index.html'));
 });
 
 app.get('/admin/index.html', (req, res) => {
-    res.sendFile(
-        path.join(FRONTEND_PATH, 'admin', 'index.html'),
-        (error) => {
-            if (error) {
-                console.error('ADMIN DASHBOARD ERROR:', error);
-
-                if (!res.headersSent) {
-                    return res.status(404).json({
-                        success: false,
-                        message: 'Admin dashboard file not found.'
-                    });
-                }
-            }
-        }
-    );
+    res.sendFile(path.join(FRONTEND_PATH, 'admin', 'index.html'));
 });
 
 app.post('/api/signup', async (req, res) => {
@@ -72,13 +62,6 @@ app.post('/api/signup', async (req, res) => {
             return res.status(400).json({
                 success: false,
                 message: 'Name cannot be empty.'
-            });
-        }
-
-        if (!normalizedEmail) {
-            return res.status(400).json({
-                success: false,
-                message: 'Email cannot be empty.'
             });
         }
 
@@ -104,13 +87,8 @@ app.post('/api/signup', async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         await run(
-            `INSERT INTO users (
-                name,
-                email,
-                password,
-                role
-            )
-            VALUES (?, ?, ?, ?)`,
+            `INSERT INTO users (name, email, password, role)
+             VALUES (?, ?, ?, ?)`,
             [
                 trimmedName,
                 normalizedEmail,
@@ -119,8 +97,6 @@ app.post('/api/signup', async (req, res) => {
             ]
         );
 
-        console.log('SIGNUP SUCCESS:', normalizedEmail);
-
         return res.status(201).json({
             success: true,
             message: 'Account created successfully.'
@@ -128,7 +104,6 @@ app.post('/api/signup', async (req, res) => {
 
     } catch (error) {
         console.error('SIGNUP ERROR:', error);
-        console.error('SIGNUP ERROR MESSAGE:', error.message);
 
         return res.status(500).json({
             success: false,
@@ -141,9 +116,6 @@ app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        console.log('LOGIN REQUEST RECEIVED');
-        console.log('Email:', email);
-
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
@@ -154,7 +126,7 @@ app.post('/api/login', async (req, res) => {
         if (!JWT_SECRET) {
             return res.status(500).json({
                 success: false,
-                message: 'Server authentication configuration is missing.'
+                message: 'JWT_SECRET is missing from .env'
             });
         }
 
@@ -172,8 +144,6 @@ app.post('/api/login', async (req, res) => {
             [normalizedEmail]
         );
 
-        console.log('USER FOUND:', !!user);
-
         if (!user) {
             return res.status(401).json({
                 success: false,
@@ -181,19 +151,10 @@ app.post('/api/login', async (req, res) => {
             });
         }
 
-        if (!user.password) {
-            return res.status(500).json({
-                success: false,
-                message: 'Account password data is invalid.'
-            });
-        }
-
         const passwordMatch = await bcrypt.compare(
             password,
             user.password
         );
-
-        console.log('PASSWORD MATCH:', passwordMatch);
 
         if (!passwordMatch) {
             return res.status(401).json({
@@ -225,9 +186,6 @@ app.post('/api/login', async (req, res) => {
             path: '/'
         });
 
-        console.log('LOGIN SUCCESS:', user.email);
-        console.log('USER ROLE:', user.role);
-
         return res.status(200).json({
             success: true,
             message: 'Login successful.',
@@ -242,7 +200,6 @@ app.post('/api/login', async (req, res) => {
 
     } catch (error) {
         console.error('LOGIN ERROR:', error);
-        console.error('LOGIN ERROR MESSAGE:', error.message);
 
         return res.status(500).json({
             success: false,
@@ -256,7 +213,7 @@ app.get('/api/me', async (req, res) => {
         if (!JWT_SECRET) {
             return res.status(500).json({
                 success: false,
-                message: 'Server authentication configuration is missing.'
+                message: 'JWT_SECRET is missing from .env'
             });
         }
 
@@ -328,7 +285,7 @@ app.post('/api/logout', (req, res) => {
 
 app.get('/api/events', async (req, res) => {
     try {
-        const events = await get(
+        const events = await all(
             `SELECT
                 events.id,
                 events.title,
@@ -369,7 +326,6 @@ app.get('/api/events', async (req, res) => {
 
     } catch (error) {
         console.error('GET EVENTS ERROR:', error);
-        console.error('GET EVENTS ERROR MESSAGE:', error.message);
 
         return res.status(500).json({
             success: false,
@@ -381,27 +337,38 @@ app.get('/api/events', async (req, res) => {
 app.use('/api/admin', adminRoutes);
 
 app.use((req, res) => {
-    res.status(404).json({
+    console.log(
+        '404 ROUTE NOT FOUND:',
+        req.method,
+        req.originalUrl
+    );
+
+    return res.status(404).json({
         success: false,
-        message: 'Route not found.'
+        message: 'Route not found.',
+        route: req.originalUrl
     });
 });
 
 app.use((err, req, res, next) => {
     console.error('SERVER ERROR:', err);
 
-    res.status(500).json({
+    return res.status(500).json({
         success: false,
         message: 'Internal server error.'
     });
 });
 
-module.exports = app;
-
 if (require.main === module) {
-    const PORT = process.env.PORT || 3000;
-
     app.listen(PORT, () => {
-        console.log(`Server running on http://localhost:${PORT}`);
+        console.log('');
+        console.log('======================================');
+        console.log('SERVER RUNNING');
+        console.log('======================================');
+        console.log(`http://localhost:${PORT}`);
+        console.log(`Admin: http://localhost:${PORT}/admin`);
+        console.log('======================================');
     });
 }
+
+module.exports = app;

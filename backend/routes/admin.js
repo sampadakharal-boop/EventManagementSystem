@@ -6,7 +6,8 @@ const router = express.Router();
 
 router.get('/verify', verifyAdmin, (req, res) => {
     res.json({
-        success: true
+        success: true,
+        user: req.user || null
     });
 });
 
@@ -112,7 +113,7 @@ router.post('/events', verifyAdmin, async (req, res) => {
             ]
         );
 
-        return res.status(201).json({
+        res.status(201).json({
             success: true,
             message: 'Event published successfully.',
             eventId: eventResult.lastInsertRowid
@@ -121,7 +122,7 @@ router.post('/events', verifyAdmin, async (req, res) => {
     } catch (error) {
         console.error('CREATE EVENT ERROR:', error);
 
-        return res.status(500).json({
+        res.status(500).json({
             success: false,
             message: 'Server error while creating event.'
         });
