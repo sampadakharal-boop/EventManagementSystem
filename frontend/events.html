@@ -1,113 +1,212 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Events | EventHub</title>
+    <title>Events | EventHub</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-<link rel="stylesheet" href="css/events.css">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="css/events.css">
 </head>
 
 <body>
 
-<nav>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">EventHub</div>
 
-<div class="logo">EventHub</div>
+        <ul>
+            <li>
+                <a href="index.html">Home</a>
+            </li>
 
-<ul>
-    <li><a href="index.html">Home</a></li>
-    <li><a href="events.html" class="active">Events</a></li>
-    <li><a href="categories.html">Categories</a></li>
-    <li><a href="aboutus.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
-</ul>
+            <li>
+                <a href="events.html" class="active">Events</a>
+            </li>
 
-<a href="signup.html" class="signup_btn">Sign Up</a>
+            <li>
+                <a href="categories.html">Categories</a>
+            </li>
 
-</nav>
+            <li>
+                <a href="aboutus.html">About</a>
+            </li>
 
-<section class="events-hero">
+            <li>
+                <a href="contact.html">Contact</a>
+            </li>
+        </ul>
 
-<div class="hero-overlay"></div>
+        <a href="signup.html" class="signup_btn">Sign Up</a>
+    </nav>
 
-<div class="hero-content">
-    <h1>Discover Amazing Events</h1>
 
-    <p>
-        Find concerts, conferences, workshops,
-        festivals, hackathons, seminars and more
-        happening near you.
-    </p>
-</div>
+    <!-- Hero Section -->
+    <section class="events-hero">
 
-</section>
+        <div class="hero-overlay"></div>
 
-<section class="search-section">
+        <div class="hero-content">
 
-<div class="search-container">
+            <span class="hero-label">
+                EVENTHUB
+            </span>
 
-    <h2>Find Your Next Event</h2>
+            <h1>Discover Amazing Events</h1>
 
-    <div class="search-box">
+            <p>
+                Find concerts, conferences, workshops,
+                festivals, hackathons, seminars and more
+                happening near you.
+            </p>
 
-        <div class="input-group">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" placeholder="Search event...">
         </div>
 
-        <div class="input-group">
-            <i class="fa-solid fa-location-dot"></i>
-            <input type="text" placeholder="Location">
+    </section>
+
+
+    <!-- Search Section -->
+    <section class="search-section">
+
+        <div class="search-container">
+
+            <h2>Find Your Next Event</h2>
+
+            <div class="search-box">
+
+                <div class="input-group">
+
+                    <i class="fa-solid fa-magnifying-glass"></i>
+
+                    <input
+                        type="text"
+                        placeholder="Search events..."
+                        aria-label="Search events">
+
+                </div>
+
+                <div class="input-group">
+
+                    <i class="fa-solid fa-location-dot"></i>
+
+                    <input
+                        type="text"
+                        placeholder="Location"
+                        aria-label="Event location">
+
+                </div>
+
+                <button type="button">
+                    Search
+                </button>
+
+            </div>
+
         </div>
 
-        <button>Search</button>
+    </section>
 
-    </div>
 
-</div>
+    <!-- Category Filter -->
+    <section class="filter-section">
 
-</section>
+        <div class="filter-container">
 
-<section class="filter-section">
+            <h2>Browse by Category</h2>
 
-<h2>Browse by Category</h2>
+            <div class="filter-buttons">
 
-<div class="filter-buttons">
-    <button class="active">All</button>
-    <button>Music</button>
-    <button>Technology</button>
-    <button>Sports</button>
-    <button>Business</button>
-    <button>Education</button>
-    <button>Startup</button>
-    <button>Workshop</button>
-    <button>Festival</button>
-</div>
+                <button type="button" class="active">
+                    All
+                </button>
 
-</section>
+                <button type="button">
+                    Music
+                </button>
 
-<section class="events-section">
+                <button type="button">
+                    Technology
+                </button>
 
-<div class="section-title">
-    <h2>Featured Events</h2>
-    <p>Explore trending events happening this month.</p>
-</div>
+                <button type="button">
+                    Sports
+                </button>
 
-<div class="events-grid" id="eventsGrid">
+                <button type="button">
+                    Business
+                </button>
 
-    <p>Loading events...</p>
+                <button type="button">
+                    Education
+                </button>
 
-</div>
+                <button type="button">
+                    Startup
+                </button>
 
-</section>
+                <button type="button">
+                    Workshop
+                </button>
 
-<script src="js/events-render.js"></script>
+                <button type="button">
+                    Festival
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Events Section -->
+    <main class="events-section">
+
+        <div class="section-title">
+
+            <span class="section-label">
+                EXPLORE
+            </span>
+
+            <h2>Featured Events</h2>
+
+            <p>
+                Explore trending events happening this month.
+            </p>
+
+        </div>
+
+
+        <!-- Events generated by JavaScript -->
+        <div
+            class="events-grid"
+            id="eventsGrid"
+            aria-live="polite">
+
+            <div class="events-loading">
+
+                <i class="fa-solid fa-spinner fa-spin"></i>
+
+                <p>Loading events...</p>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <script src="js/events-render.js"></script>
 
 </body>
+
 </html>
