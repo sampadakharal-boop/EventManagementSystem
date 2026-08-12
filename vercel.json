@@ -7,17 +7,17 @@
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/backend/server.js"
-    },
-    {
-      "src": "/admin/(.*)",
-      "dest": "/backend/server.js"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/backend/server.js"
-    }
-  ]
+  {
+    "src": "/api/(.*)",
+    "dest": "/backend/server.js"
+  },
+  {
+    "src": "/admin/(.*)",
+    "dest": "/backend/server.js"
+  },
+  {
+    "src": "/(.*)",
+    "dest": "/backend/server.js"
+  }
+]
 }

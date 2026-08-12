@@ -3,30 +3,46 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
-require('dotenv').config({
-    path: path.join(__dirname, '.env')
-});
+require('dotenv').config();
 
 const { get, all, run } = require('./db');
-const adminRoutes = require('./routes/admin');
 
 const app = express();
+
+/* =========================================================
+   CONFIG
+========================================================= */
 
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 if (!JWT_SECRET) {
-    console.error('ERROR: JWT_SECRET is missing from .env');
+    console.error('ERROR: JWT_SECRET is missing from environment variables.');
 }
 
+/* =========================================================
+   PATHS
+========================================================= */
+
 const FRONTEND_PATH = path.join(__dirname, '../frontend');
+
+/* =========================================================
+   MIDDLEWARE
+========================================================= */
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+/* =========================================================
+   STATIC FRONTEND
+========================================================= */
+
 app.use(express.static(FRONTEND_PATH));
+
+/* =========================================================
+   FRONTEND ROUTES
+========================================================= */
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(FRONTEND_PATH, 'index.html'));
@@ -44,6 +60,10 @@ app.get('/admin/index.html', (req, res) => {
     res.sendFile(path.join(FRONTEND_PATH, 'admin', 'index.html'));
 });
 
+/* =========================================================
+   SIGNUP
+========================================================= */
+
 app.post('/api/signup', async (req, res) => {
     try {
         const { name, email, password } = req.body;
@@ -55,8 +75,8 @@ app.post('/api/signup', async (req, res) => {
             });
         }
 
-        const trimmedName = name.trim();
-        const normalizedEmail = email.trim().toLowerCase();
+        const trimmedName = String(name).trim();
+        const normalizedEmail = String(email).trim().toLowerCase();
 
         if (!trimmedName) {
             return res.status(400).json({
@@ -65,7 +85,7 @@ app.post('/api/signup', async (req, res) => {
             });
         }
 
-        if (password.length < 6) {
+        if (String(password).length < 6) {
             return res.status(400).json({
                 success: false,
                 message: 'Password must be at least 6 characters.'
@@ -84,7 +104,10 @@ app.post('/api/signup', async (req, res) => {
             });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(
+            String(password),
+            10
+        );
 
         await run(
             `INSERT INTO users (name, email, password, role)
@@ -112,6 +135,10 @@ app.post('/api/signup', async (req, res) => {
     }
 });
 
+/* =========================================================
+   LOGIN
+========================================================= */
+
 app.post('/api/login', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -126,11 +153,13 @@ app.post('/api/login', async (req, res) => {
         if (!JWT_SECRET) {
             return res.status(500).json({
                 success: false,
-                message: 'JWT_SECRET is missing from .env'
+                message: 'JWT_SECRET is missing from environment variables.'
             });
         }
 
-        const normalizedEmail = email.trim().toLowerCase();
+        const normalizedEmail = String(email)
+            .trim()
+            .toLowerCase();
 
         const user = await get(
             `SELECT
@@ -151,8 +180,17 @@ app.post('/api/login', async (req, res) => {
             });
         }
 
+        if (!user.password) {
+            console.error('USER HAS NO PASSWORD:', user.id);
+
+            return res.status(500).json({
+                success: false,
+                message: 'User account is incorrectly configured.'
+            });
+        }
+
         const passwordMatch = await bcrypt.compare(
-            password,
+            String(password),
             user.password
         );
 
@@ -203,21 +241,28 @@ app.post('/api/login', async (req, res) => {
 
         return res.status(500).json({
             success: false,
-            message: 'Server error during login.'
+            message: 'Server error during login.',
+            error: process.env.NODE_ENV === 'production'
+                ? undefined
+                : error.message
         });
     }
 });
+
+/* =========================================================
+   CURRENT USER
+========================================================= */
 
 app.get('/api/me', async (req, res) => {
     try {
         if (!JWT_SECRET) {
             return res.status(500).json({
                 success: false,
-                message: 'JWT_SECRET is missing from .env'
+                message: 'JWT_SECRET is missing from environment variables.'
             });
         }
 
-        const token = req.cookies.token;
+        const token = req.cookies && req.cookies.token;
 
         if (!token) {
             return res.status(401).json({
@@ -266,6 +311,10 @@ app.get('/api/me', async (req, res) => {
     }
 });
 
+/* =========================================================
+   LOGOUT
+========================================================= */
+
 app.post('/api/logout', (req, res) => {
     const isProduction =
         process.env.NODE_ENV === 'production';
@@ -282,6 +331,10 @@ app.post('/api/logout', (req, res) => {
         message: 'Logged out successfully.'
     });
 });
+
+/* =========================================================
+   EVENTS
+========================================================= */
 
 app.get('/api/events', async (req, res) => {
     try {
@@ -334,7 +387,31 @@ app.get('/api/events', async (req, res) => {
     }
 });
 
-app.use('/api/admin', adminRoutes);
+/* =========================================================
+   ADMIN ROUTES
+========================================================= */
+
+try {
+    const adminRoutes = require('./routes/admin');
+
+    if (typeof adminRoutes === 'function') {
+        app.use('/api/admin', adminRoutes);
+    } else {
+        console.error(
+            'ADMIN ROUTES ERROR: ./routes/admin does not export an Express router.'
+        );
+    }
+
+} catch (error) {
+    console.error(
+        'ADMIN ROUTES LOAD ERROR:',
+        error
+    );
+}
+
+/* =========================================================
+   404
+========================================================= */
 
 app.use((req, res) => {
     console.log(
@@ -350,6 +427,8 @@ app.use((req, res) => {
     });
 });
 
+
+
 app.use((err, req, res, next) => {
     console.error('SERVER ERROR:', err);
 
@@ -358,6 +437,8 @@ app.use((err, req, res, next) => {
         message: 'Internal server error.'
     });
 });
+
+
 
 if (require.main === module) {
     app.listen(PORT, () => {
@@ -370,5 +451,7 @@ if (require.main === module) {
         console.log('======================================');
     });
 }
+
+
 
 module.exports = app;
