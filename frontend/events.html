@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Events | EventHub</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -58,7 +57,6 @@
         <section class="events-section">
 
             <div class="search-container">
-
                 <div class="search-box">
                     <span class="search-icon">⌕</span>
 
@@ -72,7 +70,6 @@
                 <button class="search-button" id="searchButton" type="button">
                     Search
                 </button>
-
             </div>
 
             <div class="events-layout">
@@ -84,13 +81,6 @@
 
                         <select id="categoryFilter">
                             <option value="all">All Categories</option>
-                            <option value="concert">Concerts</option>
-                            <option value="education">Educational Events</option>
-                            <option value="technology">Technology Events</option>
-                            <option value="startup">Startup Events</option>
-                            <option value="wellness">Wellness Events</option>
-                            <option value="fun">Fun Events</option>
-                            <option value="law">Law Programs</option>
                         </select>
                     </div>
 
@@ -99,10 +89,6 @@
 
                         <select id="locationFilter">
                             <option value="all">All Locations</option>
-                            <option value="kathmandu">Kathmandu</option>
-                            <option value="pokhara">Pokhara</option>
-                            <option value="lalitpur">Lalitpur</option>
-                            <option value="bhaktapur">Bhaktapur</option>
                         </select>
                     </div>
 
@@ -149,9 +135,7 @@
 
                             <h2>Upcoming Events</h2>
 
-                            <p id="resultsCount">
-                                Loading events...
-                            </p>
+                            <p id="resultsCount">Loading events...</p>
                         </div>
 
                         <select id="sortEvents">
@@ -165,7 +149,7 @@
 
                     <div class="events-grid" id="eventsGrid"></div>
 
-                    <div class="no-results" id="noResults" style="display: none;">
+                    <div class="no-results" id="noResults" style="display:none;">
 
                         <div class="no-results-icon">⌕</div>
 
@@ -192,7 +176,6 @@
         <div class="footer-content">
 
             <div class="footer-brand">
-
                 <a href="index.html" class="logo">
                     Event<span>Hub</span>
                 </a>
@@ -202,37 +185,27 @@
                     connect with people and create unforgettable
                     experiences.
                 </p>
-
             </div>
 
             <div class="footer-column">
-
                 <h4>Explore</h4>
-
                 <a href="events.html">Events</a>
                 <a href="categories.html">Categories</a>
                 <a href="aboutus.html">Explore</a>
-
             </div>
 
             <div class="footer-column">
-
                 <h4>Account</h4>
-
                 <a href="login.html">Log In</a>
                 <a href="signup.html">Create Account</a>
                 <a href="profile.html">My Profile</a>
-
             </div>
 
             <div class="footer-column">
-
                 <h4>EventHub</h4>
-
                 <a href="aboutus.html">About Us</a>
                 <a href="contact.html">Contact</a>
                 <a href="#">Privacy</a>
-
             </div>
 
         </div>
@@ -262,253 +235,17 @@
         const navLinks = document.getElementById("navLinks");
 
         let events = [];
-        let favourites = JSON.parse(
-            localStorage.getItem("eventhub-favourites") || "[]"
-        );
+        let filteredEvents = [];
 
-        function normalizeCategory(category) {
-            if (!category) {
+        let favourites =
+            JSON.parse(localStorage.getItem("eventhub-favourites")) || [];
+
+        function escapeHtml(value) {
+            if (value === null || value === undefined) {
                 return "";
             }
 
-            const value = category.toLowerCase().trim();
-
-            if (value.includes("technology") || value.includes("tech")) {
-                return "technology";
-            }
-
-            if (value.includes("concert") || value.includes("music")) {
-                return "concert";
-            }
-
-            if (
-                value.includes("education") ||
-                value.includes("educational") ||
-                value.includes("workshop")
-            ) {
-                return "education";
-            }
-
-            if (value.includes("startup")) {
-                return "startup";
-            }
-
-            if (
-                value.includes("wellness") ||
-                value.includes("health")
-            ) {
-                return "wellness";
-            }
-
-            if (value.includes("law")) {
-                return "law";
-            }
-
-            if (
-                value.includes("fun") ||
-                value.includes("entertainment")
-            ) {
-                return "fun";
-            }
-
-            return value.replace(/\s+/g, "-");
-        }
-
-        function formatDate(dateString) {
-            if (!dateString) {
-                return {
-                    day: "",
-                    month: "",
-                    full: ""
-                };
-            }
-
-            const date = new Date(dateString + "T00:00:00");
-
-            if (isNaN(date.getTime())) {
-                return {
-                    day: "",
-                    month: "",
-                    full: dateString
-                };
-            }
-
-            return {
-                day: String(date.getDate()).padStart(2, "0"),
-                month: date
-                    .toLocaleDateString("en-US", {
-                        month: "short"
-                    })
-                    .toUpperCase(),
-                full: date.toLocaleDateString("en-US", {
-                    month: "long",
-                    day: "numeric",
-                    year: "numeric"
-                })
-            };
-        }
-
-        function createEventCard(event) {
-            const date = formatDate(event.event_date);
-
-            const categoryName =
-                event.category || "Event";
-
-            const category =
-                normalizeCategory(categoryName);
-
-            const location =
-                event.city ||
-                event.venue ||
-                "Location not specified";
-
-            const price =
-                Number(event.price) || 0;
-
-            const isFree =
-                event.event_type === "free" ||
-                price === 0;
-
-            const priceText =
-                isFree
-                    ? "Free"
-                    : "Rs. " + price.toLocaleString();
-
-            const badgeText =
-                isFree ? "Free" : "Paid";
-
-            const card =
-                document.createElement("article");
-
-            card.className = "event-card";
-
-            card.dataset.id = event.id || "";
-            card.dataset.category = category;
-            card.dataset.location = location.toLowerCase();
-            card.dataset.price = price;
-            card.dataset.type = isFree ? "free" : "paid";
-            card.dataset.name = event.title || "";
-
-            const favorite =
-                favourites.includes(String(event.id));
-
-            let imageHTML = "";
-
-            if (event.image) {
-                imageHTML = `
-                    <img
-                        src="${escapeHTML(event.image)}"
-                        alt="${escapeHTML(event.title || "Event")}"
-                        class="event-image">
-                `;
-            }
-
-            card.innerHTML = `
-                <div class="event-visual">
-                    ${imageHTML}
-
-                    <span class="badge ${isFree ? "free" : "paid"}">
-                        ${badgeText}
-                    </span>
-
-                    <button
-                        class="favorite-btn ${favorite ? "active" : ""}"
-                        type="button"
-                        aria-label="Add to favourites"
-                        aria-pressed="${favorite}">
-                        ${favorite ? "♥" : "♡"}
-                    </button>
-
-                    <div class="date-badge">
-                        <strong>${date.day}</strong>
-                        <small>${date.month}</small>
-                    </div>
-                </div>
-
-                <div class="event-card-content">
-
-                    <span class="card-category">
-                        ${escapeHTML(categoryName)}
-                    </span>
-
-                    <h3>
-                        ${escapeHTML(event.title || "Untitled Event")}
-                    </h3>
-
-                    <div class="event-meta">
-
-                        <span>
-                            <span class="meta-icon">▣</span>
-                            ${escapeHTML(date.full)}
-                        </span>
-
-                        <span>
-                            <span class="meta-icon">⌖</span>
-                            ${escapeHTML(location)}
-                        </span>
-
-                    </div>
-
-                    <div class="card-footer">
-
-                        <strong class="event-price ${isFree ? "free-price" : ""}">
-                            ${priceText}
-                        </strong>
-
-                        <a
-                            href="event-details.html?id=${encodeURIComponent(event.id)}"
-                            class="details-button">
-                            Details →
-                        </a>
-
-                    </div>
-
-                </div>
-            `;
-
-            const favoriteButton =
-                card.querySelector(".favorite-btn");
-
-            favoriteButton.addEventListener("click", () => {
-                const eventId = String(event.id);
-
-                if (favourites.includes(eventId)) {
-                    favourites =
-                        favourites.filter(
-                            id => id !== eventId
-                        );
-                } else {
-                    favourites.push(eventId);
-                }
-
-                localStorage.setItem(
-                    "eventhub-favourites",
-                    JSON.stringify(favourites)
-                );
-
-                favoriteButton.classList.toggle(
-                    "active",
-                    favourites.includes(eventId)
-                );
-
-                favoriteButton.textContent =
-                    favourites.includes(eventId)
-                        ? "♥"
-                        : "♡";
-
-                favoriteButton.setAttribute(
-                    "aria-pressed",
-                    String(
-                        favourites.includes(eventId)
-                    )
-                );
-            });
-
-            return card;
-        }
-
-        function escapeHTML(value) {
-            return String(value ?? "")
+            return String(value)
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;")
@@ -516,30 +253,273 @@
                 .replace(/'/g, "&#039;");
         }
 
+        function slugify(value) {
+            return String(value || "")
+                .toLowerCase()
+                .trim()
+                .replace(/\s+/g, "-")
+                .replace(/[^a-z0-9-]/g, "");
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) {
+                return {
+                    full: "Date not available",
+                    day: "",
+                    month: ""
+                };
+            }
+
+            const date = new Date(dateString + "T00:00:00");
+
+            if (Number.isNaN(date.getTime())) {
+                return {
+                    full: dateString,
+                    day: "",
+                    month: ""
+                };
+            }
+
+            return {
+                full: date.toLocaleDateString("en-US", {
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric"
+                }),
+                day: date.toLocaleDateString("en-US", {
+                    day: "2-digit"
+                }),
+                month: date.toLocaleDateString("en-US", {
+                    month: "short"
+                }).toUpperCase()
+            };
+        }
+
+        function formatPrice(event) {
+            const price = Number(event.price) || 0;
+
+            if (
+                event.event_type === "free" ||
+                price === 0
+            ) {
+                return "Free";
+            }
+
+            return "Rs. " + price.toLocaleString("en-IN");
+        }
+
+        function getCategoryValue(category) {
+            return slugify(category);
+        }
+
+        function getLocationValue(location) {
+            return slugify(location);
+        }
+
+        function isFavorite(event) {
+            return favourites.includes(String(event.id));
+        }
+
+        function createEventCard(event) {
+            const date = formatDate(event.event_date);
+
+            const category = event.category || "Event";
+            const location = event.city || "Location not available";
+            const price = Number(event.price) || 0;
+            const eventType = event.event_type === "paid" && price > 0
+                ? "paid"
+                : "free";
+
+            const favorite = isFavorite(event);
+
+            const imageStyle = event.image
+                ? `style="background-image:url('${escapeHtml(event.image)}');background-size:cover;background-position:center;"`
+                : "";
+
+            const badgeText = eventType === "free"
+                ? "Free"
+                : "Paid";
+
+            const priceClass = eventType === "free"
+                ? "event-price free-price"
+                : "event-price";
+
+            return `
+                <article
+                    class="event-card"
+                    data-id="${escapeHtml(event.id)}"
+                    data-category="${escapeHtml(getCategoryValue(category))}"
+                    data-location="${escapeHtml(getLocationValue(location))}"
+                    data-price="${price}"
+                    data-type="${eventType}"
+                    data-name="${escapeHtml(event.title)}">
+
+                    <div class="event-visual" ${imageStyle}>
+
+                        <span class="badge ${eventType}">
+                            ${badgeText}
+                        </span>
+
+                        <button
+                            class="favorite-btn ${favorite ? "active" : ""}"
+                            type="button"
+                            aria-label="Add to favourites"
+                            aria-pressed="${favorite}">
+                            ${favorite ? "♥" : "♡"}
+                        </button>
+
+                        <div class="date-badge">
+                            <strong>${escapeHtml(date.day)}</strong>
+                            <small>${escapeHtml(date.month)}</small>
+                        </div>
+
+                    </div>
+
+                    <div class="event-card-content">
+
+                        <span class="card-category">
+                            ${escapeHtml(category)}
+                        </span>
+
+                        <h3>
+                            ${escapeHtml(event.title)}
+                        </h3>
+
+                        <div class="event-meta">
+
+                            <span>
+                                <span class="meta-icon">▣</span>
+                                ${escapeHtml(date.full)}
+                            </span>
+
+                            <span>
+                                <span class="meta-icon">⌖</span>
+                                ${escapeHtml(location)}
+                            </span>
+
+                        </div>
+
+                        <div class="card-footer">
+
+                            <strong class="${priceClass}">
+                                ${formatPrice(event)}
+                            </strong>
+
+                            <a
+                                href="event-details.html?id=${encodeURIComponent(event.id)}"
+                                class="details-button">
+                                Details →
+                            </a>
+
+                        </div>
+
+                    </div>
+
+                </article>
+            `;
+        }
+
         function renderEvents(eventList) {
             eventsGrid.innerHTML = "";
 
             if (!eventList.length) {
                 noResults.style.display = "flex";
-                resultsCount.textContent = "No events available";
+                resultsCount.textContent = "No events found";
                 return;
             }
 
             noResults.style.display = "none";
 
-            eventList.forEach(event => {
-                const card = createEventCard(event);
-                eventsGrid.appendChild(card);
-            });
+            eventsGrid.innerHTML = eventList
+                .map(event => createEventCard(event))
+                .join("");
 
-            applyFilters();
+            attachFavoriteListeners();
         }
 
-        function getFilteredEvents() {
+        function attachFavoriteListeners() {
+            const favoriteButtons =
+                eventsGrid.querySelectorAll(".favorite-btn");
+
+            favoriteButtons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const card = button.closest(".event-card");
+
+                    if (!card) {
+                        return;
+                    }
+
+                    const eventId = String(card.dataset.id);
+
+                    if (favourites.includes(eventId)) {
+                        favourites =
+                            favourites.filter(id => id !== eventId);
+                    } else {
+                        favourites.push(eventId);
+                    }
+
+                    localStorage.setItem(
+                        "eventhub-favourites",
+                        JSON.stringify(favourites)
+                    );
+
+                    const active = favourites.includes(eventId);
+
+                    button.classList.toggle("active", active);
+                    button.textContent = active ? "♥" : "♡";
+                    button.setAttribute(
+                        "aria-pressed",
+                        String(active)
+                    );
+                });
+            });
+        }
+
+        function populateFilters() {
+            const categories = [
+                ...new Set(
+                    events
+                        .map(event => event.category)
+                        .filter(Boolean)
+                )
+            ].sort();
+
+            const locations = [
+                ...new Set(
+                    events
+                        .map(event => event.city)
+                        .filter(Boolean)
+                )
+            ].sort();
+
+            categoryFilter.innerHTML =
+                '<option value="all">All Categories</option>';
+
+            categories.forEach(category => {
+                const option = document.createElement("option");
+
+                option.value = getCategoryValue(category);
+                option.textContent = category;
+
+                categoryFilter.appendChild(option);
+            });
+
+            locationFilter.innerHTML =
+                '<option value="all">All Locations</option>';
+
+            locations.forEach(location => {
+                const option = document.createElement("option");
+
+                option.value = getLocationValue(location);
+                option.textContent = location;
+
+                locationFilter.appendChild(option);
+            });
+        }
+
+        function applyFilters() {
             const search =
-                searchInput.value
-                    .toLowerCase()
-                    .trim();
+                searchInput.value.toLowerCase().trim();
 
             const selectedCategory =
                 categoryFilter.value;
@@ -553,40 +533,34 @@
             const budget =
                 Number(budgetRange.value);
 
-            return events.filter(event => {
-                const title =
-                    (event.title || "").toLowerCase();
+            filteredEvents = events.filter(event => {
+
+                const name =
+                    String(event.title || "").toLowerCase();
 
                 const description =
-                    (event.description || "").toLowerCase();
-
-                const categoryName =
-                    (event.category || "").toLowerCase();
+                    String(event.description || "").toLowerCase();
 
                 const category =
-                    normalizeCategory(event.category);
+                    getCategoryValue(event.category || "");
 
-                const city =
-                    (event.city || "").toLowerCase();
-
-                const venue =
-                    (event.venue || "").toLowerCase();
+                const location =
+                    getLocationValue(event.city || "");
 
                 const price =
                     Number(event.price) || 0;
 
                 const type =
-                    event.event_type === "paid"
+                    event.event_type === "paid" && price > 0
                         ? "paid"
                         : "free";
 
                 const matchesSearch =
                     !search ||
-                    title.includes(search) ||
+                    name.includes(search) ||
                     description.includes(search) ||
-                    categoryName.includes(search) ||
-                    city.includes(search) ||
-                    venue.includes(search);
+                    category.includes(search) ||
+                    location.includes(search);
 
                 const matchesCategory =
                     selectedCategory === "all" ||
@@ -594,7 +568,7 @@
 
                 const matchesLocation =
                     selectedLocation === "all" ||
-                    city === selectedLocation;
+                    location === selectedLocation;
 
                 const matchesPrice =
                     selectedPrice === "all" ||
@@ -611,16 +585,10 @@
                     matchesBudget
                 );
             });
-        }
 
-        function applyFilters() {
-            const filteredEvents =
-                getFilteredEvents();
+            const sortValue = sortEvents.value;
 
-            const currentSort =
-                sortEvents.value;
-
-            if (currentSort === "low") {
+            if (sortValue === "low") {
                 filteredEvents.sort(
                     (a, b) =>
                         (Number(a.price) || 0) -
@@ -628,7 +596,7 @@
                 );
             }
 
-            if (currentSort === "high") {
+            if (sortValue === "high") {
                 filteredEvents.sort(
                     (a, b) =>
                         (Number(b.price) || 0) -
@@ -636,86 +604,105 @@
                 );
             }
 
-            if (currentSort === "name") {
+            if (sortValue === "name") {
                 filteredEvents.sort(
                     (a, b) =>
-                        (a.title || "").localeCompare(
-                            b.title || ""
+                        String(a.title || "").localeCompare(
+                            String(b.title || "")
                         )
                 );
             }
 
-            eventsGrid.innerHTML = "";
+            renderEvents(filteredEvents);
 
-            filteredEvents.forEach(event => {
-                eventsGrid.appendChild(
-                    createEventCard(event)
-                );
-            });
-
-            if (filteredEvents.length === 0) {
-                noResults.style.display = "flex";
+            if (filteredEvents.length === events.length) {
+                resultsCount.textContent =
+                    `Showing all ${events.length} events`;
             } else {
-                noResults.style.display = "none";
+                resultsCount.textContent =
+                    `Showing ${filteredEvents.length} of ${events.length} events`;
             }
-
-            resultsCount.textContent =
-                filteredEvents.length === events.length
-                    ? `Showing all ${events.length} events`
-                    : `Showing ${filteredEvents.length} of ${events.length} events`;
         }
 
-        function clearFilters() {
-            searchInput.value = "";
+        async function loadEvents() {
+            try {
+                resultsCount.textContent = "Loading events...";
 
-            categoryFilter.value = "all";
+                const response =
+                    await fetch("/api/admin/events", {
+                        method: "GET",
+                        credentials: "include",
+                        headers: {
+                            "Accept": "application/json"
+                        }
+                    });
 
-            locationFilter.value = "all";
+                const data = await response.json();
 
-            priceFilter.value = "all";
+                if (!response.ok || !data.success) {
+                    throw new Error(
+                        data.message ||
+                        "Failed to load events."
+                    );
+                }
 
-            budgetRange.value = 5000;
+                events = Array.isArray(data.events)
+                    ? data.events
+                    : [];
 
-            budgetValue.textContent =
-                "Rs. 5,000";
-
-            sortEvents.value = "default";
-
-            applyFilters();
-        }
-
-        function searchEvents() {
-            applyFilters();
-
-            document
-                .querySelector(".events-content")
-                .scrollIntoView({
-                    behavior: "smooth",
-                    block: "start"
-                });
-        }
-
-        budgetRange.addEventListener(
-            "input",
-            () => {
-                budgetValue.textContent =
-                    "Rs. " +
-                    Number(
-                        budgetRange.value
-                    ).toLocaleString();
+                populateFilters();
 
                 applyFilters();
+
+            } catch (error) {
+                console.error(
+                    "LOAD EVENTS ERROR:",
+                    error
+                );
+
+                events = [];
+
+                eventsGrid.innerHTML = "";
+
+                noResults.style.display = "flex";
+
+                resultsCount.textContent =
+                    "Unable to load events";
+
+                noResults.querySelector("h3").textContent =
+                    "Unable to load events";
+
+                noResults.querySelector("p").textContent =
+                    error.message ||
+                    "Please try again later.";
+            }
+        }
+
+        budgetRange.addEventListener("input", () => {
+            budgetValue.textContent =
+                "Rs. " +
+                Number(
+                    budgetRange.value
+                ).toLocaleString("en-IN");
+        });
+
+        searchButton.addEventListener(
+            "click",
+            () => {
+                applyFilters();
+
+                document
+                    .querySelector(".events-content")
+                    .scrollIntoView({
+                        behavior: "smooth",
+                        block: "start"
+                    });
             }
         );
 
         searchInput.addEventListener(
             "input",
             applyFilters
-        );
-
-        searchButton.addEventListener(
-            "click",
-            searchEvents
         );
 
         categoryFilter.addEventListener(
@@ -733,10 +720,32 @@
             applyFilters
         );
 
+        budgetRange.addEventListener(
+            "change",
+            applyFilters
+        );
+
         applyFilter.addEventListener(
             "click",
             applyFilters
         );
+
+        sortEvents.addEventListener(
+            "change",
+            applyFilters
+        );
+
+        function clearFilters() {
+            searchInput.value = "";
+            categoryFilter.value = "all";
+            locationFilter.value = "all";
+            priceFilter.value = "all";
+            budgetRange.value = 5000;
+            budgetValue.textContent = "Rs. 5,000";
+            sortEvents.value = "default";
+
+            applyFilters();
+        }
 
         clearFilter.addEventListener(
             "click",
@@ -748,36 +757,22 @@
             clearFilters
         );
 
-        sortEvents.addEventListener(
-            "change",
-            applyFilters
-        );
+        menuBtn.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
 
-        menuBtn.addEventListener(
-            "click",
-            () => {
-                navLinks.classList.toggle("show");
-
-                menuBtn.textContent =
-                    navLinks.classList.contains("show")
-                        ? "✕"
-                        : "☰";
-            }
-        );
+            menuBtn.textContent =
+                navLinks.classList.contains("show")
+                    ? "✕"
+                    : "☰";
+        });
 
         navLinks
             .querySelectorAll("a")
             .forEach(link => {
-                link.addEventListener(
-                    "click",
-                    () => {
-                        navLinks.classList.remove(
-                            "show"
-                        );
-
-                        menuBtn.textContent = "☰";
-                    }
-                );
+                link.addEventListener("click", () => {
+                    navLinks.classList.remove("show");
+                    menuBtn.textContent = "☰";
+                });
             });
 
         loadEvents();
