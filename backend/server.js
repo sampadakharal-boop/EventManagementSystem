@@ -41,7 +41,29 @@ app.post('/api/signup', async (req, res) => {
             });
         }
 
+        const trimmedName = name.trim();
         const normalizedEmail = email.trim().toLowerCase();
+
+        if (!trimmedName) {
+            return res.status(400).json({
+                success: false,
+                message: 'Name cannot be empty.'
+            });
+        }
+
+        if (!normalizedEmail) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email cannot be empty.'
+            });
+        }
+
+        if (password.length < 6) {
+            return res.status(400).json({
+                success: false,
+                message: 'Password must be at least 6 characters.'
+            });
+        }
 
         const existingUser = await get(
             'SELECT id FROM users WHERE email = ?',
@@ -66,12 +88,14 @@ app.post('/api/signup', async (req, res) => {
             )
             VALUES (?, ?, ?, ?)`,
             [
-                name.trim(),
+                trimmedName,
                 normalizedEmail,
                 hashedPassword,
                 'user'
             ]
         );
+
+        console.log('SIGNUP SUCCESS:', normalizedEmail);
 
         return res.status(201).json({
             success: true,
@@ -80,6 +104,7 @@ app.post('/api/signup', async (req, res) => {
 
     } catch (error) {
         console.error('SIGNUP ERROR:', error);
+        console.error('SIGNUP ERROR MESSAGE:', error.message);
 
         return res.status(500).json({
             success: false,
@@ -165,15 +190,19 @@ app.post('/api/login', async (req, res) => {
             }
         );
 
+        const isProduction =
+            process.env.NODE_ENV === 'production';
+
         res.cookie('token', token, {
             httpOnly: true,
-            secure: true,
+            secure: isProduction,
             sameSite: 'lax',
             maxAge: 24 * 60 * 60 * 1000,
             path: '/'
         });
 
         console.log('LOGIN SUCCESS:', user.email);
+        console.log('USER ROLE:', user.role);
 
         return res.status(200).json({
             success: true,
@@ -200,6 +229,13 @@ app.post('/api/login', async (req, res) => {
 
 app.get('/api/me', async (req, res) => {
     try {
+        if (!JWT_SECRET) {
+            return res.status(500).json({
+                success: false,
+                message: 'Server authentication configuration is missing.'
+            });
+        }
+
         const token = req.cookies.token;
 
         if (!token) {
@@ -250,9 +286,12 @@ app.get('/api/me', async (req, res) => {
 });
 
 app.post('/api/logout', (req, res) => {
+    const isProduction =
+        process.env.NODE_ENV === 'production';
+
     res.clearCookie('token', {
         httpOnly: true,
-        secure: true,
+        secure: isProduction,
         sameSite: 'lax',
         path: '/'
     });
@@ -294,7 +333,9 @@ app.get('/api/events', async (req, res) => {
              LEFT JOIN categories
                 ON events.category_id = categories.id
              WHERE events.status = 'active'
-             ORDER BY events.event_date ASC, events.event_time ASC`
+             ORDER BY
+                events.event_date ASC,
+                events.event_time ASC`
         );
 
         return res.status(200).json({
@@ -304,6 +345,7 @@ app.get('/api/events', async (req, res) => {
 
     } catch (error) {
         console.error('GET EVENTS ERROR:', error);
+        console.error('GET EVENTS ERROR MESSAGE:', error.message);
 
         return res.status(500).json({
             success: false,

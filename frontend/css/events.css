@@ -20,9 +20,6 @@ a {
 }
 
 
-/* =========================
-   NAVIGATION
-========================= */
 
 nav {
     background: #8B5CF6;
@@ -94,9 +91,6 @@ nav ul li a.active::after {
 }
 
 
-/* =========================
-   HERO
-========================= */
 
 .events-hero {
     min-height: 500px;
@@ -153,10 +147,6 @@ nav ul li a.active::after {
     color: #ffffff;
 }
 
-
-/* =========================
-   SEARCH
-========================= */
 
 .search-section {
     padding: 70px 8%;

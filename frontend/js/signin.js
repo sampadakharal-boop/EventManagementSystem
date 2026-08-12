@@ -1,59 +1,63 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('loginForm');
-    const messageBox = document.getElementById('message');
+const loginForm = document.getElementById('loginForm');
+const message = document.getElementById('message');
 
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        messageBox.textContent = '';
+loginForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
 
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const remember = document.getElementById('remember').checked;
 
-        if (!email || !password) {
-            showMessage('Please fill in both fields.', 'error');
+    message.textContent = '';
+    message.style.color = '';
+
+    if (!email || !password) {
+        message.textContent = 'Please enter your email and password.';
+        message.style.color = 'red';
+        return;
+    }
+
+    try {
+        message.textContent = 'Logging in...';
+
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            message.textContent = data.message || 'Login failed.';
+            message.style.color = 'red';
             return;
         }
 
-        try {
-            const res = await fetch('/api/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                credentials: 'include',
-                body: JSON.stringify({
-                    email,
-                    password
-                })
-            });
+        message.textContent = 'Login successful!';
+        message.style.color = 'green';
 
-            const data = await res.json();
-
-            if (data.success) {
-                showMessage(data.message, 'success');
-                form.reset();
-
-                setTimeout(() => {
-                    if (data.user.role === 'admin') {
-                        window.location.href = '/admin/index.html';
-                    } else {
-                        window.location.href = '/index.html';
-                    }
-                }, 800);
-
+        // Small delay so user can see the success message
+        setTimeout(() => {
+            if (data.role === 'admin') {
+                window.location.href = '/admin/dashboard.html';
             } else {
-                showMessage(data.message, 'error');
+                window.location.href = '/index.html';
             }
+        }, 500);
 
-        } catch (err) {
-            console.error(err);
-            showMessage('Could not reach the server. Is it running?', 'error');
-        }
-    });
+    } catch (error) {
+        console.error('LOGIN ERROR:', error);
 
-    function showMessage(text, type) {
-        messageBox.textContent = text;
-        messageBox.style.color =
-            type === 'error' ? '#D6304A' : '#1C8A4B';
+        message.textContent =
+            'Unable to connect to the server. Please try again.';
+
+        message.style.color = 'red';
     }
 });
