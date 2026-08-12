@@ -1,6 +1,6 @@
 const express = require('express');
 const verifyAdmin = require('../middleware/verifyAdmin');
-const { get, run } = require('../db');
+const { get, all, run } = require('../db');
 
 const router = express.Router();
 
@@ -128,5 +128,52 @@ router.post('/events', verifyAdmin, async (req, res) => {
         });
     }
 });
+
+
+router.get('/events', async (req, res) => {
+    try {
+        const events = await all(`
+            SELECT
+                e.id,
+                e.title,
+                e.description,
+                e.organizer,
+                e.venue,
+                e.city,
+                e.address,
+                e.event_date,
+                e.event_time,
+                e.end_date,
+                e.end_time,
+                e.image,
+                e.capacity,
+                e.price,
+                e.event_type,
+                e.registration_deadline,
+                e.contact_email,
+                e.website,
+                e.tags,
+                e.status,
+                c.name AS category
+            FROM events e
+            LEFT JOIN categories c ON e.category_id = c.id
+            ORDER BY e.event_date ASC, e.event_time ASC
+        `);
+
+        res.json({
+            success: true,
+            events: events || []
+        });
+
+    } catch (error) {
+        console.error('GET EVENTS ERROR:', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Server error while fetching events.'
+        });
+    }
+});
+
 
 module.exports = router;
