@@ -132,6 +132,13 @@ app.post('/api/login', async (req, res) => {
             });
         }
 
+        if (!user.password) {
+            return res.status(500).json({
+                success: false,
+                message: 'Account password data is invalid.'
+            });
+        }
+
         const passwordMatch = await bcrypt.compare(
             password,
             user.password
@@ -254,6 +261,55 @@ app.post('/api/logout', (req, res) => {
         success: true,
         message: 'Logged out successfully.'
     });
+});
+
+app.get('/api/events', async (req, res) => {
+    try {
+        const events = await get(
+            `SELECT
+                events.id,
+                events.title,
+                events.description,
+                events.category_id,
+                categories.name AS category,
+                events.organizer,
+                events.venue,
+                events.city,
+                events.address,
+                events.event_date,
+                events.event_time,
+                events.end_date,
+                events.end_time,
+                events.image,
+                events.capacity,
+                events.price,
+                events.event_type,
+                events.registration_deadline,
+                events.contact_email,
+                events.website,
+                events.tags,
+                events.status,
+                events.created_at
+             FROM events
+             LEFT JOIN categories
+                ON events.category_id = categories.id
+             WHERE events.status = 'active'
+             ORDER BY events.event_date ASC, events.event_time ASC`
+        );
+
+        return res.status(200).json({
+            success: true,
+            events: events || []
+        });
+
+    } catch (error) {
+        console.error('GET EVENTS ERROR:', error);
+
+        return res.status(500).json({
+            success: false,
+            message: 'Server error while loading events.'
+        });
+    }
 });
 
 app.use('/api/admin', adminRoutes);
