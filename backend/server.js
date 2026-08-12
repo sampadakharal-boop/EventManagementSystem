@@ -1,4 +1,3 @@
-
 const path = require('path');
 
 require('dotenv').config({
@@ -105,6 +104,7 @@ app.post('/api/login', async (req, res) => {
 
         if (!JWT_SECRET) {
             console.error('LOGIN ERROR: JWT_SECRET is missing.');
+
             return res.status(500).json({
                 success: false,
                 message: 'Server authentication configuration is missing.'
@@ -136,6 +136,7 @@ app.post('/api/login', async (req, res) => {
 
         if (!user.password) {
             console.error('LOGIN ERROR: User has no password hash.');
+
             return res.status(500).json({
                 success: false,
                 message: 'Account password data is invalid.'
@@ -170,7 +171,7 @@ app.post('/api/login', async (req, res) => {
 
         res.cookie('token', token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
+            secure: true,
             sameSite: 'lax',
             maxAge: 24 * 60 * 60 * 1000,
             path: '/'
@@ -178,7 +179,7 @@ app.post('/api/login', async (req, res) => {
 
         console.log('LOGIN SUCCESS:', user.email);
 
-        return res.json({
+        return res.status(200).json({
             success: true,
             message: 'Login successful.',
             user: {
@@ -240,7 +241,7 @@ app.get('/api/me', async (req, res) => {
             });
         }
 
-        return res.json({
+        return res.status(200).json({
             success: true,
             user: {
                 id: user.id,
@@ -263,12 +264,12 @@ app.get('/api/me', async (req, res) => {
 app.post('/api/logout', (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: true,
         sameSite: 'lax',
         path: '/'
     });
 
-    return res.json({
+    return res.status(200).json({
         success: true,
         message: 'Logged out successfully.'
     });
