@@ -218,4 +218,142 @@ router.delete('/events/:id', verifyAdmin, async (req, res) => {
     }
 });
 
+router.put('/events/:id', verifyAdmin, async (req, res) => {
+    try {
+        const eventId = Number(req.params.id);
+
+        if (!eventId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid event ID.'
+            });
+        }
+
+        const {
+            name,
+            description,
+            category,
+            organizer,
+            startDate,
+            startTime,
+            endDate,
+            endTime,
+            venue,
+            city,
+            address,
+            capacity,
+            deadline,
+            eventType,
+            price,
+            contactEmail,
+            website,
+            tags,
+            image
+        } = req.body;
+
+        if (
+            !name ||
+            !description ||
+            !category ||
+            !startDate ||
+            !startTime ||
+            !venue ||
+            !city
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please fill in all required fields.'
+            });
+        }
+
+        let categoryRecord = await get(
+            'SELECT id FROM categories WHERE name = ?',
+            [category]
+        );
+
+        if (!categoryRecord) {
+            const categoryResult = await run(
+                'INSERT INTO categories (name) VALUES (?)',
+                [category]
+            );
+
+            categoryRecord = {
+                id: categoryResult.lastInsertRowid
+            };
+        }
+
+        const existingEvent = await get(
+            'SELECT id FROM events WHERE id = ?',
+            [eventId]
+        );
+
+        if (!existingEvent) {
+            return res.status(404).json({
+                success: false,
+                message: 'Event not found.'
+            });
+        }
+
+        await run(
+            `UPDATE events SET
+                title = ?,
+                description = ?,
+                category_id = ?,
+                organizer = ?,
+                venue = ?,
+                city = ?,
+                address = ?,
+                event_date = ?,
+                event_time = ?,
+                end_date = ?,
+                end_time = ?,
+                image = ?,
+                capacity = ?,
+                price = ?,
+                event_type = ?,
+                registration_deadline = ?,
+                contact_email = ?,
+                website = ?,
+                tags = ?
+            WHERE id = ?`,
+            [
+                name,
+                description,
+                categoryRecord.id,
+                organizer || '',
+                venue,
+                city,
+                address || '',
+                startDate,
+                startTime,
+                endDate || null,
+                endTime || null,
+                image || null,
+                Number(capacity) || 0,
+                eventType === 'paid' ? Number(price) || 0 : 0,
+                eventType || 'free',
+                deadline || null,
+                contactEmail || '',
+                website || '',
+                tags || '',
+                eventId
+            ]
+        );
+
+        res.json({
+            success: true,
+            message: 'Event updated successfully.'
+        });
+
+    } catch (error) {
+        console.error('UPDATE EVENT ERROR:', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Server error while updating event.'
+        });
+    }
+});
+
+
 module.exports = router;
