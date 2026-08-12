@@ -7,6 +7,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allEvents = [];
     let selectedEvent = null;
+    let selectedEventId = null;
+
+    const deleteModal = document.getElementById('deleteModal');
+    const cancelDelete = document.getElementById('cancelDelete');
+    const cancelDeleteButton = document.getElementById('cancelDeleteButton');
+    const confirmDelete = document.getElementById('confirmDelete');
 
     async function loadEvents() {
         try {
@@ -71,35 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderEvents() {
-        const searchTerm =
-            searchInput.value
-                .trim()
-                .toLowerCase();
-
-        const selectedCategory =
-            categoryFilter.value;
-
-        const selectedStatus =
-            statusFilter.value;
-
-        const selectedDate =
-            dateFilter.value;
+        const searchTerm = searchInput.value.trim().toLowerCase();
+        const selectedCategory = categoryFilter.value;
+        const selectedStatus = statusFilter.value;
+        const selectedDate = dateFilter.value;
 
         const filteredEvents = allEvents.filter(event => {
             const matchesSearch =
                 !searchTerm ||
-                String(event.title || '')
-                    .toLowerCase()
-                    .includes(searchTerm) ||
-                String(event.description || '')
-                    .toLowerCase()
-                    .includes(searchTerm) ||
-                String(event.city || '')
-                    .toLowerCase()
-                    .includes(searchTerm) ||
-                String(event.venue || '')
-                    .toLowerCase()
-                    .includes(searchTerm);
+                String(event.title || '').toLowerCase().includes(searchTerm) ||
+                String(event.description || '').toLowerCase().includes(searchTerm) ||
+                String(event.city || '').toLowerCase().includes(searchTerm) ||
+                String(event.venue || '').toLowerCase().includes(searchTerm);
 
             const matchesCategory =
                 !selectedCategory ||
@@ -138,31 +127,20 @@ document.addEventListener('DOMContentLoaded', () => {
         filteredEvents.forEach(event => {
             const row = document.createElement('tr');
 
-            const status =
-                getEventStatus(event);
-
-            const statusLabel =
-                capitalize(status);
-
-            const formattedDate =
-                formatDate(event.event_date);
-
-            const registrations =
-                event.registrations || 0;
+            const status = getEventStatus(event);
+            const statusLabel = capitalize(status);
+            const formattedDate = formatDate(event.event_date);
+            const registrations = event.registrations || 0;
 
             row.innerHTML = `
                 <td>
                     <strong>
-                        ${escapeHTML(
-                            event.title || 'Untitled Event'
-                        )}
+                        ${escapeHTML(event.title || 'Untitled Event')}
                     </strong>
                 </td>
 
                 <td>
-                    ${escapeHTML(
-                        event.category || 'Uncategorized'
-                    )}
+                    ${escapeHTML(event.category || 'Uncategorized')}
                 </td>
 
                 <td>
@@ -205,44 +183,39 @@ document.addEventListener('DOMContentLoaded', () => {
             .querySelectorAll('.manage-event')
             .forEach(button => {
                 button.addEventListener('click', () => {
-                    const eventId =
-                        Number(button.dataset.id);
-
+                    const eventId = Number(button.dataset.id);
                     openManageModal(eventId);
                 });
             });
     }
 
     function openManageModal(eventId) {
-        selectedEvent =
-            allEvents.find(
-                event => Number(event.id) === eventId
-            );
+        selectedEvent = allEvents.find(
+            event => Number(event.id) === eventId
+        );
 
         if (!selectedEvent) {
             alert('Event not found.');
             return;
         }
 
-        let modal =
-            document.getElementById('manageEventModal');
+        selectedEventId = eventId;
+
+        let modal = document.getElementById('manageEventModal');
 
         if (!modal) {
             createManageModal();
-            modal =
-                document.getElementById('manageEventModal');
+            modal = document.getElementById('manageEventModal');
         }
 
         fillManageModal(selectedEvent);
 
         modal.classList.add('show');
-
         document.body.style.overflow = 'hidden';
     }
 
     function createManageModal() {
-        const modal =
-            document.createElement('div');
+        const modal = document.createElement('div');
 
         modal.id = 'manageEventModal';
 
@@ -383,15 +356,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         <div class="manage-form-group">
                             <label>Event Type</label>
-
                             <select id="manageEventType">
-                                <option value="free">
-                                    Free
-                                </option>
-
-                                <option value="paid">
-                                    Paid
-                                </option>
+                                <option value="free">Free</option>
+                                <option value="paid">Paid</option>
                             </select>
                         </div>
 
@@ -438,15 +405,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         <div class="manage-form-group">
                             <label>Status</label>
-
                             <select id="manageStatus">
-                                <option value="active">
-                                    Active
-                                </option>
-
-                                <option value="cancelled">
-                                    Cancelled
-                                </option>
+                                <option value="active">Active</option>
+                                <option value="cancelled">Cancelled</option>
                             </select>
                         </div>
 
@@ -499,38 +460,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document
             .getElementById('closeManageModal')
-            .addEventListener(
-                'click',
-                closeManageModal
-            );
+            .addEventListener('click', closeManageModal);
 
         document
             .getElementById('cancelManageBtn')
-            .addEventListener(
-                'click',
-                closeManageModal
-            );
+            .addEventListener('click', closeManageModal);
 
         document
             .getElementById('manageModalOverlay')
-            .addEventListener(
-                'click',
-                closeManageModal
-            );
+            .addEventListener('click', closeManageModal);
 
         document
             .getElementById('manageEventForm')
-            .addEventListener(
-                'submit',
-                updateEvent
-            );
+            .addEventListener('submit', updateEvent);
 
         document
             .getElementById('deleteEventBtn')
-            .addEventListener(
-                'click',
-                deleteEvent
-            );
+            .addEventListener('click', () => {
+                if (!selectedEventId) {
+                    return;
+                }
+
+                openDeleteModal(selectedEventId);
+            });
     }
 
     function fillManageModal(event) {
@@ -596,8 +548,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 ? 'cancelled'
                 : 'active';
 
-        document.getElementById('manageMessage').textContent =
-            '';
+        document.getElementById('manageMessage').textContent = '';
     }
 
     async function updateEvent(event) {
@@ -607,100 +558,56 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const eventId =
-            selectedEvent.id;
+        const eventId = selectedEvent.id;
 
         const payload = {
-            name:
-                document.getElementById('manageName').value.trim(),
-
-            description:
-                document.getElementById('manageDescription').value.trim(),
-
-            category:
-                document.getElementById('manageCategory').value.trim(),
-
-            organizer:
-                document.getElementById('manageOrganizer').value.trim(),
-
-            startDate:
-                document.getElementById('manageStartDate').value,
-
-            startTime:
-                document.getElementById('manageStartTime').value,
-
-            endDate:
-                document.getElementById('manageEndDate').value,
-
-            endTime:
-                document.getElementById('manageEndTime').value,
-
-            venue:
-                document.getElementById('manageVenue').value.trim(),
-
-            city:
-                document.getElementById('manageCity').value.trim(),
-
-            address:
-                document.getElementById('manageAddress').value.trim(),
-
-            capacity:
-                document.getElementById('manageCapacity').value,
-
-            deadline:
-                document.getElementById('manageDeadline').value,
-
-            eventType:
-                document.getElementById('manageEventType').value,
-
-            price:
-                document.getElementById('managePrice').value,
-
-            contactEmail:
-                document.getElementById('manageContactEmail').value.trim(),
-
-            website:
-                document.getElementById('manageWebsite').value.trim(),
-
-            tags:
-                document.getElementById('manageTags').value.trim(),
-
-            status:
-                document.getElementById('manageStatus').value
+            name: document.getElementById('manageName').value.trim(),
+            description: document.getElementById('manageDescription').value.trim(),
+            category: document.getElementById('manageCategory').value.trim(),
+            organizer: document.getElementById('manageOrganizer').value.trim(),
+            startDate: document.getElementById('manageStartDate').value,
+            startTime: document.getElementById('manageStartTime').value,
+            endDate: document.getElementById('manageEndDate').value,
+            endTime: document.getElementById('manageEndTime').value,
+            venue: document.getElementById('manageVenue').value.trim(),
+            city: document.getElementById('manageCity').value.trim(),
+            address: document.getElementById('manageAddress').value.trim(),
+            capacity: document.getElementById('manageCapacity').value,
+            deadline: document.getElementById('manageDeadline').value,
+            eventType: document.getElementById('manageEventType').value,
+            price: document.getElementById('managePrice').value,
+            contactEmail: document.getElementById('manageContactEmail').value.trim(),
+            website: document.getElementById('manageWebsite').value.trim(),
+            tags: document.getElementById('manageTags').value.trim(),
+            status: document.getElementById('manageStatus').value
         };
 
-        const message =
-            document.getElementById('manageMessage');
+        const message = document.getElementById('manageMessage');
 
         try {
-            message.textContent =
-                'Saving changes...';
+            message.textContent = 'Saving changes...';
 
-            const response =
-                await fetch(
-                    `/api/admin/events/${encodeURIComponent(eventId)}`,
-                    {
-                        method: 'PUT',
-                        credentials: 'include',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(payload)
-                    }
-                );
+            const response = await fetch(
+                `/api/admin/events/${encodeURIComponent(eventId)}`,
+                {
+                    method: 'PUT',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                }
+            );
 
-            const data =
-                await response.json();
+            const data = await response.json();
 
             if (!response.ok || !data.success) {
                 throw new Error(
-                    data.message ||
-                    'Failed to update event.'
+                    data.message || 'Failed to update event.'
                 );
             }
 
-            message.textContent =
-                'Event updated successfully.';
+            message.textContent = 'Event updated successfully.';
 
             await loadEvents();
 
@@ -709,86 +616,110 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 700);
 
         } catch (error) {
-            console.error(
-                'UPDATE EVENT ERROR:',
-                error
-            );
+            console.error('UPDATE EVENT ERROR:', error);
 
             message.textContent =
-                error.message ||
-                'Failed to update event.';
+                error.message || 'Failed to update event.';
         }
     }
 
-    async function deleteEvent() {
-        if (!selectedEvent) {
+    function openDeleteModal(eventId) {
+        selectedEventId = eventId;
+
+        if (!deleteModal) {
             return;
         }
 
-        const eventId =
-            selectedEvent.id;
+        deleteModal.style.display = 'flex';
+    }
 
-        const eventName =
-            selectedEvent.title ||
-            'this event';
+    function closeDeleteModal() {
+        selectedEventId = null;
 
-        const confirmed =
-            window.confirm(
-                `Are you sure you want to delete "${eventName}"? This action cannot be undone.`
-            );
+        if (deleteModal) {
+            deleteModal.style.display = 'none';
+        }
+    }
 
-        if (!confirmed) {
+    async function confirmDeleteEvent() {
+        if (!selectedEventId) {
             return;
         }
 
-        const message =
-            document.getElementById('manageMessage');
+        const eventId = selectedEventId;
 
         try {
-            message.textContent =
-                'Deleting event...';
+            confirmDelete.disabled = true;
+            confirmDelete.textContent = 'Deleting...';
 
-            const response =
-                await fetch(
-                    `/api/admin/events/${encodeURIComponent(eventId)}`,
-                    {
-                        method: 'DELETE',
-                        credentials: 'include'
-                    }
-                );
+            const response = await fetch(
+                `/api/admin/events/${encodeURIComponent(eventId)}`,
+                {
+                    method: 'DELETE',
+                    credentials: 'include'
+                }
+            );
 
-            const data =
-                await response.json();
+            const data = await response.json();
 
             if (!response.ok || !data.success) {
                 throw new Error(
-                    data.message ||
-                    'Failed to delete event.'
+                    data.message || 'Failed to delete event.'
                 );
             }
 
-            allEvents =
-                allEvents.filter(
-                    event =>
-                        Number(event.id) !==
-                        Number(eventId)
-                );
+            allEvents = allEvents.filter(
+                event =>
+                    Number(event.id) !== Number(eventId)
+            );
 
+            closeDeleteModal();
             closeManageModal();
 
             populateCategoryFilter();
             renderEvents();
 
         } catch (error) {
-            console.error(
-                'DELETE EVENT ERROR:',
-                error
+            console.error('DELETE EVENT ERROR:', error);
+
+            alert(
+                error.message ||
+                'Failed to delete event.'
             );
 
-            message.textContent =
-                error.message ||
-                'Failed to delete event.';
+        } finally {
+            confirmDelete.disabled = false;
+            confirmDelete.textContent = 'Delete';
         }
+    }
+
+    if (cancelDelete) {
+        cancelDelete.addEventListener(
+            'click',
+            closeDeleteModal
+        );
+    }
+
+    if (cancelDeleteButton) {
+        cancelDeleteButton.addEventListener(
+            'click',
+            closeDeleteModal
+        );
+    }
+
+    if (deleteModal) {
+        deleteModal.addEventListener('click', event => {
+            if (event.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
+    }
+
+    if (confirmDelete) {
+        confirmDelete.addEventListener(
+            'click',
+            confirmDeleteEvent
+        );
     }
 
     function closeManageModal() {
@@ -802,6 +733,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
 
         selectedEvent = null;
+        selectedEventId = null;
     }
 
     function addModalStyles() {
@@ -813,11 +745,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const style =
-            document.createElement('style');
+        const style = document.createElement('style');
 
-        style.id =
-            'manageEventModalStyles';
+        style.id = 'manageEventModalStyles';
 
         style.textContent = `
             #manageEventModal {
@@ -886,10 +816,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 font-size: 28px;
                 line-height: 1;
                 cursor: pointer;
-            }
-
-            .manage-close:hover {
-                background: #e5e7eb;
             }
 
             .manage-form-grid {
@@ -983,26 +909,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 color: #dc2626;
             }
 
-            .delete-event-btn:hover {
-                background: #fecaca;
-            }
-
             .cancel-manage-btn {
                 background: #e5e7eb;
                 color: #374151;
             }
 
-            .cancel-manage-btn:hover {
-                background: #d1d5db;
-            }
-
             .save-event-btn {
                 background: #4f46e5;
                 color: #ffffff;
-            }
-
-            .save-event-btn:hover {
-                background: #4338ca;
             }
 
             @media (max-width: 700px) {
@@ -1061,10 +975,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return 'completed';
         }
 
-        if (
-            eventDate.getTime() ===
-            today.getTime()
-        ) {
+        if (eventDate.getTime() === today.getTime()) {
             return 'active';
         }
 
@@ -1076,10 +987,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return '-';
         }
 
-        const date =
-            new Date(
-                dateString + 'T00:00:00'
-            );
+        const date = new Date(
+            dateString + 'T00:00:00'
+        );
 
         return date.toLocaleDateString(
             'en-US',

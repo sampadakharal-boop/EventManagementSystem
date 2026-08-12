@@ -306,45 +306,33 @@
     </div>
 
 </div>
-
-<div class="delete-modal" id="deleteModal">
-
-    <div class="delete-modal-backdrop" id="deleteModalBackdrop"></div>
-
-    <div class="delete-modal-box">
+<div class="delete-modal" id="deleteModal" style="display: none;">
+    <div class="delete-modal-content">
+        <button type="button" class="delete-modal-close" id="cancelDelete">
+            ×
+        </button>
 
         <div class="delete-icon">
-            <span class="material-symbols-outlined">delete</span>
+            🗑
         </div>
 
         <h2>Delete Event?</h2>
 
-        <p id="deleteEventMessage">
+        <p>
             Are you sure you want to delete this event?
+            This action cannot be undone.
         </p>
 
         <div class="delete-modal-actions">
-
-            <button
-                type="button"
-                id="cancelDeleteBtn"
-                class="cancel-delete-btn"
-            >
+            <button type="button" id="cancelDeleteButton">
                 Cancel
             </button>
 
-            <button
-                type="button"
-                id="confirmDeleteBtn"
-                class="confirm-delete-btn"
-            >
+            <button type="button" id="confirmDelete">
                 Delete
             </button>
-
         </div>
-
     </div>
-
 </div>
 
 <script src="js/admin.js"></script>
