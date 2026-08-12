@@ -9,9 +9,12 @@ const { get, all, run } = require('./db');
 
 const app = express();
 
-/* =========================================================
-   CONFIG
-========================================================= */
+console.log('SERVER VERSION: 2026-08-13-FIX-01');
+console.log('SERVER FILE:', __filename);
+console.log(
+    'EXPRESS VERSION:',
+    require('express/package.json').version
+);
 
 const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET;
