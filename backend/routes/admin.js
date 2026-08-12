@@ -175,5 +175,47 @@ router.get('/events', async (req, res) => {
     }
 });
 
+router.delete('/events/:id', verifyAdmin, async (req, res) => {
+    try {
+        const eventId = Number(req.params.id);
+
+        if (!eventId) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid event ID.'
+            });
+        }
+
+        const existingEvent = await get(
+            'SELECT id FROM events WHERE id = ?',
+            [eventId]
+        );
+
+        if (!existingEvent) {
+            return res.status(404).json({
+                success: false,
+                message: 'Event not found.'
+            });
+        }
+
+        await run(
+            'DELETE FROM events WHERE id = ?',
+            [eventId]
+        );
+
+        res.json({
+            success: true,
+            message: 'Event deleted successfully.'
+        });
+
+    } catch (error) {
+        console.error('DELETE EVENT ERROR:', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Server error while deleting event.'
+        });
+    }
+});
 
 module.exports = router;
