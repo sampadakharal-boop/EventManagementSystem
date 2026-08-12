@@ -32,9 +32,13 @@ app.get('/', (req, res) => {
     res.sendFile(path.join(FRONTEND_PATH, 'index.html'));
 });
 
+app.get('/admin', (req, res) => {
+    res.redirect('/admin/index.html');
+});
+
 app.get('/admin/index.html', (req, res) => {
     res.sendFile(
-        path.join(FRONTEND_PATH, 'admin', 'admin/index.html'),
+        path.join(FRONTEND_PATH, 'admin', 'index.html'),
         (error) => {
             if (error) {
                 console.error('ADMIN DASHBOARD ERROR:', error);
@@ -48,10 +52,6 @@ app.get('/admin/index.html', (req, res) => {
             }
         }
     );
-});
-
-app.get('/admin', (req, res) => {
-    res.redirect('/admin/index.html');
 });
 
 app.post('/api/signup', async (req, res) => {
