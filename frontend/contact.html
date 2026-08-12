@@ -19,27 +19,30 @@
 
 <body>
 
-<nav>
+ <header class="navbar">
 
-    <div class="logo">
-        EventHub
+    <a href="index.html" class="logo">
+        Event<span>Hub</span>
+    </a>
+
+    <nav class="nav-links" id="navLinks">
+        <a href="index.html">Home</a>
+        <a href="events.html">Events</a>
+        <a href="categories.html">Categories</a>
+        <a href="aboutus.html">About Us</a>
+        <a href="contact.html" class="active">Contact</a>
+    </nav>
+
+    <div class="nav-actions">
+        <a href="login.html" class="login-btn">Log In</a>
+        <a href="signup.html" class="signup-btn">Get Started</a>
     </div>
 
-    <ul>
+    <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        ☰
+    </button>
 
-        <li><a href="index.html" class="active">Home</a></li>
-        <li><a href="events.html">Events</a></li>
-        <li><a href="categories.html">Categories</a></li>
-        <li><a href="aboutus.html">About</a></li>
-        <li><a href="contact.html">Contact</a></li>
-    </ul>
-
-    
-            <a href="signup.html" class="signup_btn">
-                Sign Up
-            </a>
-
-</nav>
+</header>
 
 <section class="contact-hero">
 

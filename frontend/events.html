@@ -4,208 +4,792 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Events | EventHub</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
         rel="stylesheet">
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <link rel="stylesheet" href="css/events.css">
 </head>
 
 <body>
 
-    <!-- Navigation -->
-    <nav>
-        <div class="logo">EventHub</div>
+    <header class="navbar">
+        <a href="index.html" class="logo">Event<span>Hub</span></a>
 
-        <ul>
-            <li>
-                <a href="index.html">Home</a>
-            </li>
+        <nav class="nav-links" id="navLinks">
+            <a href="index.html">Home</a>
+            <a href="events.html" class="active">Events</a>
+            <a href="categories.html">Categories</a>
+            <a href="aboutus.html">About Us</a>
+            <a href="contact.html">Contact</a>
+        </nav>
 
-            <li>
-                <a href="events.html" class="active">Events</a>
-            </li>
-
-            <li>
-                <a href="categories.html">Categories</a>
-            </li>
-
-            <li>
-                <a href="aboutus.html">About</a>
-            </li>
-
-            <li>
-                <a href="contact.html">Contact</a>
-            </li>
-        </ul>
-
-        <a href="signup.html" class="signup_btn">Sign Up</a>
-    </nav>
-
-
-    <!-- Hero Section -->
-    <section class="events-hero">
-
-        <div class="hero-overlay"></div>
-
-        <div class="hero-content">
-
-            <span class="hero-label">
-                EVENTHUB
-            </span>
-
-            <h1>Discover Amazing Events</h1>
-
-            <p>
-                Find concerts, conferences, workshops,
-                festivals, hackathons, seminars and more
-                happening near you.
-            </p>
-
+        <div class="nav-actions">
+            <a href="login.html" class="login-btn">Log In</a>
+            <a href="signup.html" class="signup-btn">Get Started</a>
         </div>
 
-    </section>
+        <button class="menu-btn" id="menuBtn" aria-label="Open navigation menu" type="button">
+            ☰
+        </button>
+    </header>
 
+    <main>
 
-    <!-- Search Section -->
-    <section class="search-section">
+        <section class="page-heading">
+            <div class="heading-container">
+                <span class="heading-label">EXPLORE EVENTHUB</span>
 
-        <div class="search-container">
+                <h1>Find Your Next Experience.</h1>
 
-            <h2>Find Your Next Event</h2>
+                <p>
+                    Discover concerts, workshops, technology events,
+                    startup programs and experiences happening around you.
+                </p>
+            </div>
+        </section>
 
-            <div class="search-box">
+        <section class="events-section">
 
-                <div class="input-group">
-
-                    <i class="fa-solid fa-magnifying-glass"></i>
+            <div class="search-container">
+                <div class="search-box">
+                    <span class="search-icon">⌕</span>
 
                     <input
                         type="text"
-                        placeholder="Search events..."
-                        aria-label="Search events">
-
+                        id="eventSearch"
+                        placeholder="Search events, workshops, concerts..."
+                        autocomplete="off">
                 </div>
 
-                <div class="input-group">
-
-                    <i class="fa-solid fa-location-dot"></i>
-
-                    <input
-                        type="text"
-                        placeholder="Location"
-                        aria-label="Event location">
-
-                </div>
-
-                <button type="button">
+                <button class="search-button" id="searchButton" type="button">
                     Search
                 </button>
+            </div>
+
+            <div class="events-layout">
+
+                <div class="filter-bar">
+
+                    <div class="filter-item">
+                        <label for="categoryFilter">Category</label>
+
+                        <select id="categoryFilter">
+                            <option value="all">All Categories</option>
+                            <option value="concert">Concerts</option>
+                            <option value="education">Educational Events</option>
+                            <option value="technology">Technology Events</option>
+                            <option value="startup">Startup Events</option>
+                            <option value="wellness">Wellness Events</option>
+                            <option value="fun">Fun Events</option>
+                            <option value="law">Law Programs</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label for="locationFilter">Location</label>
+
+                        <select id="locationFilter">
+                            <option value="all">All Locations</option>
+                            <option value="kathmandu">Kathmandu</option>
+                            <option value="pokhara">Pokhara</option>
+                            <option value="lalitpur">Lalitpur</option>
+                            <option value="bhaktapur">Bhaktapur</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item">
+                        <label for="priceFilter">Price</label>
+
+                        <select id="priceFilter">
+                            <option value="all">All Prices</option>
+                            <option value="free">Free</option>
+                            <option value="paid">Paid</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-item budget-filter">
+                        <label for="budgetRange">
+                            Budget:
+                            <span id="budgetValue">Rs. 5,000</span>
+                        </label>
+
+                        <input
+                            type="range"
+                            id="budgetRange"
+                            min="0"
+                            max="5000"
+                            value="5000">
+                    </div>
+
+                    <button class="apply-filter" id="applyFilter" type="button">
+                        Apply Filters
+                    </button>
+
+                    <button class="clear-filter" id="clearFilter" type="button">
+                        Clear
+                    </button>
+
+                </div>
+
+                <section class="events-content">
+
+                    <div class="events-header">
+
+                        <div>
+                            <span>DISCOVER</span>
+
+                            <h2>Upcoming Events</h2>
+
+                            <p id="resultsCount">Showing all events</p>
+                        </div>
+
+                        <select id="sortEvents">
+                            <option value="default">Sort by</option>
+                            <option value="low">Price: Low to High</option>
+                            <option value="high">Price: High to Low</option>
+                            <option value="name">Name</option>
+                        </select>
+
+                    </div>
+
+                    <div class="events-grid" id="eventsGrid">
+
+                        <article
+                            class="event-card"
+                            data-category="technology"
+                            data-location="kathmandu"
+                            data-price="1500"
+                            data-type="paid"
+                            data-name="Nepal Tech Summit">
+
+                            <div class="event-visual">
+                                <span class="badge featured">Featured</span>
+
+                                <button
+                                    class="favorite-btn"
+                                    type="button"
+                                    aria-label="Add to favourites"
+                                    aria-pressed="false">
+                                    ♡
+                                </button>
+
+                                <div class="date-badge">
+                                    <strong>25</strong>
+                                    <small>AUG</small>
+                                </div>
+                            </div>
+
+                            <div class="event-card-content">
+
+                                <span class="card-category">Technology</span>
+
+                                <h3>Nepal Tech Summit 2026</h3>
+
+                                <div class="event-meta">
+                                    <span>
+                                        <span class="meta-icon">▣</span>
+                                        August 25, 2026
+                                    </span>
+
+                                    <span>
+                                        <span class="meta-icon">⌖</span>
+                                        Kathmandu
+                                    </span>
+                                </div>
+
+                                <div class="card-footer">
+                                    <strong class="event-price">
+                                        Rs. 1,500
+                                    </strong>
+
+                                    <a
+                                        href="event-details.html"
+                                        class="details-button">
+                                        Details →
+                                    </a>
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <article
+                            class="event-card"
+                            data-category="concert"
+                            data-location="kathmandu"
+                            data-price="2500"
+                            data-type="paid"
+                            data-name="Summer Music Festival">
+
+                            <div class="event-visual">
+                                <span class="badge paid">Paid</span>
+
+                                <button
+                                    class="favorite-btn"
+                                    type="button"
+                                    aria-label="Add to favourites"
+                                    aria-pressed="false">
+                                    ♡
+                                </button>
+
+                                <div class="date-badge">
+                                    <strong>02</strong>
+                                    <small>SEP</small>
+                                </div>
+                            </div>
+
+                            <div class="event-card-content">
+
+                                <span class="card-category">Concert</span>
+
+                                <h3>Summer Music Festival</h3>
+
+                                <div class="event-meta">
+                                    <span>
+                                        <span class="meta-icon">▣</span>
+                                        September 2, 2026
+                                    </span>
+
+                                    <span>
+                                        <span class="meta-icon">⌖</span>
+                                        Kathmandu
+                                    </span>
+                                </div>
+
+                                <div class="card-footer">
+                                    <strong class="event-price">
+                                        Rs. 2,500
+                                    </strong>
+
+                                    <a
+                                        href="event-details.html"
+                                        class="details-button">
+                                        Details →
+                                    </a>
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <article
+                            class="event-card"
+                            data-category="education"
+                            data-location="lalitpur"
+                            data-price="0"
+                            data-type="free"
+                            data-name="Future Skills Workshop">
+
+                            <div class="event-visual">
+                                <span class="badge free">Free</span>
+
+                                <button
+                                    class="favorite-btn"
+                                    type="button"
+                                    aria-label="Add to favourites"
+                                    aria-pressed="false">
+                                    ♡
+                                </button>
+
+                                <div class="date-badge">
+                                    <strong>08</strong>
+                                    <small>SEP</small>
+                                </div>
+                            </div>
+
+                            <div class="event-card-content">
+
+                                <span class="card-category">Education</span>
+
+                                <h3>Future Skills Workshop</h3>
+
+                                <div class="event-meta">
+                                    <span>
+                                        <span class="meta-icon">▣</span>
+                                        September 8, 2026
+                                    </span>
+
+                                    <span>
+                                        <span class="meta-icon">⌖</span>
+                                        Lalitpur
+                                    </span>
+                                </div>
+
+                                <div class="card-footer">
+                                    <strong class="event-price free-price">
+                                        Free
+                                    </strong>
+
+                                    <a
+                                        href="event-details.html"
+                                        class="details-button">
+                                        Details →
+                                    </a>
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <article
+                            class="event-card"
+                            data-category="startup"
+                            data-location="bhaktapur"
+                            data-price="1000"
+                            data-type="paid"
+                            data-name="Startup Nepal">
+
+                            <div class="event-visual">
+                                <span class="badge paid">Paid</span>
+
+                                <button
+                                    class="favorite-btn"
+                                    type="button"
+                                    aria-label="Add to favourites"
+                                    aria-pressed="false">
+                                    ♡
+                                </button>
+
+                                <div class="date-badge">
+                                    <strong>15</strong>
+                                    <small>SEP</small>
+                                </div>
+                            </div>
+
+                            <div class="event-card-content">
+
+                                <span class="card-category">Startup</span>
+
+                                <h3>Startup Nepal 2026</h3>
+
+                                <div class="event-meta">
+                                    <span>
+                                        <span class="meta-icon">▣</span>
+                                        September 15, 2026
+                                    </span>
+
+                                    <span>
+                                        <span class="meta-icon">⌖</span>
+                                        Bhaktapur
+                                    </span>
+                                </div>
+
+                                <div class="card-footer">
+                                    <strong class="event-price">
+                                        Rs. 1,000
+                                    </strong>
+
+                                    <a
+                                        href="event-details.html"
+                                        class="details-button">
+                                        Details →
+                                    </a>
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <article
+                            class="event-card"
+                            data-category="wellness"
+                            data-location="pokhara"
+                            data-price="0"
+                            data-type="free"
+                            data-name="Wellness Weekend">
+
+                            <div class="event-visual">
+                                <span class="badge free">Free</span>
+
+                                <button
+                                    class="favorite-btn"
+                                    type="button"
+                                    aria-label="Add to favourites"
+                                    aria-pressed="false">
+                                    ♡
+                                </button>
+
+                                <div class="date-badge">
+                                    <strong>20</strong>
+                                    <small>SEP</small>
+                                </div>
+                            </div>
+
+                            <div class="event-card-content">
+
+                                <span class="card-category">Wellness</span>
+
+                                <h3>Wellness Weekend</h3>
+
+                                <div class="event-meta">
+                                    <span>
+                                        <span class="meta-icon">▣</span>
+                                        September 20, 2026
+                                    </span>
+
+                                    <span>
+                                        <span class="meta-icon">⌖</span>
+                                        Pokhara
+                                    </span>
+                                </div>
+
+                                <div class="card-footer">
+                                    <strong class="event-price free-price">
+                                        Free
+                                    </strong>
+
+                                    <a
+                                        href="event-details.html"
+                                        class="details-button">
+                                        Details →
+                                    </a>
+                                </div>
+
+                            </div>
+                        </article>
+
+                        <article
+                            class="event-card"
+                            data-category="fun"
+                            data-location="kathmandu"
+                            data-price="800"
+                            data-type="paid"
+                            data-name="Fun Fest">
+
+                            <div class="event-visual">
+                                <span class="badge paid">Paid</span>
+
+                                <button
+                                    class="favorite-btn"
+                                    type="button"
+                                    aria-label="Add to favourites"
+                                    aria-pressed="false">
+                                    ♡
+                                </button>
+
+                                <div class="date-badge">
+                                    <strong>25</strong>
+                                    <small>SEP</small>
+                                </div>
+                            </div>
+
+                            <div class="event-card-content">
+
+                                <span class="card-category">Fun & Entertainment</span>
+
+                                <h3>Fun Fest Kathmandu</h3>
+
+                                <div class="event-meta">
+                                    <span>
+                                        <span class="meta-icon">▣</span>
+                                        September 25, 2026
+                                    </span>
+
+                                    <span>
+                                        <span class="meta-icon">⌖</span>
+                                        Kathmandu
+                                    </span>
+                                </div>
+
+                                <div class="card-footer">
+                                    <strong class="event-price">
+                                        Rs. 800
+                                    </strong>
+
+                                    <a
+                                        href="event-details.html"
+                                        class="details-button">
+                                        Details →
+                                    </a>
+                                </div>
+
+                            </div>
+                        </article>
+
+                    </div>
+
+                    <div class="no-results" id="noResults">
+
+                        <div class="no-results-icon">⌕</div>
+
+                        <h3>No events found</h3>
+
+                        <p>Try changing your search or filters.</p>
+
+                        <button type="button" id="noResultsClear">
+                            Clear filters
+                        </button>
+
+                    </div>
+
+                </section>
 
             </div>
 
-        </div>
-
-    </section>
-
-
-    <!-- Category Filter -->
-    <section class="filter-section">
-
-        <div class="filter-container">
-
-            <h2>Browse by Category</h2>
-
-            <div class="filter-buttons">
-
-                <button type="button" class="active">
-                    All
-                </button>
-
-                <button type="button">
-                    Music
-                </button>
-
-                <button type="button">
-                    Technology
-                </button>
-
-                <button type="button">
-                    Sports
-                </button>
-
-                <button type="button">
-                    Business
-                </button>
-
-                <button type="button">
-                    Education
-                </button>
-
-                <button type="button">
-                    Startup
-                </button>
-
-                <button type="button">
-                    Workshop
-                </button>
-
-                <button type="button">
-                    Festival
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- Events Section -->
-    <main class="events-section">
-
-        <div class="section-title">
-
-            <span class="section-label">
-                EXPLORE
-            </span>
-
-            <h2>Featured Events</h2>
-
-            <p>
-                Explore trending events happening this month.
-            </p>
-
-        </div>
-
-
-        <!-- Events generated by JavaScript -->
-        <div
-            class="events-grid"
-            id="eventsGrid"
-            aria-live="polite">
-
-            <div class="events-loading">
-
-                <i class="fa-solid fa-spinner fa-spin"></i>
-
-                <p>Loading events...</p>
-
-            </div>
-
-        </div>
+        </section>
 
     </main>
 
+    <footer>
 
-    <script src="js/events-render.js"></script>
+        <div class="footer-content">
+
+            <div class="footer-brand">
+                <a href="index.html" class="logo">
+                    Event<span>Hub</span>
+                </a>
+
+                <p>
+                    Your place to discover exciting events,
+                    connect with people and create unforgettable
+                    experiences.
+                </p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <a href="events.html">Events</a>
+                <a href="categories.html">Categories</a>
+                <a href="aboutus.html">Explore</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Account</h4>
+                <a href="login.html">Log In</a>
+                <a href="signup.html">Create Account</a>
+                <a href="profile.html">My Profile</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>EventHub</h4>
+                <a href="aboutus.html">About Us</a>
+                <a href="contact.html">Contact</a>
+                <a href="#">Privacy</a>
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © 2026 EventHub. All rights reserved.
+        </div>
+
+    </footer>
+
+    <script>
+        const searchInput = document.getElementById("eventSearch");
+        const categoryFilter = document.getElementById("categoryFilter");
+        const locationFilter = document.getElementById("locationFilter");
+        const priceFilter = document.getElementById("priceFilter");
+        const budgetRange = document.getElementById("budgetRange");
+        const budgetValue = document.getElementById("budgetValue");
+        const applyFilter = document.getElementById("applyFilter");
+        const clearFilter = document.getElementById("clearFilter");
+        const searchButton = document.getElementById("searchButton");
+        const sortEvents = document.getElementById("sortEvents");
+        const eventsGrid = document.getElementById("eventsGrid");
+        const noResults = document.getElementById("noResults");
+        const noResultsClear = document.getElementById("noResultsClear");
+        const resultsCount = document.getElementById("resultsCount");
+        const cards = Array.from(document.querySelectorAll(".event-card"));
+        const menuBtn = document.getElementById("menuBtn");
+        const navLinks = document.getElementById("navLinks");
+
+        budgetRange.addEventListener("input", () => {
+            budgetValue.textContent =
+                "Rs. " + Number(budgetRange.value).toLocaleString();
+        });
+
+        function applyFilters() {
+            const search = searchInput.value.toLowerCase().trim();
+            const selectedCategory = categoryFilter.value;
+            const selectedLocation = locationFilter.value;
+            const selectedPrice = priceFilter.value;
+            const budget = Number(budgetRange.value);
+
+            let visibleCards = [];
+
+            cards.forEach(card => {
+                const name = card.dataset.name.toLowerCase();
+                const category = card.dataset.category.toLowerCase();
+                const cardLocation = card.dataset.location.toLowerCase();
+                const price = Number(card.dataset.price);
+                const type = card.dataset.type;
+
+                const matchesSearch =
+                    !search ||
+                    name.includes(search) ||
+                    category.includes(search) ||
+                    cardLocation.includes(search);
+
+                const matchesCategory =
+                    selectedCategory === "all" ||
+                    category === selectedCategory;
+
+                const matchesLocation =
+                    selectedLocation === "all" ||
+                    cardLocation === selectedLocation;
+
+                const matchesPrice =
+                    selectedPrice === "all" ||
+                    type === selectedPrice;
+
+                const matchesBudget = price <= budget;
+
+                const show =
+                    matchesSearch &&
+                    matchesCategory &&
+                    matchesLocation &&
+                    matchesPrice &&
+                    matchesBudget;
+
+                card.classList.toggle("hidden-card", !show);
+
+                if (show) {
+                    visibleCards.push(card);
+                }
+            });
+
+            noResults.style.display =
+                visibleCards.length === 0 ? "flex" : "none";
+
+            resultsCount.textContent =
+                visibleCards.length === cards.length
+                    ? `Showing all ${cards.length} events`
+                    : `Showing ${visibleCards.length} of ${cards.length} events`;
+        }
+
+        function searchEvents() {
+            applyFilters();
+
+            document
+                .querySelector(".events-content")
+                .scrollIntoView({
+                    behavior: "smooth",
+                    block: "start"
+                });
+        }
+
+        searchButton.addEventListener("click", searchEvents);
+        searchInput.addEventListener("input", applyFilters);
+
+        categoryFilter.addEventListener("change", applyFilters);
+        locationFilter.addEventListener("change", applyFilters);
+        priceFilter.addEventListener("change", applyFilters);
+        applyFilter.addEventListener("click", applyFilters);
+
+        function clearFilters() {
+            searchInput.value = "";
+            categoryFilter.value = "all";
+            locationFilter.value = "all";
+            priceFilter.value = "all";
+            budgetRange.value = 5000;
+            budgetValue.textContent = "Rs. 5,000";
+            sortEvents.value = "default";
+
+            cards.forEach(card => {
+                card.classList.remove("hidden-card");
+            });
+
+            noResults.style.display = "none";
+            resultsCount.textContent =
+                `Showing all ${cards.length} events`;
+        }
+
+        clearFilter.addEventListener("click", clearFilters);
+        noResultsClear.addEventListener("click", clearFilters);
+
+        sortEvents.addEventListener("change", () => {
+            const value = sortEvents.value;
+
+            if (value === "default") {
+                return;
+            }
+
+            const sortedCards = [...cards].sort((a, b) => {
+                if (value === "low") {
+                    return Number(a.dataset.price) - Number(b.dataset.price);
+                }
+
+                if (value === "high") {
+                    return Number(b.dataset.price) - Number(a.dataset.price);
+                }
+
+                if (value === "name") {
+                    return a.dataset.name.localeCompare(b.dataset.name);
+                }
+
+                return 0;
+            });
+
+            sortedCards.forEach(card => {
+                eventsGrid.appendChild(card);
+            });
+        });
+
+        const favoriteButtons =
+            document.querySelectorAll(".favorite-btn");
+
+        let favourites =
+            JSON.parse(
+                localStorage.getItem("eventhub-favourites")
+            ) || [];
+
+        function updateFavoriteButton(button, eventName) {
+            const isFavorite = favourites.includes(eventName);
+
+            button.classList.toggle("active", isFavorite);
+            button.textContent = isFavorite ? "♥" : "♡";
+
+            button.setAttribute(
+                "aria-pressed",
+                String(isFavorite)
+            );
+        }
+
+        favoriteButtons.forEach(button => {
+            const card = button.closest(".event-card");
+            const eventName = card.dataset.name;
+
+            updateFavoriteButton(button, eventName);
+
+            button.addEventListener("click", () => {
+                if (favourites.includes(eventName)) {
+                    favourites = favourites.filter(
+                        item => item !== eventName
+                    );
+                } else {
+                    favourites.push(eventName);
+                }
+
+                localStorage.setItem(
+                    "eventhub-favourites",
+                    JSON.stringify(favourites)
+                );
+
+                updateFavoriteButton(button, eventName);
+            });
+        });
+
+        menuBtn.addEventListener("click", () => {
+            navLinks.classList.toggle("show");
+
+            menuBtn.textContent =
+                navLinks.classList.contains("show")
+                    ? "✕"
+                    : "☰";
+        });
+
+        navLinks.querySelectorAll("a").forEach(link => {
+            link.addEventListener("click", () => {
+                navLinks.classList.remove("show");
+                menuBtn.textContent = "☰";
+            });
+        });
+
+        applyFilters();
+    </script>
 
 </body>
 
