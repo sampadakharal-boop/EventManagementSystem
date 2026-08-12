@@ -1,717 +1,317 @@
 const path = require('path');
-const fs = require('fs');
 
-require('dotenv').config({
-    path: path.join(__dirname, '.env')
-});
+const isProduction = process.env.NODE_ENV === 'production';
 
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+let dbMode = 'sqlite';
+let sqliteDb = null;
+let tursoClient = null;
 
-const { get, all, run } = require('./db');
-const adminRoutes = require('./routes/admin');
+function initializeSQLite() {
+    const Database = require('better-sqlite3');
 
-const app = express();
+    const dbPath = path.join(__dirname, 'database.db');
 
+    console.log('DATABASE MODE: SQLite');
+    console.log('DATABASE PATH:', dbPath);
 
-const JWT_SECRET = process.env.JWT_SECRET;
+    sqliteDb = new Database(dbPath);
 
-if (!JWT_SECRET) {
-    console.error('ERROR: JWT_SECRET is missing from .env');
+    sqliteDb.pragma('foreign_keys = ON');
+
+    createSQLiteTables();
+
+    return sqliteDb;
 }
 
-const FRONTEND_PATH = path.resolve(__dirname, '../frontend');
-
-const ADMIN_INDEX_PATH = path.join(
-    FRONTEND_PATH,
-    'admin',
-    'index.html'
-);
-
-console.log('==========================================');
-console.log('SERVER CONFIGURATION');
-console.log('==========================================');
-console.log('Backend path:', __dirname);
-console.log('Frontend path:', FRONTEND_PATH);
-console.log('Admin index path:', ADMIN_INDEX_PATH);
-console.log(
-    'Admin index exists:',
-    fs.existsSync(ADMIN_INDEX_PATH)
-);
-console.log('==========================================');
-
-
-/* =========================================================
-   MIDDLEWARE
-========================================================= */
-
-app.use(express.json());
-
-app.use(
-    express.urlencoded({
-        extended: true
-    })
-);
-
-app.use(cookieParser());
-
-
-/* =========================================================
-   FRONTEND STATIC FILES
-========================================================= */
-
-app.use(
-    express.static(FRONTEND_PATH)
-);
-
-
-/* =========================================================
-   HOME PAGE
-========================================================= */
-
-app.get('/', (req, res) => {
-    const indexPath = path.join(
-        FRONTEND_PATH,
-        'index.html'
-    );
-
-    if (!fs.existsSync(indexPath)) {
-        return res.status(404).send(
-            'Frontend index.html not found.'
-        );
-    }
-
-    return res.sendFile(indexPath);
-});
-
-
-/* =========================================================
-   ADMIN DASHBOARD
-========================================================= */
-
-/*
-    Your actual file is:
-
-    frontend/admin/index.html
-
-    Therefore:
-
-    /admin
-          ↓
-    /admin/index.html
-          ↓
-    frontend/admin/index.html
-*/
-
-app.get('/admin', (req, res) => {
-    return res.redirect('/admin/index.html');
-});
-
-
-app.get('/admin/index.html', (req, res) => {
-
-    console.log('ADMIN DASHBOARD REQUEST');
-
-    console.log(
-        'Looking for:',
-        ADMIN_INDEX_PATH
-    );
-
-    if (!fs.existsSync(ADMIN_INDEX_PATH)) {
-
-        console.error(
-            'ADMIN DASHBOARD FILE DOES NOT EXIST:',
-            ADMIN_INDEX_PATH
+function createSQLiteTables() {
+    sqliteDb.exec(`
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
+            role TEXT NOT NULL DEFAULT 'user',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
 
-        return res.status(404).json({
-            success: false,
-            message: 'Admin dashboard file not found.',
-            path: ADMIN_INDEX_PATH
-        });
-    }
-
-    return res.sendFile(
-        ADMIN_INDEX_PATH,
-        (error) => {
-
-            if (error) {
-
-                console.error(
-                    'ADMIN DASHBOARD SEND ERROR:',
-                    error
-                );
-
-                if (!res.headersSent) {
-                    return res.status(500).json({
-                        success: false,
-                        message:
-                            'Unable to load admin dashboard.'
-                    });
-                }
-            }
-        }
-    );
-});
-
-
-/* =========================================================
-   SIGNUP
-========================================================= */
-
-app.post('/api/signup', async (req, res) => {
-
-    try {
-
-        const {
-            name,
-            email,
-            password
-        } = req.body;
-
-        if (!name || !email || !password) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    'Name, email and password are required.'
-            });
-        }
-
-        const trimmedName = name.trim();
-
-        const normalizedEmail =
-            email.trim().toLowerCase();
-
-        if (!trimmedName) {
-
-            return res.status(400).json({
-                success: false,
-                message: 'Name cannot be empty.'
-            });
-        }
-
-        if (!normalizedEmail) {
-
-            return res.status(400).json({
-                success: false,
-                message: 'Email cannot be empty.'
-            });
-        }
-
-        if (password.length < 6) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    'Password must be at least 6 characters.'
-            });
-        }
-
-        const existingUser = await get(
-            `SELECT id
-             FROM users
-             WHERE email = ?`,
-            [normalizedEmail]
+        CREATE TABLE IF NOT EXISTS categories (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            name TEXT NOT NULL UNIQUE,
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP
         );
 
-        if (existingUser) {
-
-            return res.status(409).json({
-                success: false,
-                message:
-                    'An account with this email already exists.'
-            });
-        }
-
-        const hashedPassword =
-            await bcrypt.hash(password, 10);
-
-        await run(
-            `INSERT INTO users (
-                name,
-                email,
-                password,
-                role
-            )
-            VALUES (?, ?, ?, ?)`,
-            [
-                trimmedName,
-                normalizedEmail,
-                hashedPassword,
-                'user'
-            ]
+        CREATE TABLE IF NOT EXISTS events (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            category_id INTEGER,
+            organizer TEXT,
+            venue TEXT NOT NULL,
+            city TEXT NOT NULL,
+            address TEXT,
+            event_date TEXT NOT NULL,
+            event_time TEXT NOT NULL,
+            end_date TEXT,
+            end_time TEXT,
+            image TEXT,
+            capacity INTEGER DEFAULT 0,
+            price REAL DEFAULT 0,
+            event_type TEXT DEFAULT 'free',
+            registration_deadline TEXT,
+            contact_email TEXT,
+            website TEXT,
+            tags TEXT,
+            status TEXT DEFAULT 'active',
+            created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (category_id)
+                REFERENCES categories(id)
+                ON DELETE SET NULL
         );
 
-        console.log(
-            'SIGNUP SUCCESS:',
-            normalizedEmail
-        );
+        CREATE INDEX IF NOT EXISTS idx_users_email
+        ON users(email);
 
-        return res.status(201).json({
-            success: true,
-            message:
-                'Account created successfully.'
-        });
+        CREATE INDEX IF NOT EXISTS idx_events_status
+        ON events(status);
 
-    } catch (error) {
+        CREATE INDEX IF NOT EXISTS idx_events_date
+        ON events(event_date);
+    `);
 
-        console.error(
-            'SIGNUP ERROR:',
-            error
-        );
-
-        console.error(
-            'SIGNUP ERROR MESSAGE:',
-            error.message
-        );
-
-        return res.status(500).json({
-            success: false,
-            message:
-                'Server error while creating account.'
-        });
-    }
-});
-
-
-/* =========================================================
-   LOGIN
-========================================================= */
-
-app.post('/api/login', async (req, res) => {
-
-    try {
-
-        const {
-            email,
-            password
-        } = req.body;
-
-        console.log('==========================================');
-        console.log('LOGIN REQUEST RECEIVED');
-        console.log('Email:', email);
-        console.log('==========================================');
-
-        if (!email || !password) {
-
-            return res.status(400).json({
-                success: false,
-                message:
-                    'Email and password are required.'
-            });
-        }
-
-        if (!JWT_SECRET) {
-
-            return res.status(500).json({
-                success: false,
-                message:
-                    'Server authentication configuration is missing.'
-            });
-        }
-
-        const normalizedEmail =
-            email.trim().toLowerCase();
-
-        const user = await get(
-            `SELECT
-                id,
-                name,
-                email,
-                password,
-                role
-             FROM users
-             WHERE email = ?`,
-            [normalizedEmail]
-        );
-
-        console.log(
-            'USER FOUND:',
-            !!user
-        );
-
-        if (!user) {
-
-            return res.status(401).json({
-                success: false,
-                message:
-                    'Invalid email or password.'
-            });
-        }
-
-        if (!user.password) {
-
-            return res.status(500).json({
-                success: false,
-                message:
-                    'Account password data is invalid.'
-            });
-        }
-
-        const passwordMatch =
-            await bcrypt.compare(
-                password,
-                user.password
-            );
-
-        console.log(
-            'PASSWORD MATCH:',
-            passwordMatch
-        );
-
-        if (!passwordMatch) {
-
-            return res.status(401).json({
-                success: false,
-                message:
-                    'Invalid email or password.'
-            });
-        }
-
-        const token = jwt.sign(
-            {
-                id: user.id,
-                email: user.email,
-                role: user.role
-            },
-            JWT_SECRET,
-            {
-                expiresIn: '1d'
-            }
-        );
-
-        const isProduction =
-            process.env.NODE_ENV === 'production';
-
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: isProduction,
-            sameSite: 'lax',
-            maxAge:
-                24 * 60 * 60 * 1000,
-            path: '/'
-        });
-
-        console.log(
-            'LOGIN SUCCESS:',
-            user.email
-        );
-
-        console.log(
-            'USER ROLE:',
-            user.role
-        );
-
-        return res.status(200).json({
-
-            success: true,
-
-            message:
-                'Login successful.',
-
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role
-            },
-
-            role: user.role
-
-        });
-
-    } catch (error) {
-
-        console.error(
-            'LOGIN ERROR:',
-            error
-        );
-
-        console.error(
-            'LOGIN ERROR MESSAGE:',
-            error.message
-        );
-
-        return res.status(500).json({
-            success: false,
-            message:
-                'Server error during login.'
-        });
-    }
-});
-
-
-/* =========================================================
-   CURRENT USER
-========================================================= */
-
-app.get('/api/me', async (req, res) => {
-
-    try {
-
-        if (!JWT_SECRET) {
-
-            return res.status(500).json({
-                success: false,
-                message:
-                    'Server authentication configuration is missing.'
-            });
-        }
-
-        const token =
-            req.cookies.token;
-
-        if (!token) {
-
-            return res.status(401).json({
-                success: false,
-                message:
-                    'Not logged in.'
-            });
-        }
-
-        const decoded =
-            jwt.verify(
-                token,
-                JWT_SECRET
-            );
-
-        const user = await get(
-            `SELECT
-                id,
-                name,
-                email,
-                role
-             FROM users
-             WHERE id = ?`,
-            [decoded.id]
-        );
-
-        if (!user) {
-
-            return res.status(401).json({
-                success: false,
-                message:
-                    'User no longer exists.'
-            });
-        }
-
-        return res.status(200).json({
-
-            success: true,
-
-            user: {
-                id: user.id,
-                name: user.name,
-                email: user.email,
-                role: user.role
-            }
-
-        });
-
-    } catch (error) {
-
-        console.error(
-            'AUTH CHECK ERROR:',
-            error
-        );
-
-        return res.status(401).json({
-            success: false,
-            message:
-                'Invalid or expired login.'
-        });
-    }
-});
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-app.post('/api/logout', (req, res) => {
-
-    const isProduction =
-        process.env.NODE_ENV === 'production';
-
-    res.clearCookie('token', {
-        httpOnly: true,
-        secure: isProduction,
-        sameSite: 'lax',
-        path: '/'
-    });
-
-    return res.status(200).json({
-        success: true,
-        message:
-            'Logged out successfully.'
-    });
-});
-
-
-/* =========================================================
-   PUBLIC EVENTS
-========================================================= */
-
-app.get('/api/events', async (req, res) => {
-
-    try {
-
-        const events = await all(
-            `SELECT
-                events.id,
-                events.title,
-                events.description,
-                events.category_id,
-                categories.name AS category,
-                events.organizer,
-                events.venue,
-                events.city,
-                events.address,
-                events.event_date,
-                events.event_time,
-                events.end_date,
-                events.end_time,
-                events.image,
-                events.capacity,
-                events.price,
-                events.event_type,
-                events.registration_deadline,
-                events.contact_email,
-                events.website,
-                events.tags,
-                events.status,
-                events.created_at
-             FROM events
-             LEFT JOIN categories
-                ON events.category_id =
-                   categories.id
-             WHERE events.status = 'active'
-             ORDER BY
-                events.event_date ASC,
-                events.event_time ASC`
-        );
-
-        return res.status(200).json({
-
-            success: true,
-
-            events: events || []
-
-        });
-
-    } catch (error) {
-
-        console.error(
-            'GET EVENTS ERROR:',
-            error
-        );
-
-        console.error(
-            'GET EVENTS ERROR MESSAGE:',
-            error.message
-        );
-
-        return res.status(500).json({
-            success: false,
-            message:
-                'Server error while loading events.'
-        });
-    }
-});
-
-
-/* =========================================================
-   ADMIN API ROUTES
-========================================================= */
-
-app.use(
-    '/api/admin',
-    adminRoutes
-);
-
-
-/* =========================================================
-   404 HANDLER
-========================================================= */
-
-app.use((req, res) => {
-
-    console.log(
-        '404 ROUTE NOT FOUND:',
-        req.method,
-        req.originalUrl
-    );
-
-    return res.status(404).json({
-        success: false,
-        message: 'Route not found.',
-        route: req.originalUrl
-    });
-});
-
-
-/* =========================================================
-   ERROR HANDLER
-========================================================= */
-
-app.use(
-    (err, req, res, next) => {
-
-        console.error(
-            'SERVER ERROR:',
-            err
-        );
-
-        return res.status(500).json({
-            success: false,
-            message:
-                'Internal server error.'
-        });
-    }
-);
-
-
-/* =========================================================
-   EXPORT
-========================================================= */
-
-module.exports = app;
-
-
-/* =========================================================
-   START SERVER
-========================================================= */
-
-if (require.main === module) {
-
-    const PORT =
-        process.env.PORT || 3000;
-
-    app.listen(
-        PORT,
-        () => {
-
-            console.log('');
-            console.log(
-                '=========================================='
-            );
-
-            console.log(
-                `Server running on http://localhost:${PORT}`
-            );
-
-            console.log(
-                `Admin dashboard: http://localhost:${PORT}/admin/index.html`
-            );
-
-            console.log(
-                '=========================================='
-            );
-
-        }
-    );
+    console.log('SQLITE TABLES READY');
 }
+
+async function initializeTurso() {
+    const { createClient } = require('@libsql/client');
+
+    const url = process.env.TURSO_DATABASE_URL;
+    const authToken = process.env.TURSO_AUTH_TOKEN;
+
+    if (!url) {
+        throw new Error('TURSO_DATABASE_URL is missing.');
+    }
+
+    if (!authToken) {
+        throw new Error('TURSO_AUTH_TOKEN is missing.');
+    }
+
+    console.log('DATABASE MODE: Turso / LibSQL');
+    console.log('TURSO DATABASE:', url);
+
+    tursoClient = createClient({
+        url,
+        authToken
+    });
+
+    await createTursoTables();
+
+    return tursoClient;
+}
+
+async function createTursoTables() {
+    await tursoClient.batch(
+        [
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS users (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        email TEXT NOT NULL UNIQUE,
+                        password TEXT NOT NULL,
+                        role TEXT NOT NULL DEFAULT 'user',
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    )
+                `
+            },
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS categories (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL UNIQUE,
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    )
+                `
+            },
+            {
+                sql: `
+                    CREATE TABLE IF NOT EXISTS events (
+                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        title TEXT NOT NULL,
+                        description TEXT NOT NULL,
+                        category_id INTEGER,
+                        organizer TEXT,
+                        venue TEXT NOT NULL,
+                        city TEXT NOT NULL,
+                        address TEXT,
+                        event_date TEXT NOT NULL,
+                        event_time TEXT NOT NULL,
+                        end_date TEXT,
+                        end_time TEXT,
+                        image TEXT,
+                        capacity INTEGER DEFAULT 0,
+                        price REAL DEFAULT 0,
+                        event_type TEXT DEFAULT 'free',
+                        registration_deadline TEXT,
+                        contact_email TEXT,
+                        website TEXT,
+                        tags TEXT,
+                        status TEXT DEFAULT 'active',
+                        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                    )
+                `
+            },
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_users_email
+                    ON users(email)
+                `
+            },
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_events_status
+                    ON events(status)
+                `
+            },
+            {
+                sql: `
+                    CREATE INDEX IF NOT EXISTS idx_events_date
+                    ON events(event_date)
+                `
+            }
+        ],
+        'write'
+    );
+
+    console.log('TURSO TABLES READY');
+}
+
+let initializationPromise;
+
+async function initializeDatabase() {
+    if (initializationPromise) {
+        return initializationPromise;
+    }
+
+    initializationPromise = (async () => {
+        if (
+            isProduction &&
+            process.env.TURSO_DATABASE_URL &&
+            process.env.TURSO_AUTH_TOKEN
+        ) {
+            dbMode = 'turso';
+            await initializeTurso();
+            return;
+        }
+
+        dbMode = 'sqlite';
+        initializeSQLite();
+    })();
+
+    return initializationPromise;
+}
+
+async function get(sql, params = []) {
+    await initializeDatabase();
+
+    if (dbMode === 'turso') {
+        const result = await tursoClient.execute({
+            sql,
+            args: params
+        });
+
+        if (!result.rows || result.rows.length === 0) {
+            return undefined;
+        }
+
+        return convertRow(result.rows[0]);
+    }
+
+    const statement = sqliteDb.prepare(sql);
+
+    return statement.get(...params);
+}
+
+async function all(sql, params = []) {
+    await initializeDatabase();
+
+    if (dbMode === 'turso') {
+        const result = await tursoClient.execute({
+            sql,
+            args: params
+        });
+
+        return (result.rows || []).map(convertRow);
+    }
+
+    const statement = sqliteDb.prepare(sql);
+
+    return statement.all(...params);
+}
+
+async function run(sql, params = []) {
+    await initializeDatabase();
+
+    if (dbMode === 'turso') {
+        const result = await tursoClient.execute({
+            sql,
+            args: params
+        });
+
+        return {
+            changes: Number(result.rowsAffected || 0),
+            lastInsertRowid: result.lastInsertRowid
+                ? Number(result.lastInsertRowid)
+                : null
+        };
+    }
+
+    const statement = sqliteDb.prepare(sql);
+    const result = statement.run(...params);
+
+    return {
+        changes: result.changes,
+        lastInsertRowid: Number(result.lastInsertRowid)
+    };
+}
+
+function convertRow(row) {
+    if (!row) {
+        return row;
+    }
+
+    const object = {};
+
+    for (const key of Object.keys(row)) {
+        object[key] = row[key];
+    }
+
+    return object;
+}
+
+async function healthCheck() {
+    try {
+        await initializeDatabase();
+
+        await get('SELECT 1 AS ok');
+
+        return {
+            success: true,
+            mode: dbMode
+        };
+    } catch (error) {
+        console.error('DATABASE HEALTH CHECK ERROR:', error);
+
+        return {
+            success: false,
+            mode: dbMode,
+            error: error.message
+        };
+    }
+}
+
+module.exports = {
+    get,
+    all,
+    run,
+    healthCheck
+};
