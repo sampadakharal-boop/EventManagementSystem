@@ -59,7 +59,7 @@ app.post('/api/signup', async (req, res) => {
 
         await run(
             `INSERT INTO users (
-                full_name,
+                name,
                 email,
                 password,
                 role
@@ -103,8 +103,6 @@ app.post('/api/login', async (req, res) => {
         }
 
         if (!JWT_SECRET) {
-            console.error('LOGIN ERROR: JWT_SECRET is missing.');
-
             return res.status(500).json({
                 success: false,
                 message: 'Server authentication configuration is missing.'
@@ -116,7 +114,7 @@ app.post('/api/login', async (req, res) => {
         const user = await get(
             `SELECT
                 id,
-                full_name,
+                name,
                 email,
                 password,
                 role
@@ -131,15 +129,6 @@ app.post('/api/login', async (req, res) => {
             return res.status(401).json({
                 success: false,
                 message: 'Invalid email or password.'
-            });
-        }
-
-        if (!user.password) {
-            console.error('LOGIN ERROR: User has no password hash.');
-
-            return res.status(500).json({
-                success: false,
-                message: 'Account password data is invalid.'
             });
         }
 
@@ -184,7 +173,7 @@ app.post('/api/login', async (req, res) => {
             message: 'Login successful.',
             user: {
                 id: user.id,
-                name: user.full_name,
+                name: user.name,
                 email: user.email,
                 role: user.role
             },
@@ -194,7 +183,6 @@ app.post('/api/login', async (req, res) => {
     } catch (error) {
         console.error('LOGIN ERROR:', error);
         console.error('LOGIN ERROR MESSAGE:', error.message);
-        console.error('LOGIN ERROR STACK:', error.stack);
 
         return res.status(500).json({
             success: false,
@@ -214,19 +202,12 @@ app.get('/api/me', async (req, res) => {
             });
         }
 
-        if (!JWT_SECRET) {
-            return res.status(500).json({
-                success: false,
-                message: 'Server authentication configuration is missing.'
-            });
-        }
-
         const decoded = jwt.verify(token, JWT_SECRET);
 
         const user = await get(
             `SELECT
                 id,
-                full_name,
+                name,
                 email,
                 role
              FROM users
@@ -245,7 +226,7 @@ app.get('/api/me', async (req, res) => {
             success: true,
             user: {
                 id: user.id,
-                name: user.full_name,
+                name: user.name,
                 email: user.email,
                 role: user.role
             }
