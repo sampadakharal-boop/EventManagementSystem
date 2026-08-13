@@ -9,10 +9,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedEvent = null;
     let selectedEventId = null;
 
-    const deleteModal = document.getElementById('deleteModal');
-    const cancelDelete = document.getElementById('cancelDelete');
-    const cancelDeleteButton = document.getElementById('cancelDeleteButton');
-    const confirmDelete = document.getElementById('confirmDelete');
+    let deleteModal = null;
+    let cancelDelete = null;
+    let cancelDeleteButton = null;
+    let confirmDelete = null;
 
     async function loadEvents() {
         try {
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(data.message || 'Failed to load events.');
             }
 
-            allEvents = data.events || [];
+            allEvents = Array.isArray(data.events) ? data.events : [];
 
             populateCategoryFilter();
             renderEvents();
@@ -68,27 +68,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         categories.forEach(category => {
             const option = document.createElement('option');
-
             option.value = category;
             option.textContent = category;
-
             categoryFilter.appendChild(option);
         });
     }
 
     function renderEvents() {
-        const searchTerm = searchInput.value.trim().toLowerCase();
-        const selectedCategory = categoryFilter.value;
-        const selectedStatus = statusFilter.value;
-        const selectedDate = dateFilter.value;
+        const searchTerm = searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : '';
+
+        const selectedCategory = categoryFilter
+            ? categoryFilter.value
+            : '';
+
+        const selectedStatus = statusFilter
+            ? statusFilter.value
+            : '';
+
+        const selectedDate = dateFilter
+            ? dateFilter.value
+            : '';
 
         const filteredEvents = allEvents.filter(event => {
             const matchesSearch =
                 !searchTerm ||
-                String(event.title || '').toLowerCase().includes(searchTerm) ||
-                String(event.description || '').toLowerCase().includes(searchTerm) ||
-                String(event.city || '').toLowerCase().includes(searchTerm) ||
-                String(event.venue || '').toLowerCase().includes(searchTerm);
+                String(event.title || '')
+                    .toLowerCase()
+                    .includes(searchTerm) ||
+                String(event.description || '')
+                    .toLowerCase()
+                    .includes(searchTerm) ||
+                String(event.city || '')
+                    .toLowerCase()
+                    .includes(searchTerm) ||
+                String(event.venue || '')
+                    .toLowerCase()
+                    .includes(searchTerm);
 
             const matchesCategory =
                 !selectedCategory ||
@@ -100,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const matchesDate =
                 !selectedDate ||
-                event.event_date === selectedDate;
+                String(event.event_date || '') === selectedDate;
 
             return (
                 matchesSearch &&
@@ -120,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </td>
                 </tr>
             `;
-
             return;
         }
 
@@ -160,15 +176,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 </td>
 
                 <td>
-                    <span class="status-badge ${status}">
-                        ${statusLabel}
+                    <span class="status-badge ${escapeHTML(status)}">
+                        ${escapeHTML(statusLabel)}
                     </span>
                 </td>
 
                 <td>
                     <button
                         class="action-btn manage-event"
-                        data-id="${event.id}"
+                        data-id="${escapeHTML(event.id)}"
                         type="button"
                     >
                         Manage
@@ -183,7 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
             .querySelectorAll('.manage-event')
             .forEach(button => {
                 button.addEventListener('click', () => {
-                    const eventId = Number(button.dataset.id);
+                    const eventId = button.dataset.id;
                     openManageModal(eventId);
                 });
             });
@@ -191,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function openManageModal(eventId) {
         selectedEvent = allEvents.find(
-            event => Number(event.id) === eventId
+            event => String(event.id) === String(eventId)
         );
 
         if (!selectedEvent) {
@@ -199,7 +215,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        selectedEventId = eventId;
+        selectedEventId = String(eventId);
 
         let modal = document.getElementById('manageEventModal');
 
@@ -215,6 +231,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function createManageModal() {
+        const existingModal = document.getElementById('manageEventModal');
+
+        if (existingModal) {
+            return;
+        }
+
         const modal = document.createElement('div');
 
         modal.id = 'manageEventModal';
@@ -460,29 +482,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
         document
             .getElementById('closeManageModal')
-            .addEventListener('click', closeManageModal);
+            .addEventListener(
+                'click',
+                closeManageModal
+            );
 
         document
             .getElementById('cancelManageBtn')
-            .addEventListener('click', closeManageModal);
+            .addEventListener(
+                'click',
+                closeManageModal
+            );
 
         document
             .getElementById('manageModalOverlay')
-            .addEventListener('click', closeManageModal);
+            .addEventListener(
+                'click',
+                closeManageModal
+            );
 
         document
             .getElementById('manageEventForm')
-            .addEventListener('submit', updateEvent);
+            .addEventListener(
+                'submit',
+                updateEvent
+            );
 
         document
             .getElementById('deleteEventBtn')
-            .addEventListener('click', () => {
-                if (!selectedEventId) {
-                    return;
-                }
+            .addEventListener(
+                'click',
+                () => {
+                    if (!selectedEventId) {
+                        return;
+                    }
 
-                openDeleteModal(selectedEventId);
-            });
+                    openDeleteModal(selectedEventId);
+                }
+            );
     }
 
     function fillManageModal(event) {
@@ -523,13 +560,13 @@ document.addEventListener('DOMContentLoaded', () => {
             event.end_time || '';
 
         document.getElementById('manageCapacity').value =
-            event.capacity || 0;
+            event.capacity ?? 0;
 
         document.getElementById('manageEventType').value =
             event.event_type || 'free';
 
         document.getElementById('managePrice').value =
-            event.price || 0;
+            event.price ?? 0;
 
         document.getElementById('manageDeadline').value =
             event.registration_deadline || '';
@@ -582,10 +619,12 @@ document.addEventListener('DOMContentLoaded', () => {
             status: document.getElementById('manageStatus').value
         };
 
-        const message = document.getElementById('manageMessage');
+        const message =
+            document.getElementById('manageMessage');
 
         try {
-            message.textContent = 'Saving changes...';
+            message.textContent =
+                'Saving changes...';
 
             const response = await fetch(
                 `/api/admin/events/${encodeURIComponent(eventId)}`,
@@ -603,11 +642,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!response.ok || !data.success) {
                 throw new Error(
-                    data.message || 'Failed to update event.'
+                    data.message ||
+                    'Failed to update event.'
                 );
             }
 
-            message.textContent = 'Event updated successfully.';
+            message.textContent =
+                'Event updated successfully.';
 
             await loadEvents();
 
@@ -616,28 +657,236 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 700);
 
         } catch (error) {
-            console.error('UPDATE EVENT ERROR:', error);
+            console.error(
+                'UPDATE EVENT ERROR:',
+                error
+            );
 
             message.textContent =
-                error.message || 'Failed to update event.';
+                error.message ||
+                'Failed to update event.';
         }
     }
 
     function openDeleteModal(eventId) {
-        selectedEventId = eventId;
+        selectedEventId = String(eventId);
+
+        deleteModal =
+            document.getElementById('deleteModal');
+
+        cancelDelete =
+            document.getElementById('cancelDelete');
+
+        cancelDeleteButton =
+            document.getElementById('cancelDeleteButton');
+
+        confirmDelete =
+            document.getElementById('confirmDelete');
 
         if (!deleteModal) {
-            return;
+            deleteModal = createDeleteModal();
+
+            cancelDelete =
+                document.getElementById('cancelDelete');
+
+            cancelDeleteButton =
+                document.getElementById('cancelDeleteButton');
+
+            confirmDelete =
+                document.getElementById('confirmDelete');
+
+            setupDeleteModalEvents();
         }
 
         deleteModal.style.display = 'flex';
     }
 
-    function closeDeleteModal() {
-        selectedEventId = null;
+    function createDeleteModal() {
+        const modal =
+            document.createElement('div');
+
+        modal.id = 'deleteModal';
+
+        modal.innerHTML = `
+            <div class="delete-modal-content">
+
+                <div class="delete-modal-icon">
+                    !
+                </div>
+
+                <h2>Delete Event?</h2>
+
+                <p>
+                    Are you sure you want to delete this event?
+                    This action cannot be undone.
+                </p>
+
+                <div class="delete-modal-actions">
+
+                    <button
+                        type="button"
+                        id="cancelDelete"
+                        class="delete-cancel-btn"
+                    >
+                        Cancel
+                    </button>
+
+                    <button
+                        type="button"
+                        id="cancelDeleteButton"
+                        class="delete-cancel-btn"
+                    >
+                        Keep Event
+                    </button>
+
+                    <button
+                        type="button"
+                        id="confirmDelete"
+                        class="delete-confirm-btn"
+                    >
+                        Delete
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+
+        const style =
+            document.createElement('style');
+
+        style.id =
+            'deleteEventModalStyles';
+
+        style.textContent = `
+            #deleteModal {
+                position: fixed;
+                inset: 0;
+                z-index: 10000;
+                display: none;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+                background: rgba(15, 23, 42, 0.7);
+                backdrop-filter: blur(4px);
+            }
+
+            .delete-modal-content {
+                width: min(430px, 100%);
+                padding: 30px;
+                background: #ffffff;
+                border-radius: 18px;
+                text-align: center;
+                box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+            }
+
+            .delete-modal-icon {
+                width: 54px;
+                height: 54px;
+                margin: 0 auto 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 50%;
+                background: #fee2e2;
+                color: #dc2626;
+                font-size: 28px;
+                font-weight: 700;
+            }
+
+            .delete-modal-content h2 {
+                margin: 0 0 10px;
+                color: #111827;
+                font-size: 22px;
+            }
+
+            .delete-modal-content p {
+                margin: 0;
+                color: #6b7280;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+
+            .delete-modal-actions {
+                display: flex;
+                justify-content: center;
+                gap: 10px;
+                margin-top: 24px;
+            }
+
+            .delete-cancel-btn,
+            .delete-confirm-btn {
+                border: 0;
+                border-radius: 9px;
+                padding: 11px 16px;
+                font-family: inherit;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            .delete-cancel-btn {
+                background: #e5e7eb;
+                color: #374151;
+            }
+
+            .delete-confirm-btn {
+                background: #dc2626;
+                color: #ffffff;
+            }
+
+            .delete-confirm-btn:disabled {
+                opacity: 0.6;
+                cursor: not-allowed;
+            }
+
+            @media (max-width: 600px) {
+                .delete-modal-actions {
+                    flex-direction: column;
+                }
+            }
+        `;
+
+        document.head.appendChild(style);
+
+        return modal;
+    }
+
+    function setupDeleteModalEvents() {
+        if (cancelDelete) {
+            cancelDelete.addEventListener(
+                'click',
+                closeDeleteModal
+            );
+        }
+
+        if (cancelDeleteButton) {
+            cancelDeleteButton.addEventListener(
+                'click',
+                closeDeleteModal
+            );
+        }
 
         if (deleteModal) {
-            deleteModal.style.display = 'none';
+            deleteModal.addEventListener(
+                'click',
+                event => {
+                    if (
+                        event.target === deleteModal
+                    ) {
+                        closeDeleteModal();
+                    }
+                }
+            );
+        }
+
+        if (confirmDelete) {
+            confirmDelete.addEventListener(
+                'click',
+                confirmDeleteEvent
+            );
         }
     }
 
@@ -646,41 +895,60 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const eventId = selectedEventId;
+        const eventId =
+            String(selectedEventId);
+
+        const button =
+            document.getElementById('confirmDelete');
 
         try {
-            confirmDelete.disabled = true;
-            confirmDelete.textContent = 'Deleting...';
+            if (button) {
+                button.disabled = true;
+                button.textContent = 'Deleting...';
+            }
 
-            const response = await fetch(
-                `/api/admin/events/${encodeURIComponent(eventId)}`,
-                {
-                    method: 'DELETE',
-                    credentials: 'include'
-                }
-            );
+            const response =
+                await fetch(
+                    `/api/admin/events/${encodeURIComponent(eventId)}`,
+                    {
+                        method: 'DELETE',
+                        credentials: 'include',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    }
+                );
 
-            const data = await response.json();
+            const data =
+                await response.json();
 
             if (!response.ok || !data.success) {
                 throw new Error(
-                    data.message || 'Failed to delete event.'
+                    data.message ||
+                    'Failed to delete event.'
                 );
             }
 
-            allEvents = allEvents.filter(
-                event =>
-                    Number(event.id) !== Number(eventId)
-            );
+            allEvents =
+                allEvents.filter(
+                    event =>
+                        String(event.id) !== eventId
+                );
 
             closeDeleteModal();
             closeManageModal();
+
+            selectedEvent = null;
+            selectedEventId = null;
 
             populateCategoryFilter();
             renderEvents();
 
         } catch (error) {
-            console.error('DELETE EVENT ERROR:', error);
+            console.error(
+                'DELETE EVENT ERROR:',
+                error
+            );
 
             alert(
                 error.message ||
@@ -688,43 +956,26 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
         } finally {
-            confirmDelete.disabled = false;
-            confirmDelete.textContent = 'Delete';
+            if (button) {
+                button.disabled = false;
+                button.textContent = 'Delete';
+            }
         }
     }
 
-    if (cancelDelete) {
-        cancelDelete.addEventListener(
-            'click',
-            closeDeleteModal
-        );
-    }
+    function closeDeleteModal() {
+        if (deleteModal) {
+            deleteModal.style.display = 'none';
+        }
 
-    if (cancelDeleteButton) {
-        cancelDeleteButton.addEventListener(
-            'click',
-            closeDeleteModal
-        );
-    }
-
-    if (deleteModal) {
-        deleteModal.addEventListener('click', event => {
-            if (event.target === deleteModal) {
-                closeDeleteModal();
-            }
-        });
-    }
-
-    if (confirmDelete) {
-        confirmDelete.addEventListener(
-            'click',
-            confirmDeleteEvent
-        );
+        selectedEventId = null;
     }
 
     function closeManageModal() {
         const modal =
-            document.getElementById('manageEventModal');
+            document.getElementById(
+                'manageEventModal'
+            );
 
         if (modal) {
             modal.classList.remove('show');
@@ -733,7 +984,6 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = '';
 
         selectedEvent = null;
-        selectedEventId = null;
     }
 
     function addModalStyles() {
@@ -745,9 +995,11 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const style = document.createElement('style');
+        const style =
+            document.createElement('style');
 
-        style.id = 'manageEventModalStyles';
+        style.id =
+            'manageEventModalStyles';
 
         style.textContent = `
             #manageEventModal {
@@ -975,7 +1227,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return 'completed';
         }
 
-        if (eventDate.getTime() === today.getTime()) {
+        if (
+            eventDate.getTime() ===
+            today.getTime()
+        ) {
             return 'active';
         }
 
@@ -987,9 +1242,10 @@ document.addEventListener('DOMContentLoaded', () => {
             return '-';
         }
 
-        const date = new Date(
-            dateString + 'T00:00:00'
-        );
+        const date =
+            new Date(
+                dateString + 'T00:00:00'
+            );
 
         return date.toLocaleDateString(
             'en-US',
@@ -1047,6 +1303,22 @@ document.addEventListener('DOMContentLoaded', () => {
             'change',
             renderEvents
         );
+    }
+
+    deleteModal =
+        document.getElementById('deleteModal');
+
+    if (deleteModal) {
+        cancelDelete =
+            document.getElementById('cancelDelete');
+
+        cancelDeleteButton =
+            document.getElementById('cancelDeleteButton');
+
+        confirmDelete =
+            document.getElementById('confirmDelete');
+
+        setupDeleteModalEvents();
     }
 
     loadEvents();
