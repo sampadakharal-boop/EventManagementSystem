@@ -1,15 +1,26 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Manage Events | EventHub Admin</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="css/dashboard.css">
-<link rel="stylesheet" href="css/events.css">
+    <title>Events | EventHub Admin</title>
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined">
+    <link rel="stylesheet" href="css/dashboard.css">
+    <link rel="stylesheet" href="css/events.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined"
+    >
 </head>
 
 <body>
@@ -83,7 +94,11 @@
             Notifications
         </a>
 
-        <button id="logoutBtn" class="nav-link logout-link" type="button">
+        <button
+            type="button"
+            id="logoutBtn"
+            class="nav-link logout-link"
+        >
             <span class="material-symbols-outlined">logout</span>
             Logout
         </button>
@@ -96,28 +111,47 @@
 
     <header class="topbar">
 
-        <button class="menu-toggle" id="menuToggle" type="button">
+        <button
+            type="button"
+            class="menu-toggle"
+            id="menuToggle"
+            aria-label="Open menu"
+        >
             <span class="material-symbols-outlined">menu</span>
         </button>
 
         <div class="topbar-title">
             <h1>Events</h1>
-            <p>Manage all your events</p>
+            <p>Manage and organize your events</p>
         </div>
 
         <div class="topbar-actions">
 
             <div class="search-box">
                 <span class="material-symbols-outlined">search</span>
-                <input type="text" placeholder="Search...">
+
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    aria-label="Search"
+                >
             </div>
 
-            <button class="icon-btn" type="button">
-                <span class="material-symbols-outlined">notifications</span>
+            <button
+                type="button"
+                class="icon-btn"
+                aria-label="Notifications"
+            >
+                <span class="material-symbols-outlined">
+                    notifications
+                </span>
+
                 <span class="badge-dot"></span>
             </button>
 
-            <div class="admin-avatar">A</div>
+            <div class="admin-avatar">
+                A
+            </div>
 
         </div>
 
@@ -125,51 +159,244 @@
 
     <main class="content">
 
-        <div class="page-header">
+        <section class="page-header">
 
-            <h2>All Events</h2>
+            <div>
+                <span class="page-eyebrow">EVENT MANAGEMENT</span>
 
-            <a href="create-event.html" class="btn-primary">
-                <span class="material-symbols-outlined">add</span>
+                <h2>All Events</h2>
+
+                <p>
+                    View, manage and organize all events from one place.
+                </p>
+            </div>
+
+            <a
+                href="create-event.html"
+                class="btn-primary"
+            >
+                <span class="material-symbols-outlined">
+                    add
+                </span>
+
                 Create Event
             </a>
 
-        </div>
+        </section>
 
-        <div class="filters-bar">
+        <section class="event-stats">
 
-            <input
-                type="text"
-                id="eventSearch"
-                placeholder="Search events..."
-            >
+            <div class="stat-card">
 
-            <select id="categoryFilter">
-                <option value="">All Categories</option>
-            </select>
+                <div class="stat-icon">
+                    <span class="material-symbols-outlined">
+                        event
+                    </span>
+                </div>
 
-            <select id="statusFilter">
-                <option value="">All Status</option>
-                <option value="upcoming">Upcoming</option>
-                <option value="active">Active</option>
-                <option value="completed">Completed</option>
-                <option value="cancelled">Cancelled</option>
-            </select>
+                <div>
+                    <span class="stat-label">
+                        Total Events
+                    </span>
 
-            <input
-                type="date"
-                id="dateFilter"
-            >
+                    <strong id="totalEvents">
+                        0
+                    </strong>
+                </div>
 
-        </div>
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <span class="material-symbols-outlined">
+                        upcoming
+                    </span>
+                </div>
+
+                <div>
+                    <span class="stat-label">
+                        Upcoming
+                    </span>
+
+                    <strong id="upcomingEvents">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <span class="material-symbols-outlined">
+                        play_circle
+                    </span>
+                </div>
+
+                <div>
+                    <span class="stat-label">
+                        Active
+                    </span>
+
+                    <strong id="activeEvents">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    <span class="material-symbols-outlined">
+                        task_alt
+                    </span>
+                </div>
+
+                <div>
+                    <span class="stat-label">
+                        Completed
+                    </span>
+
+                    <strong id="completedEvents">
+                        0
+                    </strong>
+                </div>
+
+            </div>
+
+        </section>
+
+        <section class="filters-section">
+
+            <div class="filters-header">
+
+                <div>
+                    <h3>Event List</h3>
+
+                    <p>
+                        Search and filter your events.
+                    </p>
+                </div>
+
+                <button
+                    type="button"
+                    id="clearFilters"
+                    class="clear-filters"
+                >
+                    Clear Filters
+                </button>
+
+            </div>
+
+            <div class="filters-bar">
+
+                <div class="filter-search">
+
+                    <span class="material-symbols-outlined">
+                        search
+                    </span>
+
+                    <input
+                        type="text"
+                        id="eventSearch"
+                        placeholder="Search by event, location..."
+                    >
+
+                </div>
+
+                <div class="filter-control">
+
+                    <span class="material-symbols-outlined">
+                        category
+                    </span>
+
+                    <select id="categoryFilter">
+                        <option value="">
+                            All Categories
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="filter-control">
+
+                    <span class="material-symbols-outlined">
+                        filter_list
+                    </span>
+
+                    <select id="statusFilter">
+
+                        <option value="">
+                            All Status
+                        </option>
+
+                        <option value="upcoming">
+                            Upcoming
+                        </option>
+
+                        <option value="active">
+                            Active
+                        </option>
+
+                        <option value="completed">
+                            Completed
+                        </option>
+
+                        <option value="cancelled">
+                            Cancelled
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <div class="filter-control">
+
+                    <span class="material-symbols-outlined">
+                        calendar_month
+                    </span>
+
+                    <input
+                        type="date"
+                        id="dateFilter"
+                        aria-label="Filter by date"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
 
         <section class="panel table-panel">
+
+            <div class="table-header">
+
+                <div>
+                    <h3>All Events</h3>
+
+                    <p>
+                        Your event management list
+                    </p>
+                </div>
+
+                <span
+                    class="event-count"
+                    id="eventCount"
+                >
+                    0 events
+                </span>
+
+            </div>
 
             <div class="table-wrapper">
 
                 <table>
 
                     <thead>
+
                         <tr>
                             <th>Event</th>
                             <th>Category</th>
@@ -179,14 +406,26 @@
                             <th>Status</th>
                             <th>Actions</th>
                         </tr>
+
                     </thead>
 
                     <tbody id="eventsTableBody">
 
                         <tr>
-                            <td colspan="7" style="text-align:center; padding:30px;">
+
+                            <td
+                                colspan="7"
+                                class="loading-cell"
+                            >
+
+                                <span class="material-symbols-outlined">
+                                    progress_activity
+                                </span>
+
                                 Loading events...
+
                             </td>
+
                         </tr>
 
                     </tbody>
@@ -199,140 +438,6 @@
 
     </main>
 
-</div>
-
-<div class="manage-modal" id="manageModal">
-
-    <div class="manage-modal-backdrop" id="manageModalBackdrop"></div>
-
-    <div class="manage-modal-box">
-
-        <div class="manage-modal-header">
-
-            <div>
-                <span class="manage-modal-label">EVENT MANAGEMENT</span>
-                <h2 id="manageEventTitle">Manage Event</h2>
-            </div>
-
-            <button
-                type="button"
-                class="manage-modal-close"
-                id="closeManageModal"
-                aria-label="Close"
-            >
-                <span class="material-symbols-outlined">close</span>
-            </button>
-
-        </div>
-
-        <div class="manage-modal-body">
-
-            <div class="manage-event-info">
-
-                <div class="manage-info-item">
-                    <span class="material-symbols-outlined">tag</span>
-                    <div>
-                        <small>Event ID</small>
-                        <strong id="manageEventId">-</strong>
-                    </div>
-                </div>
-
-                <div class="manage-info-item">
-                    <span class="material-symbols-outlined">category</span>
-                    <div>
-                        <small>Category</small>
-                        <strong id="manageEventCategory">-</strong>
-                    </div>
-                </div>
-
-                <div class="manage-info-item">
-                    <span class="material-symbols-outlined">calendar_month</span>
-                    <div>
-                        <small>Date</small>
-                        <strong id="manageEventDate">-</strong>
-                    </div>
-                </div>
-
-                <div class="manage-info-item">
-                    <span class="material-symbols-outlined">location_on</span>
-                    <div>
-                        <small>Location</small>
-                        <strong id="manageEventLocation">-</strong>
-                    </div>
-                </div>
-
-                <div class="manage-info-item">
-                    <span class="material-symbols-outlined">groups</span>
-                    <div>
-                        <small>Registrations</small>
-                        <strong id="manageEventRegistrations">0</strong>
-                    </div>
-                </div>
-
-                <div class="manage-info-item">
-                    <span class="material-symbols-outlined">info</span>
-                    <div>
-                        <small>Status</small>
-                        <strong id="manageEventStatus">-</strong>
-                    </div>
-                </div>
-
-            </div>
-
-            <div class="manage-actions">
-
-                <button
-                    type="button"
-                    class="manage-edit-btn"
-                    id="editEventBtn"
-                >
-                    <span class="material-symbols-outlined">edit</span>
-                    Edit Event
-                </button>
-
-                <button
-                    type="button"
-                    class="manage-delete-btn"
-                    id="deleteEventBtn"
-                >
-                    <span class="material-symbols-outlined">delete</span>
-                    Delete Event
-                </button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-<div class="delete-modal" id="deleteModal" style="display: none;">
-    <div class="delete-modal-content">
-        <button type="button" class="delete-modal-close" id="cancelDelete">
-            ×
-        </button>
-
-        <div class="delete-icon">
-            🗑
-        </div>
-
-        <h2>Delete Event?</h2>
-
-        <p>
-            Are you sure you want to delete this event?
-            This action cannot be undone.
-        </p>
-
-        <div class="delete-modal-actions">
-            <button type="button" id="cancelDeleteButton">
-                Cancel
-            </button>
-
-            <button type="button" id="confirmDelete">
-                Delete
-            </button>
-        </div>
-    </div>
 </div>
 
 <script src="js/admin.js"></script>
